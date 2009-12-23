@@ -22,6 +22,7 @@
 #include <qsettings.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+#include <qlayoutitem.h>
 #include "identitywidget.h"
 #include <KDebug>
 
@@ -109,12 +110,12 @@ void KCMPolkitConfig::load()
     }
 
     kDebug() << "The highest filename is " << highestFilename;
-    QSettings policy(highestFilename, QSettings::IniFormat);
-    kDebug() << policy.allKeys();
-    kDebug() << policy.childGroups();
-    policy.beginGroup("Configuration");
+    QFile policyFile(highestFilename);
+    policyFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString identities = QString(policyFile.readAll()).split("AdminIdentities=").last();
+    identities = identities.split('\n').first();
+    policyFile.close();
 
-    QString identities = policy.value("AdminIdentities").toString();
     kDebug() << "our identities are " << identities;
     foreach (const QString &identity, identities.split(';')) {
         IdentityWidget::IdentityType type;
@@ -165,6 +166,18 @@ void KCMPolkitConfig::save()
     }
 
     kDebug() << "Identities to save: " << identities;
+
+    QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
+                                                          "/Helper",
+                                                          "org.kde.polkitkde1.helper",
+                                                          QLatin1String("saveGlobalConfiguration"));
+    QList<QVariant> argumentList;
+    argumentList << QVariant::fromValue(identities);
+    argumentList << QVariant::fromValue(m_ui->configPrioritySpin->value());
+    argumentList << QVariant::fromValue(m_ui->policyPrioritySpin->value());
+    message.setArguments(argumentList);
+
+    QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
 }
 
 void KCMPolkitConfig::addNewIdentity()

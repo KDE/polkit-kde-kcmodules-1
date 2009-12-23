@@ -44,6 +44,7 @@ PolkitKde1Helper::~PolkitKde1Helper()
 
 void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, int systemPriority, int policiesPriority)
 {
+    qDebug() << "Request to save the global configuration by " << message().service();
     PolkitQt1::Authority::Result result;
     PolkitQt1::SystemBusNameSubject *subject;
 
@@ -52,9 +53,11 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, i
     result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changesystemconfiguration",
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
     if (result == PolkitQt1::Authority::Yes) {
+        qDebug() << "Authorized successfully";
         // It's ok
     } else {
         // It's not ok
+        qDebug() << "UnAuthorized! " << PolkitQt1::Authority::instance()->lastError();
         return;
     }
 
@@ -65,10 +68,14 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, i
     kdesettings.setValue("ConfigPriority", systemPriority);
     kdesettings.setValue("PoliciesPriority", policiesPriority);
 
-    QSettings polkitsettings(QString("/etc/polkit-1/localauthority.conf.d/%1-polkitkde.conf").arg(systemPriority),
-                             QSettings::IniFormat);
-    polkitsettings.beginGroup("Configuration");
-    polkitsettings.setValue("AdminIdentities", adminIdentities);
+    QString contents = QString("[Configuration]\nAdminIdentities=%1\n").arg(adminIdentities);
+
+    qDebug() << contents << "will be wrote to the local authority file";
+    QFile wfile(QString("/etc/polkit-1/localauthority.conf.d/%1-polkitkde.conf").arg(systemPriority));
+    wfile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
+    wfile.write(contents.toUtf8());
+    wfile.flush();
+    wfile.close();
 
     // TODO: Move files around if the priority was changed
 }

@@ -41,6 +41,8 @@ kde4_add_executable(polkitkde1helper ${polkitkde1helper_SRCS})
 
 target_link_libraries(polkitkde1helper ${QT_QTCORE_LIBRARY} ${POLKITQT-1_CORE_LIBRARY})
 
+install(TARGETS polkitkde1helper DESTINATION ${LIBEXEC_INSTALL_DIR})
+
 dbus_add_activation_system_service(org.kde.polkitkde1.helper.service.in)
 
 install(FILES org.kde.polkitkde1.helper.conf DESTINATION ${SYSCONF_INSTALL_DIR}/dbus-1/system.d)

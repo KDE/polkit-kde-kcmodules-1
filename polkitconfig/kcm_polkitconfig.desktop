@@ -1,0 +1,17 @@
+[Desktop Entry]
+Exec=kcmshell4 kcm_polkitconfig
+Icon=system-lock-screen
+Type=Service
+X-KDE-ServiceTypes=KCModule
+#X-DocPath=kcontrol/powerdevil/index.html
+
+X-KDE-Library=kcm_polkitconfig
+X-KDE-ParentApp=kcontrol
+
+X-KDE-System-Settings-Parent-Category=system-policies
+
+Name=Global policy configuration
+
+Comment=Configure global settings for system policies
+
+X-KDE-Keywords=system,policy,policies,security,polkit,policykit,password

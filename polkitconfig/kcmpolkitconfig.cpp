@@ -58,6 +58,10 @@ KCMPolkitConfig::KCMPolkitConfig(QWidget* parent, const QVariantList& args)
 
     connect(m_ui->addIdentityButton, SIGNAL(clicked(bool)),
             this, SLOT(addNewIdentity()));
+    connect(m_ui->configPrioritySpin, SIGNAL(valueChanged(int)),
+            this, SLOT(changed()));
+    connect(m_ui->policyPrioritySpin, SIGNAL(valueChanged(int)),
+            this, SLOT(changed()));
 }
 
 KCMPolkitConfig::~KCMPolkitConfig()
@@ -76,7 +80,7 @@ void KCMPolkitConfig::load()
     QSettings settings("/etc/polkit-1/polkit-kde-1.conf", QSettings::IniFormat);
     settings.beginGroup("General");
 
-    int priority = settings.value("ConfigPriority", 40).toInt();
+    int priority = settings.value("ConfigPriority", 75).toInt();
     int highestPriority = -1;
     QString highestFilename;
 
@@ -95,9 +99,10 @@ void KCMPolkitConfig::load()
     }
 
     if (highestPriority > priority) {
+        kDebug() << "Highest priority is " << highestPriority << ", polkit kde priority is " << priority;
         m_ui->warningTextLabel->setText(i18n("The changes will have no effect, since another policy has an higher priority "
                                              "(%1). Please change the priority of policies defined through this module to an "
-                                             "higher value."));
+                                             "higher value.", highestPriority));
         m_ui->warningTextLabel->setVisible(true);
         m_ui->warningPixmapLabel->setPixmap(KIcon("dialog-warning").pixmap(48));
         m_ui->warningPixmapLabel->setVisible(true);
@@ -123,20 +128,50 @@ void KCMPolkitConfig::load()
         QString name = identity.split(':').last();
         IdentityWidget *iw = new IdentityWidget(type, name);
         m_identitiesLayout->insertWidget(m_identitiesLayout->count() - 1, iw);
+        connect(iw, SIGNAL(changed()), this, SLOT(changed()));
     }
 
     // Set up the other tab
     m_ui->configPrioritySpin->setValue(priority);
-    m_ui->policyPrioritySpin->setValue(settings.value("PolicyPriority", 75).toInt());
+    m_ui->policyPrioritySpin->setValue(settings.value("PoliciesPriority", 75).toInt());
 }
 
 void KCMPolkitConfig::save()
 {
-KCModule::save();
+    // Get back all the identities first
+    QString identities;
+    for (int i = 0; i < m_identitiesLayout->count(); ++i) {
+        QLayoutItem *item = m_identitiesLayout->itemAt(i);
+        if (item != 0) {
+            QWidget *widget = item->widget();
+            if (widget != 0) {
+                IdentityWidget *identityWidget = qobject_cast< IdentityWidget* >(widget);
+                if (identityWidget != 0) {
+                    // Whew, let's add it
+                    if (identityWidget->identityType() == IdentityWidget::UserIdentity) {
+                        identities.append("unix-user:");
+                    } else {
+                        identities.append("unix-group:");
+                    }
+                    identities.append(identityWidget->identityName());
+                    identities.append(';');
+                }
+            }
+        }
+    }
+
+    if (!identities.isEmpty()) {
+        identities.remove(identities.length() - 1, 1);
+    }
+
+    kDebug() << "Identities to save: " << identities;
 }
 
 void KCMPolkitConfig::addNewIdentity()
 {
-    m_identitiesLayout->insertWidget(m_identitiesLayout->count() - 1, new IdentityWidget());
+    IdentityWidget *iw = new IdentityWidget();
+    m_identitiesLayout->insertWidget(m_identitiesLayout->count() - 1, iw);
+    connect(iw, SIGNAL(changed()), this, SLOT(changed()));
+    changed();
 }
 

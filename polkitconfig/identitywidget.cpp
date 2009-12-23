@@ -16,27 +16,25 @@
 
 IdentityWidget::IdentityWidget(IdentityWidget::IdentityType type, const QString& name, QWidget* parent)
     : QWidget(parent)
-    , m_type(type)
-    , m_name(name)
 {
-    init();
+    init(type);
+    setIdentityName(name);
 }
 
 IdentityWidget::IdentityWidget(QWidget* parent)
     : QWidget(parent)
-    , m_type(UserIdentity)
 {
-    init();
+    init(UserIdentity);
 }
 
-void IdentityWidget::init()
+void IdentityWidget::init(IdentityType type)
 {
     m_ui = new Ui::IdentityWidget;
     m_ui->setupUi(this);
     m_ui->removeButton->setIcon(KIcon("list-remove"));
     m_ui->identityTypeBox->setItemIcon(0, KIcon("user-identity"));
     m_ui->identityTypeBox->setItemIcon(1, KIcon("system-users"));
-    m_ui->identityTypeBox->setCurrentIndex((int)m_type);
+    m_ui->identityTypeBox->setCurrentIndex((int)type);
     populateIdentityNameBox();
 
     connect(m_ui->identityTypeBox, SIGNAL(currentIndexChanged(int)),
@@ -46,35 +44,35 @@ void IdentityWidget::init()
     connect(m_ui->identityNameBox, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(changed()));
     connect(m_ui->removeButton, SIGNAL(clicked(bool)),
+            this, SIGNAL(changed()));
+    connect(m_ui->removeButton, SIGNAL(clicked(bool)),
             this, SLOT(deleteLater()));
 }
 
 QString IdentityWidget::identityName() const
 {
-    return m_name;
+    return m_ui->identityNameBox->itemData(m_ui->identityNameBox->currentIndex()).toString();
 }
 
 IdentityWidget::IdentityType IdentityWidget::identityType() const
 {
-    return m_type;
+    return (IdentityType)(m_ui->identityTypeBox->currentIndex());
 }
 
 void IdentityWidget::setIdentityName(const QString& name)
 {
-    m_name = name;
-    m_ui->identityNameBox->setCurrentItem(m_name);
+    m_ui->identityNameBox->setCurrentIndex(m_ui->identityNameBox->findText(name));
 }
 
 void IdentityWidget::setIdentityType(IdentityWidget::IdentityType type)
 {
-    m_type = type;
-    m_ui->identityTypeBox->setCurrentIndex((int)m_type);
+    m_ui->identityTypeBox->setCurrentIndex((int)type);
 }
 
 void IdentityWidget::populateIdentityNameBox()
 {
     m_ui->identityNameBox->clear();
-    if (m_type == UserIdentity) {
+    if (m_ui->identityTypeBox->currentIndex() == (int)UserIdentity) {
         QList<KUser> users = KUser::allUsers();
 
         foreach (const KUser &user, users) {
@@ -93,18 +91,11 @@ void IdentityWidget::populateIdentityNameBox()
 
             m_ui->identityNameBox->addItem(icon, displayName, user.loginName());
         }
-
-        // Try setting the name
-        m_ui->identityNameBox->setCurrentIndex(m_ui->identityNameBox->findText(m_name));
     } else {
         QList<KUserGroup> groups = KUserGroup::allGroups();
 
         foreach (const KUserGroup &group, groups) {
             m_ui->identityNameBox->addItem(KIcon("system-users"), group.name(), group.name());
         }
-
-        // Try setting the name
-        m_ui->identityNameBox->setCurrentIndex(m_ui->identityNameBox->findText(m_name));
-        kDebug() << "Searching for " << m_name << "gives back " << m_ui->identityNameBox->findText(m_name);
     }
 }

@@ -42,11 +42,9 @@ class IdentityWidget : public QWidget
         void populateIdentityNameBox();
 
     private:
-        void init();
+        void init(IdentityType type);
 
         Ui::IdentityWidget *m_ui;
-        IdentityType m_type;
-        QString m_name;
 };
 
 #endif // IDENTITYWIDGET_H

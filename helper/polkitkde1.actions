@@ -1,0 +1,25 @@
+[Domain]
+Name=System policy settings
+Icon=security-high
+
+[org.kde.polkitkde1.readauthorizations]
+Name=Read system authorizations
+Description=Authorization is required to read system authorizations
+Policy=auth_admin
+Persistence=session
+
+[org.kde.polkitkde1.changeimplicitauthorizations]
+Name=Change implicit authorizations for an action
+Description=Authorization is required to change implicit authorizations
+Policy=auth_admin
+
+[org.kde.polkitkde1.changeexplicitauthorizations]
+Name=Change explicit authorizations for an action
+Description=Authorization is required to change explicit authorizations
+Policy=auth_admin
+Persistence=session
+
+[org.kde.polkitkde1.changesystemconfiguration]
+Name=Change global configuration for system policies
+Description=Authorization is required to change global configuration for system policies
+Policy=auth_admin

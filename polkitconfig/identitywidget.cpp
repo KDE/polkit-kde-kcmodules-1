@@ -61,7 +61,7 @@ IdentityWidget::IdentityType IdentityWidget::identityType() const
 
 void IdentityWidget::setIdentityName(const QString& name)
 {
-    m_ui->identityNameBox->setCurrentIndex(m_ui->identityNameBox->findText(name));
+    m_ui->identityNameBox->setCurrentIndex(m_ui->identityNameBox->findData(name));
 }
 
 void IdentityWidget::setIdentityType(IdentityWidget::IdentityType type)

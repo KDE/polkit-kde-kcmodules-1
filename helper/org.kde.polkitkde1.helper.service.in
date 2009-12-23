@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=org.kde.polkitkde1.helper
+Exec=@LIBEXEC_INSTALL_DIR@/polkitkde1helper
+User=root

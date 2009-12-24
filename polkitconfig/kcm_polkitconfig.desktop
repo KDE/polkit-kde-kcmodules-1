@@ -11,7 +11,9 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system-policies
 
 Name=Global policy configuration
+Name[uk]=Налаштування загальних правил доступу
 
 Comment=Configure global settings for system policies
+Comment[uk]=Налаштування загальних параметрів системних правил доступу
 
 X-KDE-Keywords=system,policy,policies,security,polkit,policykit,password

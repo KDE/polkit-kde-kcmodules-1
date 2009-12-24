@@ -1,25 +1,34 @@
 [Domain]
 Name=System policy settings
+Name[uk]=Параметри системних правил доступу
 Icon=security-high
 
 [org.kde.polkitkde1.readauthorizations]
 Name=Read system authorizations
+Name[uk]=Читання системних уповноважень
 Description=Authorization is required to read system authorizations
+Description[uk]=Для читання системних уповноважень потрібно пройти уповноваження
 Policy=auth_admin
 Persistence=session
 
 [org.kde.polkitkde1.changeimplicitauthorizations]
 Name=Change implicit authorizations for an action
+Name[uk]=Змінити неявні уповноваження на дію
 Description=Authorization is required to change implicit authorizations
+Description[uk]=Для зміни неявних уповноважень потрібно пройти уповноваження
 Policy=auth_admin
 
 [org.kde.polkitkde1.changeexplicitauthorizations]
 Name=Change explicit authorizations for an action
+Name[uk]=Змінити явні уповноваження на дію
 Description=Authorization is required to change explicit authorizations
+Description[uk]=Для зміни явних уповноважень потрібно пройти уповноваження
 Policy=auth_admin
 Persistence=session
 
 [org.kde.polkitkde1.changesystemconfiguration]
 Name=Change global configuration for system policies
+Name[uk]=Змінити загальні налаштування системних правил доступу
 Description=Authorization is required to change global configuration for system policies
+Description[uk]=Для зміни загального налаштування системних прав доступу потрібно пройти уповноваження
 Policy=auth_admin

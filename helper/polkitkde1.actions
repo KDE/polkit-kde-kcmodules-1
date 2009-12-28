@@ -1,34 +1,62 @@
 [Domain]
 Name=System policy settings
+Name[ca]=Arranjament de la política del sistema
+Name[cs]=Nastavení pravidel systému
+Name[pt]=Configuração da política do sistema
 Name[uk]=Параметри системних правил доступу
+Name[zh_TW]=系統政策設定
 Icon=security-high
 
 [org.kde.polkitkde1.readauthorizations]
 Name=Read system authorizations
+Name[ca]=Llegeix les autoritzacions del sistema
+Name[pt]=Ler as autorizações do sistema
 Name[uk]=Читання системних уповноважень
+Name[zh_TW]=讀取系統授權
 Description=Authorization is required to read system authorizations
+Description[ca]=Es requereix autorització per llegir les autoritzacions del sistema
+Description[pt]=É necessária a autorização para ler as autorizações do sistema
 Description[uk]=Для читання системних уповноважень потрібно пройти уповноваження
+Description[zh_TW]=讀取系統授權時需要認證
 Policy=auth_admin
 Persistence=session
 
 [org.kde.polkitkde1.changeimplicitauthorizations]
 Name=Change implicit authorizations for an action
+Name[ca]=Canvia les autoritzacions implícites per una acció
+Name[pt]=Modificar as autorizações implícitas para uma acção
 Name[uk]=Змінити неявні уповноваження на дію
+Name[zh_TW]=變更某動作的內部授權
 Description=Authorization is required to change implicit authorizations
+Description[ca]=Es requereix autorització per canviar les autoritzacions implícites
+Description[pt]=É necessária a autorização para modificar as autorizações implícitas
 Description[uk]=Для зміни неявних уповноважень потрібно пройти уповноваження
+Description[zh_TW]=變更內部授權時需要認證
 Policy=auth_admin
 
 [org.kde.polkitkde1.changeexplicitauthorizations]
 Name=Change explicit authorizations for an action
+Name[ca]=Canvia les autoritzacions explícites per una acció
+Name[pt]=Modificar as autorizações explícitas para uma acção
 Name[uk]=Змінити явні уповноваження на дію
+Name[zh_TW]=變更某動作的外部授權
 Description=Authorization is required to change explicit authorizations
+Description[ca]=Es requereix autorització per canviar les autoritzacions explícites
+Description[pt]=É necessária a autorização para modificar as autorizações explícitas
 Description[uk]=Для зміни явних уповноважень потрібно пройти уповноваження
+Description[zh_TW]=變更外部授權時需要認證
 Policy=auth_admin
 Persistence=session
 
 [org.kde.polkitkde1.changesystemconfiguration]
 Name=Change global configuration for system policies
+Name[ca]=Canvia la configuració global de les polítiques del sistema
+Name[pt]=Modificar a configuração global das políticas do sistema
 Name[uk]=Змінити загальні налаштування системних правил доступу
+Name[zh_TW]=變更系統政策的全域設定
 Description=Authorization is required to change global configuration for system policies
+Description[ca]=Es requereix autorització per canviar la configuració global de les polítiques del sistema
+Description[pt]=É necessária a autorização para modificar a configuração global das políticas do sistema
 Description[uk]=Для зміни загального налаштування системних прав доступу потрібно пройти уповноваження
+Description[zh_TW]=變更系統政策的全域設定時需要認證
 Policy=auth_admin

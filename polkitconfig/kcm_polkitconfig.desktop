@@ -12,13 +12,19 @@ X-KDE-System-Settings-Parent-Category=system-policies
 
 Name=Global policy configuration
 Name[ca]=Configuració de la política global
+Name[en_GB]=Global policy configuration
+Name[nl]=Configuratie voor globaal beleid
 Name[pt]=Configuração da política global
+Name[sv]=Inställning av global policy
 Name[uk]=Налаштування загальних правил доступу
 Name[zh_TW]=全域政策設定
 
 Comment=Configure global settings for system policies
 Comment[ca]=Configura l'arranjament global de les polítiques del sistema
+Comment[en_GB]=Configure global settings for system policies
+Comment[nl]=Globale instellingen voor systeembeleid configureren
 Comment[pt]=Configurar as opções globais das políticas do sistema
+Comment[sv]=Anpassa globala inställningar av systempolicy
 Comment[uk]=Налаштування загальних параметрів системних правил доступу
 Comment[zh_TW]=設定系統政策的全域設定
 

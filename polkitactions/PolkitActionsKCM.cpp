@@ -1,20 +1,11 @@
-/*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+/* This file is part of the KDE project
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Copyright (C) 2009 Dario Freddi <drf@kde.org>
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 */
 
 #include "PolkitActionsKCM.h"
@@ -53,11 +44,14 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
     m_model = new PolkitKde::PoliciesModel(this);
     m_proxyModel = new PolkitKde::AuthorizationsFilterModel(this);
     m_proxyModel->setSourceModel(m_model);
+    m_ui->treeView->header()->hide();
     m_ui->treeView->setModel(m_proxyModel);
     m_ui->treeView->setItemDelegate(new PolkitKde::PkItemDelegate(this));
 
     connect(m_ui->searchLine, SIGNAL(textChanged(QString)),
             m_proxyModel, SLOT(setFilterRegExp(QString)));
+    connect(m_ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)));
 
     // Initialize
     connect(PolkitQt1::Authority::instance(), SIGNAL(checkAuthorizationFinished(PolkitQt1::Authority::Result)),
@@ -74,20 +68,25 @@ PolkitActionsKCM::~PolkitActionsKCM()
 
 void PolkitActionsKCM::load()
 {
-KCModule::load();
+    KCModule::load();
 }
 
 void PolkitActionsKCM::save()
 {
-KCModule::save();
+    KCModule::save();
 }
 
 void PolkitActionsKCM::defaults()
 {
-KCModule::defaults();
+    KCModule::defaults();
 }
 
 void PolkitActionsKCM::slotCheckAuthorizationFinished(PolkitQt1::Authority::Result result)
+{
+
+}
+
+void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QModelIndex& )
 {
 
 }

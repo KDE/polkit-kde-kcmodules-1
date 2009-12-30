@@ -179,20 +179,3 @@ QList< PKLAEntry > PolkitKde1Helper::entriesFromFile(int filePriority, const QSt
     return retlist;
 }
 
-QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry)
-{
-    argument.beginStructure();
-    argument << entry.title << entry.identity << entry.action << entry.resultAny << entry.resultInactive << entry.resultActive
-             << entry.filePriority << entry.fileOrder;
-    argument.endStructure();
-    return argument;
-}
-
-const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry)
-{
-    argument.beginStructure();
-    argument >> entry.title >> entry.identity >> entry.action >> entry.resultAny >> entry.resultInactive >> entry.resultActive
-             >> entry.filePriority >> entry.fileOrder;
-    argument.endStructure();
-    return argument;
-}

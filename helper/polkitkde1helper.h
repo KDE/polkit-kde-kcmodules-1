@@ -14,22 +14,7 @@
 #include <QtCore/QObject>
 #include <QtDBus/QDBusContext>
 #include <QtDBus/qdbusargument.h>
-
-class PKLAEntry {
-    public:
-    QString title;
-    QString identity;
-    QString action;
-    QString resultAny;
-    QString resultInactive;
-    QString resultActive;
-
-    int filePriority;
-    int fileOrder;
-};
-Q_DECLARE_METATYPE(PKLAEntry)
-
-typedef QList<PKLAEntry> PKLAEntryList;
+#include "../PKLAEntry.h"
 
 class PolkitKde1Helper : public QObject, protected QDBusContext
 {
@@ -50,8 +35,5 @@ class PolkitKde1Helper : public QObject, protected QDBusContext
     private:
         QList<PKLAEntry> entriesFromFile(int filePriority, const QString &fileContents);
 };
-
-QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry);
-const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry);
 
 #endif // POLKITKDE1HELPER_H

@@ -17,90 +17,21 @@
 #include <qdbuspendingcall.h>
 #include <QtDBus/qdbusmetatype.h>
 #include <PolkitQt1/ActionDescription>
+#include <QDebug>
 
 namespace PolkitKde {
 
 ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent)
         : QWidget(parent)
         , m_ui(new Ui::ActionWidget)
-        , m_action(action)
+        , m_action(0)
 {
     m_ui->setupUi(this);
 
     // Initialize
-    switch (action->implicitActive()) {
-        case PolkitQt1::ActionDescription::Authorized:
-            m_ui->activeComboBox->setCurrentIndex(0);
-            break;
-        case PolkitQt1::ActionDescription::NotAuthorized:
-            m_ui->activeComboBox->setCurrentIndex(1);
-            break;
-        case PolkitQt1::ActionDescription::AuthenticationRequired:
-            m_ui->activeComboBox->setCurrentIndex(4);
-            break;
-        case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
-            m_ui->activeComboBox->setCurrentIndex(5);
-            break;
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
-            m_ui->activeComboBox->setCurrentIndex(2);
-            break;
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
-            m_ui->activeComboBox->setCurrentIndex(3);
-            break;
-    }
-    switch (action->implicitInactive()) {
-        case PolkitQt1::ActionDescription::Authorized:
-            m_ui->inactiveComboBox->setCurrentIndex(0);
-            break;
-        case PolkitQt1::ActionDescription::NotAuthorized:
-            m_ui->inactiveComboBox->setCurrentIndex(1);
-            break;
-        case PolkitQt1::ActionDescription::AuthenticationRequired:
-            m_ui->inactiveComboBox->setCurrentIndex(4);
-            break;
-        case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
-            m_ui->inactiveComboBox->setCurrentIndex(5);
-            break;
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
-            m_ui->inactiveComboBox->setCurrentIndex(2);
-            break;
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
-            m_ui->inactiveComboBox->setCurrentIndex(3);
-            break;
-    }
-    switch (action->implicitAny()) {
-        case PolkitQt1::ActionDescription::Authorized:
-            m_ui->anyComboBox->setCurrentIndex(0);
-            break;
-        case PolkitQt1::ActionDescription::NotAuthorized:
-            m_ui->anyComboBox->setCurrentIndex(1);
-            break;
-        case PolkitQt1::ActionDescription::AuthenticationRequired:
-            m_ui->anyComboBox->setCurrentIndex(4);
-            break;
-        case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
-            m_ui->anyComboBox->setCurrentIndex(5);
-            break;
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
-            m_ui->anyComboBox->setCurrentIndex(2);
-            break;
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
-            m_ui->anyComboBox->setCurrentIndex(3);
-            break;
-    }
-    m_ui->descriptionLabel->setText(action->description());
-    m_ui->vendorLabel->setText(action->vendorName());
-    m_ui->vendorLabel->setUrl(action->vendorUrl());
-    m_ui->pixmapLabel->setPixmap(KIcon(action->iconName()).pixmap(64));
+    reloadPKLAs();
 
-    qDBusRegisterMetaType<PKLAEntry>();
-    QDBusConnection::systemBus().connect("org.kde.polkitkde1.helper", "/Helper", "org.kde.polkitkde1.helper",
-                                         "policiesRetrieved", this, SLOT(slotPoliciesRetrieved(PKLAEntryList)));
-    QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
-                                                          "/Helper",
-                                                          "org.kde.polkitkde1.helper",
-                                                          QLatin1String("retrievePolicies"));
-    QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
+    setAction(action);
 }
 
 ActionWidget::~ActionWidget()
@@ -108,8 +39,105 @@ ActionWidget::~ActionWidget()
 
 }
 
-void ActionWidget::slotPoliciesRetrieved(const PKLAEntryList& policies)
+void ActionWidget::reloadPKLAs()
 {
+    m_entries.clear();
+    QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
+                                                          "/Helper",
+                                                          "org.kde.polkitkde1.helper",
+                                                          QLatin1String("retrievePolicies"));
+    QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
+    reply.waitForFinished();
+    if (reply.reply().arguments().count() >= 1) {
+        QVariantList vlist;
+        reply.reply().arguments().first().value<QDBusArgument>() >> vlist;
+        foreach (const QVariant &variant, vlist) {
+            PKLAEntry entry;
+            variant.value<QDBusArgument>() >> entry;
+            qDebug() << entry.title;
+            m_entries.append(entry);
+        }
+    }
+
+    if (m_action) {
+        computeActionPolicies();
+    }
+}
+
+void ActionWidget::computeActionPolicies()
+{
+    foreach (const PKLAEntry &entry, m_entries) {
+        QStringList realActions = entry.action.split(';');
+        if (realActions.contains(m_action->actionId())) {
+            // Match! Is it, actually, an implicit override?
+            if (entry.title == "PolkitKdeOverrideImplicit") {
+                // It is!
+                setImplicitAuthorization(implFromText(entry.resultActive), m_ui->activeComboBox);
+                setImplicitAuthorization(implFromText(entry.resultInactive), m_ui->inactiveComboBox);
+                setImplicitAuthorization(implFromText(entry.resultAny), m_ui->anyComboBox);
+            } else {
+                // TODO: Add it to the local auths
+            }
+        }
+    }
+}
+
+PolkitQt1::ActionDescription::ImplicitAuthorization ActionWidget::implFromText(const QString& text)
+{
+    if (text == "yes") {
+        return PolkitQt1::ActionDescription::Authorized;
+    } else if (text == "no") {
+        return PolkitQt1::ActionDescription::NotAuthorized;
+    } else if (text == "auth_admin") {
+        return PolkitQt1::ActionDescription::AdministratorAuthenticationRequired;
+    } else if (text == "auth_admin_keep") {
+        return PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained;
+    } else if (text == "auth_self") {
+        return PolkitQt1::ActionDescription::AuthenticationRequired;
+    } else if (text == "auth_self_keep") {
+        return PolkitQt1::ActionDescription::AuthenticationRequiredRetained;
+    } else {
+        return PolkitQt1::ActionDescription::Unknown;
+    }
+}
+
+void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox* box)
+{
+    switch (auth) {
+        case PolkitQt1::ActionDescription::Authorized:
+            box->setCurrentIndex(0);
+            break;
+        case PolkitQt1::ActionDescription::NotAuthorized:
+            box->setCurrentIndex(1);
+            break;
+        case PolkitQt1::ActionDescription::AuthenticationRequired:
+            box->setCurrentIndex(4);
+            break;
+        case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
+            box->setCurrentIndex(5);
+            break;
+        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
+            box->setCurrentIndex(2);
+            break;
+        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
+            box->setCurrentIndex(3);
+            break;
+    }
+}
+
+void ActionWidget::setAction(PolkitQt1::ActionDescription* action)
+{
+    m_action = action;
+    setImplicitAuthorization(action->implicitActive(), m_ui->activeComboBox);
+    setImplicitAuthorization(action->implicitInactive(), m_ui->inactiveComboBox);
+    setImplicitAuthorization(action->implicitAny(), m_ui->anyComboBox);
+
+    m_ui->descriptionLabel->setText(action->description());
+    m_ui->vendorLabel->setText(action->vendorName());
+    m_ui->vendorLabel->setUrl(action->vendorUrl());
+    m_ui->pixmapLabel->setPixmap(KIcon(action->iconName()).pixmap(64));
+
+    computeActionPolicies();
 }
 
 }

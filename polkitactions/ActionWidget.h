@@ -13,11 +13,9 @@
 
 #include <QtGui/QWidget>
 #include "../PKLAEntry.h"
+#include <PolkitQt1/ActionDescription>
 
-namespace PolkitQt1 {
-class ActionDescription;
-}
-
+class QComboBox;
 namespace Ui {
 class ActionWidget;
 }
@@ -31,12 +29,20 @@ class ActionWidget : public QWidget
         explicit ActionWidget(PolkitQt1::ActionDescription *action, QWidget* parent = 0);
         virtual ~ActionWidget();
 
-    public slots:
-        void slotPoliciesRetrieved(const PKLAEntryList &policies);
+    public Q_SLOTS:
+        void setAction(PolkitQt1::ActionDescription *action);
+        void computeActionPolicies();
+
+    private Q_SLOTS:
+        void reloadPKLAs();
 
     private:
+        PolkitQt1::ActionDescription::ImplicitAuthorization implFromText(const QString &text);
+        void setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox *box);
+
         Ui::ActionWidget *m_ui;
         PolkitQt1::ActionDescription *m_action;
+        PKLAEntryList m_entries;
 };
 
 }

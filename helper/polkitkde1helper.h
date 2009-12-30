@@ -25,15 +25,12 @@ class PolkitKde1Helper : public QObject, protected QDBusContext
         PolkitKde1Helper(QObject* parent = 0);
         virtual ~PolkitKde1Helper();
 
-    public slots:
+    public Q_SLOTS:
         void saveGlobalConfiguration(const QString &adminIdentities, int systemPriority, int policiesPriority);
-        void retrievePolicies();
-
-    Q_SIGNALS:
-        void policiesRetrieved(const PKLAEntryList &policies);
+        QVariantList retrievePolicies();
 
     private:
-        QList<PKLAEntry> entriesFromFile(int filePriority, const QString &fileContents);
+        QVariantList entriesFromFile(int filePriority, const QString &fileContents);
 };
 
 #endif // POLKITKDE1HELPER_H

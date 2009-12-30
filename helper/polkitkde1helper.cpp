@@ -82,7 +82,7 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, i
     // TODO: Move files around if the priority was changed
 }
 
-void PolkitKde1Helper::retrievePolicies()
+QVariantList PolkitKde1Helper::retrievePolicies()
 {
     qDebug() << "Request to retrieve the action authorizations by " << message().service();
     PolkitQt1::Authority::Result result;
@@ -98,10 +98,10 @@ void PolkitKde1Helper::retrievePolicies()
     } else {
         // It's not ok
         qDebug() << "UnAuthorized! " << PolkitQt1::Authority::instance()->lastError();
-        return;
+        return QVariantList();
     }
 
-    QList<PKLAEntry> retlist;
+    QVariantList retlist;
 
     // Iterate over the directory and find out everything
     QDir baseDir("/var/lib/polkit-1/localauthority/");
@@ -120,16 +120,16 @@ void PolkitKde1Helper::retrievePolicies()
         }
     }
 
-    emit policiesRetrieved(retlist);
+    return retlist;
 }
 
-QList< PKLAEntry > PolkitKde1Helper::entriesFromFile(int filePriority, const QString& filePath)
+QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& filePath)
 {
-    QList< PKLAEntry > retlist;
+    QList< QVariant > retlist;
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "Failed to open " << filePath;
-        return QList< PKLAEntry >();
+        return QVariantList();
     }
 
     int priority = 0;
@@ -159,7 +159,7 @@ QList< PKLAEntry > PolkitKde1Helper::entriesFromFile(int filePriority, const QSt
                 } else if (line.startsWith('[')) {
                     // Ouch!!
                     qWarning() << "The file appears malformed!! " << filePath;
-                    return QList< PKLAEntry >();
+                    return QVariantList();
                 }
 
                 // Did we parse it all?
@@ -169,7 +169,7 @@ QList< PKLAEntry > PolkitKde1Helper::entriesFromFile(int filePriority, const QSt
                     ++priority;
                     qDebug() << "PKLA Parsed:" << entry.title << entry.action << entry.identity << entry.resultAny
                              << entry.resultInactive << entry.resultActive << entry.fileOrder;
-                    retlist.append(entry);
+                    retlist.append(QVariant::fromValue(entry));
                     break;
                 }
             }

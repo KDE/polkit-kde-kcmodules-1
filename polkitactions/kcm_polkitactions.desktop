@@ -1,0 +1,17 @@
+[Desktop Entry]
+Exec=kcmshell4 kcm_polkitactions
+Icon=system-lock-screen
+Type=Service
+X-KDE-ServiceTypes=KCModule
+#X-DocPath=kcontrol/powerdevil/index.html
+
+X-KDE-Library=kcm_polkitactions
+X-KDE-ParentApp=kcontrol
+
+X-KDE-System-Settings-Parent-Category=system-policies
+
+Name=Actions policy
+
+Comment=Configure policies for trusted actions in the system
+
+X-KDE-Keywords=system,policy,policies,security,polkit,policykit,password

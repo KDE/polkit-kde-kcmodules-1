@@ -13,11 +13,13 @@
 
 #include <kcmodule.h>
 #include <PolkitQt1/Authority>
+#include <QtCore/QPointer>
 
 class QModelIndex;
 namespace PolkitKde {
 class PoliciesModel;
 class AuthorizationsFilterModel;
+class ActionWidget;
 }
 
 namespace Ui {
@@ -43,6 +45,7 @@ class PolkitActionsKCM : public KCModule
         Ui::PolkitActionsMainView *m_ui;
         PolkitKde::PoliciesModel *m_model;
         PolkitKde::AuthorizationsFilterModel *m_proxyModel;
+        QPointer<PolkitKde::ActionWidget> m_actionWidget;
 };
 
 #endif // POLKITACTIONSKCM_H

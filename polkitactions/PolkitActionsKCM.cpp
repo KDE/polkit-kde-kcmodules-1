@@ -96,8 +96,15 @@ void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QMod
         action = current.data(PolkitKde::PoliciesModel::PolkitEntryRole).value<PolkitQt1::ActionDescription *>();
 
         if (action) {
-            layout()->takeAt(1)->widget()->deleteLater();
-            layout()->addWidget(new PolkitKde::ActionWidget(action));
+            if (m_actionWidget.isNull()) {
+                if (layout()->count() == 2) {
+                    layout()->takeAt(1)->widget()->deleteLater();
+                }
+                m_actionWidget = new PolkitKde::ActionWidget(action);
+                layout()->addWidget(m_actionWidget.data());
+            } else {
+                m_actionWidget.data()->setAction(action);
+            }
         }
     } else {
         // TODO

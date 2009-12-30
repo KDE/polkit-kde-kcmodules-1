@@ -7,5 +7,12 @@
            <arg direction="in" type="i" name="systemPriority" />
            <arg direction="in" type="i" name="policiesPriority" />
        </method>
+       <method name="retrievePolicies" >
+       </method>
+
+       <signal name="policiesRetrieved" >
+           <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="PKLAEntryList"/>
+           <arg direction="out" type="a(ssssssii)" />
+       </method>
    </interface>
 </node>

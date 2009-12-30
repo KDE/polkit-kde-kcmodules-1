@@ -18,10 +18,12 @@
 #include <QtDBus/QDBusConnection>
 
 #include <PolkitQt1/Authority>
+#include <qdir.h>
 
 PolkitKde1Helper::PolkitKde1Helper(QObject* parent)
     : QObject(parent)
 {
+    qDBusRegisterMetaType<PKLAEntry>();
     (void) new HelperAdaptor(this);
     // Register the DBus service
     if (!QDBusConnection::systemBus().registerService("org.kde.polkitkde1.helper")) {
@@ -80,3 +82,117 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, i
     // TODO: Move files around if the priority was changed
 }
 
+void PolkitKde1Helper::retrievePolicies()
+{
+    qDebug() << "Request to retrieve the action authorizations by " << message().service();
+    PolkitQt1::Authority::Result result;
+    PolkitQt1::SystemBusNameSubject *subject;
+
+    subject = new PolkitQt1::SystemBusNameSubject(message().service());
+
+    result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.readauthorizations",
+                                                                      subject, PolkitQt1::Authority::AllowUserInteraction);
+    if (result == PolkitQt1::Authority::Yes) {
+        qDebug() << "Authorized successfully";
+        // It's ok
+    } else {
+        // It's not ok
+        qDebug() << "UnAuthorized! " << PolkitQt1::Authority::instance()->lastError();
+        return;
+    }
+
+    QList<PKLAEntry> retlist;
+
+    // Iterate over the directory and find out everything
+    QDir baseDir("/var/lib/polkit-1/localauthority/");
+    QFileInfoList baseList = baseDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    foreach (const QFileInfo &info, baseList) {
+        int filePriority = info.baseName().split('-').first().toInt();
+        qDebug() << "Iterating over the directory " << info.absoluteFilePath() << ", which has a priority of " << filePriority;
+
+        QDir nestedDir(info.absoluteFilePath());
+        QFileInfoList nestedList = nestedDir.entryInfoList(QDir::Files);
+
+        foreach (const QFileInfo &nestedInfo, nestedList) {
+            qDebug() << "Parsing file " << nestedInfo.absoluteFilePath();
+            retlist.append(entriesFromFile(filePriority, nestedInfo.absoluteFilePath()));
+        }
+    }
+
+    emit policiesRetrieved(retlist);
+}
+
+QList< PKLAEntry > PolkitKde1Helper::entriesFromFile(int filePriority, const QString& filePath)
+{
+    QList< PKLAEntry > retlist;
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Failed to open " << filePath;
+        return QList< PKLAEntry >();
+    }
+
+    int priority = 0;
+
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        if (line.startsWith('[')) {
+            // Ok, that's a key entry
+            PKLAEntry entry;
+            entry.title = line.split('[').last().split(']').first();
+            entry.filePriority = filePriority;
+            entry.fileOrder = priority;
+            // Now parse over all the rest
+            while (!in.atEnd()) {
+                QString line = in.readLine();
+                if (line.startsWith("Identity=")) {
+                    entry.identity = line.split("Identity=").last();
+                } else if (line.startsWith("Action=")) {
+                    entry.action = line.split("Action=").last();
+                } else if (line.startsWith("ResultAny=")) {
+                    entry.resultAny = line.split("ResultAny=").last();
+                } else if (line.startsWith("ResultInactive=")) {
+                    entry.resultInactive = line.split("ResultInactive=").last();
+                } else if (line.startsWith("ResultActive=")) {
+                    entry.resultActive = line.split("ResultActive=").last();
+                } else if (line.startsWith('[')) {
+                    // Ouch!!
+                    qWarning() << "The file appears malformed!! " << filePath;
+                    return QList< PKLAEntry >();
+                }
+
+                // Did we parse it all?
+                if (!entry.identity.isEmpty() && !entry.action.isEmpty() && !entry.resultActive.isEmpty() &&
+                    !entry.resultAny.isEmpty() && !entry.resultInactive.isEmpty()) {
+                    // Awesome, add and wave goodbye. And also increase the priority
+                    ++priority;
+                    qDebug() << "PKLA Parsed:" << entry.title << entry.action << entry.identity << entry.resultAny
+                             << entry.resultInactive << entry.resultActive << entry.fileOrder;
+                    retlist.append(entry);
+                    break;
+                }
+            }
+        }
+    }
+
+    return retlist;
+}
+
+QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry)
+{
+    argument.beginStructure();
+    argument << entry.title << entry.identity << entry.action << entry.resultAny << entry.resultInactive << entry.resultActive
+             << entry.filePriority << entry.fileOrder;
+    argument.endStructure();
+    return argument;
+}
+
+const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry)
+{
+    argument.beginStructure();
+    argument >> entry.title >> entry.identity >> entry.action >> entry.resultAny >> entry.resultInactive >> entry.resultActive
+             >> entry.filePriority >> entry.fileOrder;
+    argument.endStructure();
+    return argument;
+}

@@ -18,6 +18,9 @@
 #include "PoliciesModel.h"
 #include "AuthorizationsFilterModel.h"
 #include "pkitemdelegate.h"
+#include <QLayout>
+#include "ActionWidget.h"
+#include "PolicyItem.h"
 
 K_PLUGIN_FACTORY(KCMPolkitActionsFactory,
                  registerPlugin<PolkitActionsKCM>();
@@ -88,6 +91,16 @@ void PolkitActionsKCM::slotCheckAuthorizationFinished(PolkitQt1::Authority::Resu
 
 void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QModelIndex& )
 {
+    if (current.data(PolkitKde::PoliciesModel::IsGroupRole).toBool() == false) {
+        PolkitQt1::ActionDescription *action;
+        action = current.data(PolkitKde::PoliciesModel::PolkitEntryRole).value<PolkitQt1::ActionDescription *>();
 
+        if (action) {
+            layout()->takeAt(1)->widget()->deleteLater();
+            layout()->addWidget(new PolkitKde::ActionWidget(action));
+        }
+    } else {
+        // TODO
+    }
 }
 

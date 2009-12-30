@@ -3,6 +3,8 @@ set( kcm_polkitactions_SRCS
     AuthorizationsFilterModel.cpp
     PoliciesModel.cpp
     PolicyItem.cpp
+    ActionWidget.cpp
+    ../PKLAEntry.cpp
     pkitemdelegate.cpp
 )
 

@@ -12,6 +12,7 @@
 #define ACTIONWIDGET_H
 
 #include <QtGui/QWidget>
+#include "../PKLAEntry.h"
 
 namespace PolkitQt1 {
 class ActionDescription;
@@ -25,9 +26,13 @@ namespace PolkitKde {
 
 class ActionWidget : public QWidget
 {
+    Q_OBJECT
     public:
         explicit ActionWidget(PolkitQt1::ActionDescription *action, QWidget* parent = 0);
         virtual ~ActionWidget();
+
+    public slots:
+        void slotPoliciesRetrieved(const PKLAEntryList &policies);
 
     private:
         Ui::ActionWidget *m_ui;

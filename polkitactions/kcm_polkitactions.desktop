@@ -11,6 +11,7 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system-policies
 
 Name=Actions policy
+Name[cs]=Pravidla činností
 Name[da]=Politik for handlinger
 Name[de]=Aktionsregeln
 Name[en_GB]=Actions policy
@@ -22,8 +23,10 @@ Name[pt]=Política das acções
 Name[pt_BR]=Política de ações
 Name[sv]=Åtgärdspolicy
 Name[uk]=Правила дій
+Name[x-test]=xxActions policyxx
 
 Comment=Configure policies for trusted actions in the system
+Comment[cs]=Nastavit pravidla pro důvěryhodné činnosti v systému
 Comment[da]=Indstil politikker for betroede handlinger i systemet
 Comment[de]=Regeln für vertrauliche Aktionen im System einrichten
 Comment[en_GB]=Configure policies for trusted actions in the system
@@ -35,5 +38,6 @@ Comment[pt]=Configurar as políticas para as acções fidedignas no sistema
 Comment[pt_BR]=Configure as políticas para as ações confiáveis no sistema
 Comment[sv]=Anpassa policy för pålitliga åtgärder i systemet
 Comment[uk]=Налаштування правил щодо виконання довірених дій у системі
+Comment[x-test]=xxConfigure policies for trusted actions in the systemxx
 
 X-KDE-Keywords=system,policy,policies,security,polkit,policykit,password

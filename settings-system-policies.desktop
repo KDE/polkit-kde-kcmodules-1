@@ -7,6 +7,7 @@ Icon=preferences-desktop-user-password
 
 Name=System policies
 Name[ca]=Polítiques del sistema
+Name[ca@valencia]=Polítiques del sistema
 Name[cs]=Pravidla systému
 Name[da]=Systempolitikker
 Name[de]=Systemregeln

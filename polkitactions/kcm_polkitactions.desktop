@@ -12,6 +12,7 @@ X-KDE-System-Settings-Parent-Category=system-policies
 
 Name=Actions policy
 Name[ca]=Política d'accions
+Name[ca@valencia]=Política d'accions
 Name[cs]=Pravidla činností
 Name[da]=Politik for handlinger
 Name[de]=Aktionsregeln
@@ -35,6 +36,7 @@ Name[zh_TW]=動作政策
 
 Comment=Configure policies for trusted actions in the system
 Comment[ca]=Configura les polítiques per accions fiables en el sistema
+Comment[ca@valencia]=Configura les polítiques per accions fiables en el sistema
 Comment[cs]=Nastavit pravidla pro důvěryhodné činnosti v systému
 Comment[da]=Indstil politikker for betroede handlinger i systemet
 Comment[de]=Regeln für vertrauliche Aktionen im System einrichten

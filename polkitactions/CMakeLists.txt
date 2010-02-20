@@ -4,6 +4,7 @@ set( kcm_polkitactions_SRCS
     PoliciesModel.cpp
     PolicyItem.cpp
     ActionWidget.cpp
+    LocalAuthorization.cpp
     ../PKLAEntry.cpp
     pkitemdelegate.cpp
 )

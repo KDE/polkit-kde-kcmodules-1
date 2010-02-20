@@ -139,4 +139,91 @@ QSize PkItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelI
                  qMax(ITEM_ROW_HEIGHT, d_fm.height() + r_fm.height()));
 }
 
+/////////////////////////////
+
+PKLAItemDelegate::PKLAItemDelegate(QObject *parent) : QStyledItemDelegate(parent)
+{}
+
+PKLAItemDelegate::~PKLAItemDelegate()
+{}
+
+void PKLAItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                           const QModelIndex &index) const
+{
+    QStyleOptionViewItemV4 opt(option);
+
+    QStyle *style = QApplication::style();
+    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget);
+
+    QPixmap pixmap(opt.rect.size());
+    pixmap.fill(Qt::transparent);
+    QPainter p(&pixmap);
+    p.translate(-opt.rect.topLeft());
+
+    QRect clipRect(opt.rect);
+    p.setClipRect(clipRect);
+
+    // here we draw the icon
+    KIcon icon("dialog-password");
+
+    QIcon::Mode iconMode = QIcon::Normal;
+
+    if (opt.state & QStyle::State_MouseOver) {
+        iconMode = QIcon::Active;
+    }
+
+    const int height = (opt.rect.height() > ITEM_ROW_HEIGHT) ? opt.rect.height() : ITEM_ROW_HEIGHT;
+
+    QRect iconRect(opt.rect.topLeft(), QSize(ICON_SIZE, ICON_SIZE));
+    const QRect iconPlaceRect(opt.rect.topLeft(), QSize(height, height));
+    iconRect.moveCenter(iconPlaceRect.center());
+    icon.paint(&p, iconRect, Qt::AlignCenter, iconMode);
+
+    QColor foregroundColor = (opt.state.testFlag(QStyle::State_Selected)) ?
+                             opt.palette.color(QPalette::HighlightedText) : opt.palette.color(QPalette::Text);
+
+    p.setPen(foregroundColor);
+
+    // here we draw the action description
+    clipRect.setSize(QSize(opt.rect.width() - height - MARGIN, height / 2));
+    clipRect.translate(height + MARGIN, 0);
+    p.setClipRect(clipRect);
+
+    QFont descriptionFont = opt.font;
+    if (index.model()->hasChildren(index)) {
+        descriptionFont.setBold(true);
+    }
+    descriptionFont.setPointSize(descriptionFont.pointSize());
+    p.setFont(descriptionFont);
+
+    p.drawText(clipRect, Qt::AlignLeft | Qt::AlignBottom, index.data(Qt::DisplayRole).toString());
+
+    // here we draw the action raw name
+    clipRect.translate(0, qApp->fontMetrics().height());
+    p.setClipRect(clipRect);
+
+    QFont actionNameFont = KGlobalSettings::smallestReadableFont();
+    actionNameFont.setItalic(true);
+    p.setFont(actionNameFont);
+    p.drawText(clipRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::UserRole).toString());
+
+    p.end();
+
+    painter->drawPixmap(opt.rect.topLeft(), pixmap);
+}
+
+QSize PKLAItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QFont dFont = option.font;
+
+    const QFont rFont = KGlobalSettings::smallestReadableFont();
+
+    QFontMetrics d_fm(dFont); // description font
+    QFontMetrics r_fm(rFont); // raw string font
+
+    return QSize(qMax(d_fm.width(index.data(Qt::DisplayRole).toString()),
+                      d_fm.width(index.data(PolkitKde::PoliciesModel::PathRole).toString())),
+                 qMax(ITEM_ROW_HEIGHT, d_fm.height() + r_fm.height()));
+}
+
 }

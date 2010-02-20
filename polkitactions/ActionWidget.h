@@ -37,8 +37,9 @@ class ActionWidget : public QWidget
         void reloadPKLAs();
 
     private:
-        PolkitQt1::ActionDescription::ImplicitAuthorization implFromText(const QString &text);
         void setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox *box);
+        QString formatPKLAEntry(const PKLAEntry &entry);
+        QString formatIdentities(const QString &identities);
 
         Ui::ActionWidget *m_ui;
         PolkitQt1::ActionDescription *m_action;

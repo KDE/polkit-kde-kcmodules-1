@@ -210,21 +210,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QScrollArea" name="scrollArea">
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>380</width>
-           <height>223</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
+       <widget class="QListWidget" name="localAuthListWidget"/>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">

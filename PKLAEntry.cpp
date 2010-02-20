@@ -29,3 +29,43 @@ const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry)
     return argument;
 }
 
+PolkitQt1::ActionDescription::ImplicitAuthorization PKLAEntry::implFromText(const QString& text)
+{
+    if (text == "yes") {
+        return PolkitQt1::ActionDescription::Authorized;
+    } else if (text == "no") {
+        return PolkitQt1::ActionDescription::NotAuthorized;
+    } else if (text == "auth_admin") {
+        return PolkitQt1::ActionDescription::AdministratorAuthenticationRequired;
+    } else if (text == "auth_admin_keep") {
+        return PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained;
+    } else if (text == "auth_self") {
+        return PolkitQt1::ActionDescription::AuthenticationRequired;
+    } else if (text == "auth_self_keep") {
+        return PolkitQt1::ActionDescription::AuthenticationRequiredRetained;
+    } else {
+        return PolkitQt1::ActionDescription::Unknown;
+    }
+}
+
+QString PKLAEntry::textFromImpl(PolkitQt1::ActionDescription::ImplicitAuthorization implicit)
+{
+    switch (implicit) {
+        case PolkitQt1::ActionDescription::Authorized:
+            return "yes";
+        case PolkitQt1::ActionDescription::NotAuthorized:
+            return "no";
+        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
+            return "auth_admin";
+        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
+            return "auth_admin_keep";
+        case PolkitQt1::ActionDescription::AuthenticationRequired:
+            return "auth_self";
+        case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
+            return "auth_self_keep";
+        default:
+            return QString();
+    }
+}
+
+

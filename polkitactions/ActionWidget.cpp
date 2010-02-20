@@ -18,6 +18,9 @@
 #include <QtDBus/qdbusmetatype.h>
 #include <PolkitQt1/ActionDescription>
 #include <QDebug>
+#include "LocalAuthorization.h"
+#include <KDebug>
+#include "pkitemdelegate.h"
 
 namespace PolkitKde {
 
@@ -32,6 +35,7 @@ ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent
     reloadPKLAs();
 
     setAction(action);
+    m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
 }
 
 ActionWidget::~ActionWidget()
@@ -66,39 +70,77 @@ void ActionWidget::reloadPKLAs()
 
 void ActionWidget::computeActionPolicies()
 {
+    kDebug();
+    m_ui->localAuthListWidget->clear();
     foreach (const PKLAEntry &entry, m_entries) {
         QStringList realActions = entry.action.split(';');
+        kDebug() << entry.action << m_action->actionId();
         if (realActions.contains(m_action->actionId())) {
             // Match! Is it, actually, an implicit override?
             if (entry.title == "PolkitKdeOverrideImplicit") {
                 // It is!
-                setImplicitAuthorization(implFromText(entry.resultActive), m_ui->activeComboBox);
-                setImplicitAuthorization(implFromText(entry.resultInactive), m_ui->inactiveComboBox);
-                setImplicitAuthorization(implFromText(entry.resultAny), m_ui->anyComboBox);
+                kDebug() << "Found implicit override";
+                setImplicitAuthorization(PKLAEntry::implFromText(entry.resultActive), m_ui->activeComboBox);
+                setImplicitAuthorization(PKLAEntry::implFromText(entry.resultInactive), m_ui->inactiveComboBox);
+                setImplicitAuthorization(PKLAEntry::implFromText(entry.resultAny), m_ui->anyComboBox);
             } else {
                 // TODO: Add it to the local auths
+                //LocalAuthorization *auth = new LocalAuthorization(entry);
+                kDebug() << "Found PKLA override";
+                QListWidgetItem *item = new QListWidgetItem(entry.title);
+                item->setData(Qt::UserRole, formatPKLAEntry(entry));
+                m_ui->localAuthListWidget->addItem(item);
             }
         }
     }
 }
 
-PolkitQt1::ActionDescription::ImplicitAuthorization ActionWidget::implFromText(const QString& text)
+QString ActionWidget::formatPKLAEntry(const PKLAEntry& entry)
 {
-    if (text == "yes") {
-        return PolkitQt1::ActionDescription::Authorized;
-    } else if (text == "no") {
-        return PolkitQt1::ActionDescription::NotAuthorized;
-    } else if (text == "auth_admin") {
-        return PolkitQt1::ActionDescription::AdministratorAuthenticationRequired;
-    } else if (text == "auth_admin_keep") {
-        return PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained;
-    } else if (text == "auth_self") {
-        return PolkitQt1::ActionDescription::AuthenticationRequired;
-    } else if (text == "auth_self_keep") {
-        return PolkitQt1::ActionDescription::AuthenticationRequiredRetained;
-    } else {
-        return PolkitQt1::ActionDescription::Unknown;
+    QString authorizationText;
+
+    if (PKLAEntry::implFromText(entry.resultActive) != m_action->implicitActive()) {
+        authorizationText.append(i18n("'%1' on active console", entry.resultActive));
+        authorizationText.append(", ");
     }
+    if (PKLAEntry::implFromText(entry.resultInactive) != m_action->implicitInactive()) {
+        authorizationText.append(i18n("'%1' on inactive console", entry.resultActive));
+        authorizationText.append(", ");
+    }
+    if (PKLAEntry::implFromText(entry.resultAny) != m_action->implicitAny()) {
+        authorizationText.append(i18n("'%1' on any console", entry.resultActive));
+        authorizationText.append(", ");
+    }
+
+    if (authorizationText.endsWith(", ")) {
+        authorizationText.remove(-1, 2);
+    }
+
+    return i18np("%2 has the following policy: %3", "%2 have the following policy: %3",
+                 entry.identity.split(';').count(), formatIdentities(entry.identity), authorizationText);
+}
+
+QString ActionWidget::formatIdentities(const QString& identities)
+{
+    QString rettext;
+    QStringList realIdentities = identities.split(';');
+
+    foreach (const QString &identity, realIdentities) {
+        if (identity.startsWith("unix-user:")) {
+            rettext.append(identity.split("unix-user:").last());
+            rettext.append(", ");
+        }
+        if (identity.startsWith("unix-group:")) {
+            rettext.append(i18n("%1 group", identity.split("unix-group:").last()));
+            rettext.append(", ");
+        }
+    }
+
+    if (rettext.endsWith(", ")) {
+        rettext = rettext.remove(rettext.length() - 2, 2);
+    }
+
+    return rettext;
 }
 
 void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox* box)
@@ -121,6 +163,8 @@ void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::Implic
             break;
         case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
             box->setCurrentIndex(3);
+            break;
+        default:
             break;
     }
 }

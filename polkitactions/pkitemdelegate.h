@@ -38,6 +38,19 @@ public:
 
 };
 
+class PKLAItemDelegate : public QStyledItemDelegate
+{
+    Q_OBJECT
+
+public:
+    PKLAItemDelegate(QObject *parent = 0);
+    ~PKLAItemDelegate();
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+};
+
 }
 
 #endif

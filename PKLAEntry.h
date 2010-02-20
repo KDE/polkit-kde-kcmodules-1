@@ -10,7 +10,9 @@
 
 #ifndef PKLAENTRY_H
 #define PKLAENTRY_H
+
 #include <QMetaType>
+#include <PolkitQt1/ActionDescription>
 
 class QDBusArgument;
 
@@ -25,6 +27,10 @@ class PKLAEntry {
 
     int filePriority;
     int fileOrder;
+
+    // Static utils for PKLA
+    static PolkitQt1::ActionDescription::ImplicitAuthorization implFromText(const QString& text);
+    static QString textFromImpl(PolkitQt1::ActionDescription::ImplicitAuthorization implicit);
 };
 Q_DECLARE_METATYPE(PKLAEntry)
 

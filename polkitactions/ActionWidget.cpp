@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2009 Dario Freddi <drf@kde.org>
+   Copyright (C) 2009-2010 Dario Freddi <drf@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -17,8 +17,6 @@
 #include <qdbuspendingcall.h>
 #include <QtDBus/qdbusmetatype.h>
 #include <PolkitQt1/ActionDescription>
-#include <QDebug>
-#include "LocalAuthorization.h"
 #include <KDebug>
 #include "pkitemdelegate.h"
 

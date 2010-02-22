@@ -4,15 +4,17 @@ set( kcm_polkitactions_SRCS
     PoliciesModel.cpp
     PolicyItem.cpp
     ActionWidget.cpp
-    LocalAuthorization.cpp
+    explicitauthorizationdialog.cpp
     ../PKLAEntry.cpp
     pkitemdelegate.cpp
+    ../polkitconfig/identitywidget.cpp
 )
 
 kde4_add_ui_files(kcm_polkitactions_SRCS
     mainview.ui
     explicitwidget.ui
-    actionwidget.ui)
+    actionwidget.ui
+    ../polkitconfig/identitywidget.ui)
 
 kde4_add_plugin(kcm_polkitactions ${kcm_polkitactions_SRCS})
 

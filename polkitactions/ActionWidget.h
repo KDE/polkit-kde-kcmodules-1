@@ -31,17 +31,20 @@ class ActionWidget : public QWidget
         virtual ~ActionWidget();
 
         static int comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthorization auth);
+        static PolkitQt1::ActionDescription::ImplicitAuthorization implicitAuthorizationFor(int comboBoxIndex);
 
     public Q_SLOTS:
         void setAction(PolkitQt1::ActionDescription *action);
         void computeActionPolicies();
         void editExplicitPKLAEntry(QListWidgetItem *item);
+        void addExplicitPKLAEntry();
 
     private Q_SLOTS:
         void reloadPKLAs();
 
     private:
         void setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox *box);
+        void addNewPKLAEntry(const PKLAEntry &entry);
         QString formatPKLAEntry(const PKLAEntry &entry);
         QString formatIdentities(const QString &identities);
 

@@ -20,6 +20,7 @@
 #include <KDebug>
 #include "pkitemdelegate.h"
 #include "explicitauthorizationdialog.h"
+#include <QSettings>
 
 namespace PolkitKde {
 
@@ -37,6 +38,8 @@ ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent
     m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
     connect(m_ui->localAuthListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
             this, SLOT(editExplicitPKLAEntry(QListWidgetItem*)));
+    connect(m_ui->addLocalButton, SIGNAL(clicked(bool)),
+            this, SLOT(addExplicitPKLAEntry()));
 }
 
 ActionWidget::~ActionWidget()
@@ -154,27 +157,43 @@ int ActionWidget::comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthori
     switch (auth) {
         case PolkitQt1::ActionDescription::Authorized:
             return 0;
-            break;
         case PolkitQt1::ActionDescription::NotAuthorized:
             return 1;
-            break;
         case PolkitQt1::ActionDescription::AuthenticationRequired:
             return 4;
-            break;
         case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
             return 5;
-            break;
         case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
             return 2;
-            break;
         case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
             return 3;
-            break;
         default:
             break;
     }
 
     return 1;
+}
+
+PolkitQt1::ActionDescription::ImplicitAuthorization ActionWidget::implicitAuthorizationFor(int comboBoxIndex)
+{
+    switch (comboBoxIndex) {
+        case 0:
+            return PolkitQt1::ActionDescription::Authorized;
+        case 1:
+            return PolkitQt1::ActionDescription::NotAuthorized;
+        case 4:
+            return PolkitQt1::ActionDescription::AuthenticationRequired;
+        case 5:
+            return PolkitQt1::ActionDescription::AuthenticationRequiredRetained;
+        case 2:
+            return PolkitQt1::ActionDescription::AdministratorAuthenticationRequired;
+        case 3:
+            return PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained;
+        default:
+            break;
+    }
+
+    return PolkitQt1::ActionDescription::Unknown;
 }
 
 void ActionWidget::setAction(PolkitQt1::ActionDescription* action)
@@ -196,10 +215,70 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
 {
     foreach (const PKLAEntry &entry, m_entries) {
         if (entry.title == item->text()) {
-            ExplicitAuthorizationDialog *dialog = new ExplicitAuthorizationDialog(entry, this);
-            dialog->exec();
+            QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(entry, this);
+            if (dialog.data()->exec() == KDialog::Ok) {
+                dialog.data()->commitChangesToPKLA();
+                PKLAEntry result = dialog.data()->pkla();
+                // Register the entry. But first remove the previous one to avoid duplicates
+                for (PKLAEntryList::iterator it = m_entries.begin(); it != m_entries.end(); ++it) {
+                    if ((*it).title == result.title) {
+                        // Erase the old one
+                        m_entries.erase(it);
+                        break;
+                    }
+                }
+
+                addNewPKLAEntry(result);
+            }
+
+            if (dialog) {
+                dialog.data()->deleteLater();
+            }
         }
     }
+}
+
+void ActionWidget::addExplicitPKLAEntry()
+{
+    QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(m_action->actionId(), this);
+    if (dialog.data()->exec() == KDialog::Accepted) {
+        dialog.data()->commitChangesToPKLA();
+        PKLAEntry result = dialog.data()->pkla();
+        // Register the entry.
+        addNewPKLAEntry(result);
+    }
+
+    if (dialog) {
+        dialog.data()->deleteLater();
+    }
+}
+
+void ActionWidget::addNewPKLAEntry(const PKLAEntry& entry)
+{
+    PKLAEntry toInsert(entry);
+    // Match it to the current config value
+    QSettings settings("/etc/polkit-1/polkit-kde-1.conf", QSettings::IniFormat);
+    settings.beginGroup("General");
+    toInsert.filePriority = settings.value("PoliciesPriority", 75).toInt();
+
+    // If there's no file order, append it to the end of the current entries
+    if (toInsert.fileOrder < 0) {
+        int max = 0;
+        foreach (const PKLAEntry &entry, m_entries) {
+            if (entry.fileOrder > max) {
+                max = entry.fileOrder;
+            }
+        }
+        ++max;
+        toInsert.fileOrder = max;
+    }
+
+    // Ok, now append it to the list
+    m_entries.append(toInsert);
+    kDebug() << "Inserting entry named " << toInsert.title << " for " << toInsert.action;
+
+    // And reload the policies
+    computeActionPolicies();
 }
 
 }

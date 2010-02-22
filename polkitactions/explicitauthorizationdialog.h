@@ -26,8 +26,14 @@ class ExplicitAuthorizationDialog : public KDialog
     Q_OBJECT
     public:
         explicit ExplicitAuthorizationDialog(const PKLAEntry &entry, QWidget* parent = 0);
-        explicit ExplicitAuthorizationDialog(QWidget* parent = 0);
+        explicit ExplicitAuthorizationDialog(const QString &action, QWidget* parent = 0);
         virtual ~ExplicitAuthorizationDialog();
+
+        void commitChangesToPKLA();
+        PKLAEntry pkla();
+
+    private slots:
+        void addIdentity();
 
     private:
         void init();

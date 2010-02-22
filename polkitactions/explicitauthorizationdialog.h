@@ -14,6 +14,13 @@
 #include <KDialog>
 #include "../PKLAEntry.h"
 
+namespace Ui {
+    class ExplicitAuthorizationWidget;
+}
+class QVBoxLayout;
+
+namespace PolkitKde {
+
 class ExplicitAuthorizationDialog : public KDialog
 {
     Q_OBJECT
@@ -23,7 +30,15 @@ class ExplicitAuthorizationDialog : public KDialog
         virtual ~ExplicitAuthorizationDialog();
 
     private:
+        void init();
+        void reloadPKLA();
+
+    private:
         PKLAEntry m_entry;
+        Ui::ExplicitAuthorizationWidget *m_ui;
+        QVBoxLayout *m_identitiesLayout;
 };
+
+}
 
 #endif // EXPLICITAUTHORIZATIONDIALOG_H

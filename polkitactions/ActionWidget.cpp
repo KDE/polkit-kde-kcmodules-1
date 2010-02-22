@@ -19,6 +19,7 @@
 #include <PolkitQt1/ActionDescription>
 #include <KDebug>
 #include "pkitemdelegate.h"
+#include "explicitauthorizationdialog.h"
 
 namespace PolkitKde {
 
@@ -34,6 +35,8 @@ ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent
 
     setAction(action);
     m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
+    connect(m_ui->localAuthListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(editExplicitPKLAEntry(QListWidgetItem*)));
 }
 
 ActionWidget::~ActionWidget()
@@ -143,28 +146,35 @@ QString ActionWidget::formatIdentities(const QString& identities)
 
 void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox* box)
 {
+    box->setCurrentIndex(comboBoxIndexFor(auth));
+}
+
+int ActionWidget::comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthorization auth)
+{
     switch (auth) {
         case PolkitQt1::ActionDescription::Authorized:
-            box->setCurrentIndex(0);
+            return 0;
             break;
         case PolkitQt1::ActionDescription::NotAuthorized:
-            box->setCurrentIndex(1);
+            return 1;
             break;
         case PolkitQt1::ActionDescription::AuthenticationRequired:
-            box->setCurrentIndex(4);
+            return 4;
             break;
         case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
-            box->setCurrentIndex(5);
+            return 5;
             break;
         case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
-            box->setCurrentIndex(2);
+            return 2;
             break;
         case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
-            box->setCurrentIndex(3);
+            return 3;
             break;
         default:
             break;
     }
+
+    return 1;
 }
 
 void ActionWidget::setAction(PolkitQt1::ActionDescription* action)
@@ -180,6 +190,16 @@ void ActionWidget::setAction(PolkitQt1::ActionDescription* action)
     m_ui->pixmapLabel->setPixmap(KIcon(action->iconName()).pixmap(64));
 
     computeActionPolicies();
+}
+
+void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
+{
+    foreach (const PKLAEntry &entry, m_entries) {
+        if (entry.title == item->text()) {
+            ExplicitAuthorizationDialog *dialog = new ExplicitAuthorizationDialog(entry, this);
+            dialog->exec();
+        }
+    }
 }
 
 }

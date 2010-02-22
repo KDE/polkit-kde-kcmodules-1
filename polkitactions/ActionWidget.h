@@ -16,6 +16,7 @@
 #include <PolkitQt1/ActionDescription>
 
 class QComboBox;
+class QListWidgetItem;
 namespace Ui {
 class ActionWidget;
 }
@@ -29,9 +30,12 @@ class ActionWidget : public QWidget
         explicit ActionWidget(PolkitQt1::ActionDescription *action, QWidget* parent = 0);
         virtual ~ActionWidget();
 
+        static int comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthorization auth);
+
     public Q_SLOTS:
         void setAction(PolkitQt1::ActionDescription *action);
         void computeActionPolicies();
+        void editExplicitPKLAEntry(QListWidgetItem *item);
 
     private Q_SLOTS:
         void reloadPKLAs();

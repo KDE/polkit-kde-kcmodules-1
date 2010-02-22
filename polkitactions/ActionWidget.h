@@ -41,6 +41,10 @@ class ActionWidget : public QWidget
 
     private Q_SLOTS:
         void reloadPKLAs();
+        void movePKLADown();
+        void movePKLAUp();
+        void explicitSelectionChanged(QListWidgetItem *current,QListWidgetItem*);
+        void removePKLAEntry();
 
     private:
         void setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox *box);

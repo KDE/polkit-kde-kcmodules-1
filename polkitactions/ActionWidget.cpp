@@ -24,6 +24,11 @@
 
 namespace PolkitKde {
 
+bool orderByPriorityLessThan(const PKLAEntry &e1, const PKLAEntry &e2)
+{
+    return e1.fileOrder < e2.fileOrder;
+}
+
 ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent)
         : QWidget(parent)
         , m_ui(new Ui::ActionWidget)
@@ -34,12 +39,26 @@ ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent
     // Initialize
     reloadPKLAs();
 
+    // Icons 'n stuff
+    m_ui->removeButton->setIcon(KIcon("list-remove"));
+    m_ui->addLocalButton->setIcon(KIcon("list-add"));
+    m_ui->moveDownButton->setIcon(KIcon("go-down"));
+    m_ui->moveUpButton->setIcon(KIcon("go-up"));
+
     setAction(action);
     m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
     connect(m_ui->localAuthListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
             this, SLOT(editExplicitPKLAEntry(QListWidgetItem*)));
+    connect(m_ui->localAuthListWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(explicitSelectionChanged(QListWidgetItem*,QListWidgetItem*)));
     connect(m_ui->addLocalButton, SIGNAL(clicked(bool)),
             this, SLOT(addExplicitPKLAEntry()));
+    connect(m_ui->removeButton, SIGNAL(clicked(bool)),
+            this, SLOT(removePKLAEntry()));
+    connect(m_ui->moveDownButton, SIGNAL(clicked(bool)),
+            this, SLOT(movePKLADown()));
+    connect(m_ui->moveUpButton, SIGNAL(clicked(bool)),
+            this, SLOT(movePKLAUp()));
 }
 
 ActionWidget::~ActionWidget()
@@ -76,6 +95,7 @@ void ActionWidget::computeActionPolicies()
 {
     kDebug();
     m_ui->localAuthListWidget->clear();
+    qSort(m_entries.begin(), m_entries.end(), orderByPriorityLessThan);
     foreach (const PKLAEntry &entry, m_entries) {
         QStringList realActions = entry.action.split(';');
         kDebug() << entry.action << m_action->actionId();
@@ -96,6 +116,13 @@ void ActionWidget::computeActionPolicies()
                 m_ui->localAuthListWidget->addItem(item);
             }
         }
+    }
+
+    // Trigger the selection
+    if (!m_ui->localAuthListWidget->selectedItems().isEmpty()) {
+        explicitSelectionChanged(m_ui->localAuthListWidget->selectedItems().first(), 0);
+    } else {
+        explicitSelectionChanged(0, 0);
     }
 }
 
@@ -216,7 +243,7 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
     foreach (const PKLAEntry &entry, m_entries) {
         if (entry.title == item->text()) {
             QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(entry, this);
-            if (dialog.data()->exec() == KDialog::Ok) {
+            if (dialog.data()->exec() == KDialog::Accepted) {
                 dialog.data()->commitChangesToPKLA();
                 PKLAEntry result = dialog.data()->pkla();
                 // Register the entry. But first remove the previous one to avoid duplicates
@@ -278,6 +305,95 @@ void ActionWidget::addNewPKLAEntry(const PKLAEntry& entry)
     kDebug() << "Inserting entry named " << toInsert.title << " for " << toInsert.action;
 
     // And reload the policies
+    computeActionPolicies();
+}
+
+void ActionWidget::removePKLAEntry()
+{
+    if (m_ui->localAuthListWidget->selectedItems().isEmpty()) {
+        return;
+    }
+
+    QListWidgetItem *item = m_ui->localAuthListWidget->selectedItems().first();
+
+    // Find and erase the PKLA
+    for (PKLAEntryList::iterator it = m_entries.begin(); it != m_entries.end(); ++it) {
+        if ((*it).title == item->text()) {
+            // Remove it
+            it = m_entries.erase(it);
+            break;
+        }
+    }
+
+    // Reload
+    computeActionPolicies();
+}
+
+void ActionWidget::explicitSelectionChanged(QListWidgetItem* current, QListWidgetItem* )
+{
+    if (current) {
+        m_ui->removeButton->setEnabled(true);
+
+        // Can we move up?
+        m_ui->moveUpButton->setEnabled(m_ui->localAuthListWidget->currentRow() > 0);
+        // Can we move down?
+        m_ui->moveDownButton->setEnabled(m_ui->localAuthListWidget->currentRow() < (m_ui->localAuthListWidget->count() - 1));
+    } else {
+        m_ui->removeButton->setEnabled(false);
+        m_ui->moveDownButton->setEnabled(false);
+        m_ui->moveUpButton->setEnabled(false);
+    }
+}
+
+void ActionWidget::movePKLADown()
+{
+    if (m_ui->localAuthListWidget->selectedItems().isEmpty()) {
+        return;
+    }
+
+    QListWidgetItem *item = m_ui->localAuthListWidget->selectedItems().first();
+
+    // Find the PKLA and change it
+    PKLAEntry entry;
+    for (PKLAEntryList::iterator it = m_entries.begin(); it != m_entries.end(); ++it) {
+        if ((*it).title == item->text()) {
+            // Decrease the priority
+            ++(*it).fileOrder;
+            kDebug() << (*it).title << " is now " << (*it).fileOrder;
+            // Increase the priority of the next one
+            ++it;
+            --(*it).fileOrder;
+            break;
+        }
+    }
+
+    // Reload
+    computeActionPolicies();
+}
+
+void ActionWidget::movePKLAUp()
+{
+    if (m_ui->localAuthListWidget->selectedItems().isEmpty()) {
+        return;
+    }
+
+    QListWidgetItem *item = m_ui->localAuthListWidget->selectedItems().first();
+
+    // Find the PKLA and change it
+    PKLAEntry entry;
+    for (PKLAEntryList::iterator it = m_entries.begin(); it != m_entries.end(); ++it) {
+        if ((*it).title == item->text()) {
+            // Increase the priority
+            --(*it).fileOrder;
+            kDebug() << (*it).title << " is now " << (*it).fileOrder;
+            // Decrease the priority of the previous one
+            --it;
+            ++(*it).fileOrder;
+            break;
+        }
+    }
+
+    // Reload
     computeActionPolicies();
 }
 

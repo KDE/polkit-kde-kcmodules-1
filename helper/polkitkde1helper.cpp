@@ -18,7 +18,12 @@
 #include <QtDBus/QDBusConnection>
 
 #include <PolkitQt1/Authority>
-#include <qdir.h>
+#include <QDir>
+
+bool orderByPriorityLessThan(const PKLAEntry &e1, const PKLAEntry &e2)
+{
+    return e1.fileOrder < e2.fileOrder;
+}
 
 PolkitKde1Helper::PolkitKde1Helper(QObject* parent)
     : QObject(parent)
@@ -177,5 +182,49 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
     }
 
     return retlist;
+}
+
+void PolkitKde1Helper::writePolicy(const QVariantList& policy)
+{
+    PKLAEntryList entries;
+    foreach (const QVariant &variant, policy) {
+        entries.append(variant.value<PKLAEntry>());
+    }
+    qSort(entries.begin(), entries.end(), orderByPriorityLessThan);
+
+    QSettings kdesettings("/etc/polkit-1/polkit-kde-1.conf", QSettings::IniFormat);
+    kdesettings.beginGroup("General");
+
+    QString path = QString("/var/lib/polkit-1/localauthority/%1-polkitkde/%2.conf")
+                          .arg(kdesettings.value("PoliciesPriority",75).toInt()).arg(entries.first().action);
+
+    if (QFile::exists(path)) {
+        QFile::remove(path);
+    }
+
+    QString contents;
+
+    foreach (const PKLAEntry &entry, entries) {
+        contents.append(formatPKLAEntry(entry));
+        contents.append('\n');
+    }
+
+    QFile wfile(path);
+    wfile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
+    wfile.write(contents.toUtf8());
+    wfile.flush();
+    wfile.close();
+}
+
+QString PolkitKde1Helper::formatPKLAEntry(const PKLAEntry& entry)
+{
+    QString retstring;
+    retstring.append(QString("[%1]\n").arg(entry.title));
+    retstring.append(QString("Identity=%1\n").arg(entry.identity));
+    retstring.append(QString("Action=%1\n").arg(entry.action));
+    retstring.append(QString("ResultAny=%1\n").arg(entry.resultAny));
+    retstring.append(QString("ResultInactive=%1\n").arg(entry.resultInactive));
+    retstring.append(QString("ResultActive=%1\n").arg(entry.resultActive));
+    return retstring;
 }
 

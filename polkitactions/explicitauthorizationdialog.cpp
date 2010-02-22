@@ -45,6 +45,8 @@ void ExplicitAuthorizationDialog::init()
     setMainWidget(widget);
     setModal(true);
 
+    m_ui->addButton->setIcon(KIcon("list-add"));
+
     m_identitiesLayout = new QVBoxLayout;
     m_identitiesLayout->addStretch();
     m_ui->scrollAreaWidgetContents->setLayout(m_identitiesLayout);

@@ -28,9 +28,11 @@ class PolkitKde1Helper : public QObject, protected QDBusContext
     public Q_SLOTS:
         void saveGlobalConfiguration(const QString &adminIdentities, int systemPriority, int policiesPriority);
         QVariantList retrievePolicies();
+        void writePolicy(const QVariantList &policy);
 
     private:
         QVariantList entriesFromFile(int filePriority, const QString &fileContents);
+        QString formatPKLAEntry(const PKLAEntry &entry);
 };
 
 #endif // POLKITKDE1HELPER_H

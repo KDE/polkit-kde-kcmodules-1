@@ -33,6 +33,8 @@ class ActionWidget : public QWidget
         static int comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthorization auth);
         static PolkitQt1::ActionDescription::ImplicitAuthorization implicitAuthorizationFor(int comboBoxIndex);
 
+        PKLAEntryList entries() const;
+
     public Q_SLOTS:
         void setAction(PolkitQt1::ActionDescription *action);
         void computeActionPolicies();
@@ -45,6 +47,9 @@ class ActionWidget : public QWidget
         void movePKLAUp();
         void explicitSelectionChanged(QListWidgetItem *current,QListWidgetItem*);
         void removePKLAEntry();
+
+    Q_SIGNALS:
+        void changed();
 
     private:
         void setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox *box);

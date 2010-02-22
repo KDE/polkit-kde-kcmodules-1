@@ -11,6 +11,10 @@
            <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QVariantList"/>
            <arg direction="out" type="av" />
        </method>
+       <method name="writePolicy" >
+           <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantList"/>
+           <arg direction="in" type="av" />
+       </method>
 
    </interface>
 </node>

@@ -21,6 +21,9 @@
 #include <QLayout>
 #include "ActionWidget.h"
 #include "PolicyItem.h"
+#include <QDBusMessage>
+#include <QDBusConnection>
+#include <qdbuspendingcall.h>
 
 K_PLUGIN_FACTORY(KCMPolkitActionsFactory,
                  registerPlugin<PolkitActionsKCM>();
@@ -76,7 +79,24 @@ void PolkitActionsKCM::load()
 
 void PolkitActionsKCM::save()
 {
-    KCModule::save();
+    if (m_actionWidget.isNull()) {
+        return;
+    }
+
+    QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
+                                                          "/Helper",
+                                                          "org.kde.polkitkde1.helper",
+                                                          QLatin1String("writePolicy"));
+    QList<QVariant> argumentList;
+    QVariantList policies;
+    foreach (const PKLAEntry &entry, m_actionWidget.data()->entries()) {
+        policies << QVariant::fromValue(entry);
+    }
+    argumentList << policies;
+
+    message.setArguments(argumentList);
+
+    QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
 }
 
 void PolkitActionsKCM::defaults()
@@ -101,6 +121,7 @@ void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QMod
                     layout()->takeAt(1)->widget()->deleteLater();
                 }
                 m_actionWidget = new PolkitKde::ActionWidget(action);
+                connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
                 layout()->addWidget(m_actionWidget.data());
             } else {
                 m_actionWidget.data()->setAction(action);

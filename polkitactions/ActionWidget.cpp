@@ -47,6 +47,7 @@ ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent
 
     setAction(action);
     m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
+
     connect(m_ui->localAuthListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
             this, SLOT(editExplicitPKLAEntry(QListWidgetItem*)));
     connect(m_ui->localAuthListWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
@@ -59,6 +60,12 @@ ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent
             this, SLOT(movePKLADown()));
     connect(m_ui->moveUpButton, SIGNAL(clicked(bool)),
             this, SLOT(movePKLAUp()));
+    connect(m_ui->anyComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(changed()));
+    connect(m_ui->inactiveComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(changed()));
+    connect(m_ui->activeComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(changed()));
 }
 
 ActionWidget::~ActionWidget()
@@ -304,6 +311,8 @@ void ActionWidget::addNewPKLAEntry(const PKLAEntry& entry)
     m_entries.append(toInsert);
     kDebug() << "Inserting entry named " << toInsert.title << " for " << toInsert.action;
 
+    emit changed();
+
     // And reload the policies
     computeActionPolicies();
 }
@@ -324,6 +333,8 @@ void ActionWidget::removePKLAEntry()
             break;
         }
     }
+
+    emit changed();
 
     // Reload
     computeActionPolicies();
@@ -367,6 +378,8 @@ void ActionWidget::movePKLADown()
         }
     }
 
+    emit changed();
+
     // Reload
     computeActionPolicies();
 }
@@ -393,8 +406,15 @@ void ActionWidget::movePKLAUp()
         }
     }
 
+    emit changed();
+
     // Reload
     computeActionPolicies();
+}
+
+PKLAEntryList ActionWidget::entries() const
+{
+    return m_entries;
 }
 
 }

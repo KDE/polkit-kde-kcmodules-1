@@ -2,7 +2,7 @@
 Type=Service
 X-KDE-ServiceTypes=SystemSettingsCategory
 X-KDE-System-Settings-Category=system-policies
-X-KDE-System-Settings-Parent-Category=system
+X-KDE-System-Settings-Parent-Category=system-administration
 Icon=preferences-desktop-user-password
 
 Name=System policies

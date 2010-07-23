@@ -142,7 +142,9 @@ QSize PkItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelI
 /////////////////////////////
 
 PKLAItemDelegate::PKLAItemDelegate(QObject *parent) : QStyledItemDelegate(parent)
-{}
+    , m_passwordIcon("dialog-password")
+{
+}
 
 PKLAItemDelegate::~PKLAItemDelegate()
 {}
@@ -163,9 +165,6 @@ void PKLAItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QRect clipRect(opt.rect);
     p.setClipRect(clipRect);
 
-    // here we draw the icon
-    KIcon icon("dialog-password");
-
     QIcon::Mode iconMode = QIcon::Normal;
 
     if (opt.state & QStyle::State_MouseOver) {
@@ -177,7 +176,7 @@ void PKLAItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QRect iconRect(opt.rect.topLeft(), QSize(ICON_SIZE, ICON_SIZE));
     const QRect iconPlaceRect(opt.rect.topLeft(), QSize(height, height));
     iconRect.moveCenter(iconPlaceRect.center());
-    icon.paint(&p, iconRect, Qt::AlignCenter, iconMode);
+    m_passwordIcon.paint(&p, iconRect, Qt::AlignCenter, iconMode);
 
     QColor foregroundColor = (opt.state.testFlag(QStyle::State_Selected)) ?
                              opt.palette.color(QPalette::HighlightedText) : opt.palette.color(QPalette::Text);

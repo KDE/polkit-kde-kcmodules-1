@@ -21,6 +21,8 @@
 
 #include <QStyledItemDelegate>
 
+#include <KIcon>
+
 class QStyleOptionViewItem;
 
 namespace PolkitKde {
@@ -49,6 +51,8 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+private:
+    KIcon m_passwordIcon;
 };
 
 }

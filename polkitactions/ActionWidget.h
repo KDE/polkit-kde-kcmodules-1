@@ -15,7 +15,7 @@
 #include "../PKLAEntry.h"
 #include <PolkitQt1/ActionDescription>
 
-class QComboBox;
+class KComboBox;
 class QListWidgetItem;
 namespace Ui {
 class ActionWidget;
@@ -52,7 +52,7 @@ class ActionWidget : public QWidget
         void changed();
 
     private:
-        void setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox *box);
+        void setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, KComboBox *box);
         void addNewPKLAEntry(const PKLAEntry &entry);
         QString formatPKLAEntry(const PKLAEntry &entry);
         QString formatIdentities(const QString &identities);

@@ -68,9 +68,9 @@ void ExplicitAuthorizationDialog::reloadPKLA()
 
     foreach (const QString &identity, m_entry.identity.split(';')) {
         IdentityWidget *idWidget = 0;
-        if (identity.startsWith("unix-user:")) {
+        if (identity.startsWith(QLatin1String("unix-user:"))) {
             idWidget = new IdentityWidget(IdentityWidget::UserIdentity, identity.split("unix-user:").last());
-        } else if (identity.startsWith("unix-group:")) {
+        } else if (identity.startsWith(QLatin1String("unix-group:"))) {
             idWidget = new IdentityWidget(IdentityWidget::GroupIdentity, identity.split("unix-group:").last());
         }
 

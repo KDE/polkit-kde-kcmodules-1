@@ -151,15 +151,15 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
             // Now parse over all the rest
             while (!in.atEnd()) {
                 QString line = in.readLine();
-                if (line.startsWith("Identity=")) {
+                if (line.startsWith(QLatin1String("Identity="))) {
                     entry.identity = line.split("Identity=").last();
-                } else if (line.startsWith("Action=")) {
+                } else if (line.startsWith(QLatin1String("Action="))) {
                     entry.action = line.split("Action=").last();
-                } else if (line.startsWith("ResultAny=")) {
+                } else if (line.startsWith(QLatin1String("ResultAny="))) {
                     entry.resultAny = line.split("ResultAny=").last();
-                } else if (line.startsWith("ResultInactive=")) {
+                } else if (line.startsWith(QLatin1String("ResultInactive="))) {
                     entry.resultInactive = line.split("ResultInactive=").last();
-                } else if (line.startsWith("ResultActive=")) {
+                } else if (line.startsWith(QLatin1String("ResultActive="))) {
                     entry.resultActive = line.split("ResultActive=").last();
                 } else if (line.startsWith('[')) {
                     // Ouch!!

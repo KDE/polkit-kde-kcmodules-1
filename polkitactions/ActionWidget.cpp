@@ -150,7 +150,7 @@ QString ActionWidget::formatPKLAEntry(const PKLAEntry& entry)
         authorizationText.append(", ");
     }
 
-    if (authorizationText.endsWith(", ")) {
+    if (authorizationText.endsWith(QLatin1String(", "))) {
         authorizationText.remove(-1, 2);
     }
 
@@ -164,24 +164,24 @@ QString ActionWidget::formatIdentities(const QString& identities)
     QStringList realIdentities = identities.split(';');
 
     foreach (const QString &identity, realIdentities) {
-        if (identity.startsWith("unix-user:")) {
+        if (identity.startsWith(QLatin1String("unix-user:"))) {
             rettext.append(identity.split("unix-user:").last());
             rettext.append(", ");
         }
-        if (identity.startsWith("unix-group:")) {
+        if (identity.startsWith(QLatin1String("unix-group:"))) {
             rettext.append(i18n("%1 group", identity.split("unix-group:").last()));
             rettext.append(", ");
         }
     }
 
-    if (rettext.endsWith(", ")) {
+    if (rettext.endsWith(QLatin1String(", "))) {
         rettext = rettext.remove(rettext.length() - 2, 2);
     }
 
     return rettext;
 }
 
-void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox* box)
+void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, KComboBox* box)
 {
     box->setCurrentIndex(comboBoxIndexFor(auth));
 }

@@ -18,12 +18,12 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .
 */
 
-#ifndef _POLICY_GEN_H_
-#define _POLICY_GEN_H_
+#ifndef POLICY_GEN_H
+#define POLICY_GEN_H
 
-#include <QString>
-#include <QMap>
-#include <QHash>
+#include <QtCore/QString>
+#include <QtCore/QMap>
+#include <QtCore/QHash>
 
 struct Action {
     QString name;

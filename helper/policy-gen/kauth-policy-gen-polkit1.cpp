@@ -59,19 +59,25 @@ void output(QList<Action> actions, QHash<QString, QString> domain)
     foreach (const Action &action, actions) {
         out << dent << "<action id=\"" << action.name << "\" >\n";
 
-        foreach (const QString &lang, action.descriptions.keys()) {
+        QHash<QString, QString>::const_iterator descriptionIter = action.descriptions.constBegin();
+        while (descriptionIter != action.descriptions.constEnd()) {
+            QString lang = descriptionIter.key();
             out << dent << dent << "<description";
             if (lang != "en")
                 out << " xml:lang=\"" << lang << '"';
             out << '>' << action.messages.value(lang) << "</description>\n";
+            ++descriptionIter;
         }
 
-        foreach (const QString &lang, action.messages.keys()) {
+        QHash<QString, QString>::const_iterator messageIter = action.messages.constBegin();
+        while (messageIter != action.messages.constEnd()) {
+            QString lang = messageIter.key();
             out << dent << dent << "<message";
             if (lang != "en") {
                 out << " xml:lang=\"" << lang << '"';
             }
             out << '>' << action.descriptions.value(lang) << "</message>\n";
+            ++messageIter;
         }
 
         QString policy = action.policy;

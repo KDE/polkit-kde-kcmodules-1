@@ -8,9 +8,9 @@ X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_polkitconfig
 X-KDE-ParentApp=kcontrol
 
-X-KDE-System-Settings-Parent-Category=system-policies
+X-KDE-System-Settings-Parent-Category=system-administration
 
-Name=Global policy configuration
+Name=Global Policy Configuration
 Name[ca]=Configuració de la política global
 Name[ca@valencia]=Configuració de la política global
 Name[cs]=Nastavení globálních pravidel

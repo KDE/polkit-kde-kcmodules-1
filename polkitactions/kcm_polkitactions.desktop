@@ -8,9 +8,9 @@ X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_polkitactions
 X-KDE-ParentApp=kcontrol
 
-X-KDE-System-Settings-Parent-Category=system-policies
+X-KDE-System-Settings-Parent-Category=system-administration
 
-Name=Actions policy
+Name=Actions Policy
 Name[ca]=Política d'accions
 Name[ca@valencia]=Política d'accions
 Name[cs]=Pravidla činností

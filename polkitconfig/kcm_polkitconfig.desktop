@@ -11,6 +11,11 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Global Policy Configuration
+Name[nl]=Configuratie voor globaal beleid
+Name[pt]=Configuração da Política Global
+Name[pt_BR]=Configuração da política global
+Name[sv]=Inställning av global policy
+Name[uk]=Налаштування загальних правил доступу
 Name[x-test]=xxGlobal Policy Configurationxx
 
 Comment=Configure global settings for system policies

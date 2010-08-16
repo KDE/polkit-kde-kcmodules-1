@@ -12,6 +12,7 @@ X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Global Policy Configuration
 Name[da]=Konfiguration af global politik
+Name[de]=Systemweite Regeleinstellung
 Name[fr]=Configuration de la stratégie globale
 Name[hu]=Globális házirend-beállítások
 Name[nl]=Configuratie voor globaal beleid

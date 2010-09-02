@@ -11,6 +11,7 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Actions Policy
+Name[cs]=Pravidla činností
 Name[da]=Politik for handlinger
 Name[de]=Aktionsregeln
 Name[fr]=Stratégie des actions

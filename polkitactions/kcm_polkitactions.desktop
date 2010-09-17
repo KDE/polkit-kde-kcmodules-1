@@ -26,6 +26,7 @@ Name[pt_BR]=Política de ações
 Name[sv]=Åtgärdspolicy
 Name[uk]=Правила дій
 Name[x-test]=xxActions Policyxx
+Name[zh_TW]=動作政策
 
 Comment=Configure policies for trusted actions in the system
 Comment[ca]=Configura les polítiques per accions fiables en el sistema

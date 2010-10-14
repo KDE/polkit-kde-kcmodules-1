@@ -69,7 +69,7 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
 
 PolkitActionsKCM::~PolkitActionsKCM()
 {
-
+    delete m_ui;
 }
 
 void PolkitActionsKCM::load()

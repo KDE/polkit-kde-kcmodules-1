@@ -70,7 +70,7 @@ ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent
 
 ActionWidget::~ActionWidget()
 {
-
+    delete m_ui;
 }
 
 void ActionWidget::reloadPKLAs()

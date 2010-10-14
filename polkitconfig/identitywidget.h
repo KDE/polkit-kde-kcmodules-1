@@ -28,7 +28,7 @@ class IdentityWidget : public QWidget
 
         IdentityWidget(IdentityType type, const QString &name, QWidget* parent = 0);
         IdentityWidget(QWidget* parent = 0);
-
+        ~IdentityWidget();
         void setIdentityType(IdentityType type);
         void setIdentityName(const QString &name);
 

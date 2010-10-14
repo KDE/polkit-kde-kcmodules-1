@@ -67,7 +67,7 @@ KCMPolkitConfig::KCMPolkitConfig(QWidget* parent, const QVariantList& args)
 
 KCMPolkitConfig::~KCMPolkitConfig()
 {
-
+    delete m_ui;
 }
 
 void KCMPolkitConfig::defaults()

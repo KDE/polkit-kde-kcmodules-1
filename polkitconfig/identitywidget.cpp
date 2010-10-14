@@ -27,6 +27,11 @@ IdentityWidget::IdentityWidget(QWidget* parent)
     init(UserIdentity);
 }
 
+IdentityWidget::~IdentityWidget()
+{
+    delete m_ui;
+}
+
 void IdentityWidget::init(IdentityType type)
 {
     m_ui = new Ui::IdentityWidget;
@@ -48,6 +53,8 @@ void IdentityWidget::init(IdentityType type)
     connect(m_ui->removeButton, SIGNAL(clicked(bool)),
             this, SLOT(deleteLater()));
 }
+
+
 
 QString IdentityWidget::identityName() const
 {

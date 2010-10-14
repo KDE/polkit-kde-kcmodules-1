@@ -34,7 +34,7 @@ ExplicitAuthorizationDialog::ExplicitAuthorizationDialog(const QString &action, 
 
 ExplicitAuthorizationDialog::~ExplicitAuthorizationDialog()
 {
-
+    delete m_ui;
 }
 
 void ExplicitAuthorizationDialog::init()

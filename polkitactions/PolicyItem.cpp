@@ -40,27 +40,21 @@ PolicyItem::PolicyItem(bool isGroup, PolicyItem *parent)
 
 PolicyItem::~PolicyItem()
 {
-    if (itemData.contains(PoliciesModel::PolkitEntryRole)) {
-        delete (itemData[PoliciesModel::PolkitEntryRole].value<PolkitQt1::ActionDescription *>());
-    }
     qDeleteAll(childItems);
 }
 
-void PolicyItem::setPolkitEntry(PolkitQt1::ActionDescription *entry)
+void PolicyItem::setPolkitEntry(const PolkitQt1::ActionDescription &entry)
 {
     // yep, caching the icon DOES improve speed
-    QString iconName = entry->iconName();
+    QString iconName = entry.iconName();
     if (KIconLoader::global()->iconPath(iconName, KIconLoader::NoGroup, true).isEmpty()) {
         itemData[Qt::DecorationRole] = KIcon("preferences-desktop-cryptography");
     } else {
         itemData[Qt::DecorationRole] = KIcon(iconName);
     }
 
-    itemData[Qt::DisplayRole] = entry->description();
-    itemData[PoliciesModel::PathRole] = entry->actionId();
-    if (itemData.contains(PoliciesModel::PolkitEntryRole)) {
-        delete entry;
-    }
+    itemData[Qt::DisplayRole] = entry.description();
+    itemData[PoliciesModel::PathRole] = entry.actionId();
     itemData[PoliciesModel::PolkitEntryRole] = QVariant::fromValue(entry);
 }
 

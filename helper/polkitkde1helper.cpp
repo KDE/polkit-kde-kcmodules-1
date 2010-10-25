@@ -53,9 +53,7 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, i
 {
     qDebug() << "Request to save the global configuration by " << message().service();
     PolkitQt1::Authority::Result result;
-    PolkitQt1::SystemBusNameSubject *subject;
-
-    subject = new PolkitQt1::SystemBusNameSubject(message().service());
+    PolkitQt1::SystemBusNameSubject subject(message().service());
 
     result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changesystemconfiguration",
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
@@ -91,9 +89,7 @@ QVariantList PolkitKde1Helper::retrievePolicies()
 {
     qDebug() << "Request to retrieve the action authorizations by " << message().service();
     PolkitQt1::Authority::Result result;
-    PolkitQt1::SystemBusNameSubject *subject;
-
-    subject = new PolkitQt1::SystemBusNameSubject(message().service());
+    PolkitQt1::SystemBusNameSubject subject(message().service());
 
     result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.readauthorizations",
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);

@@ -29,10 +29,9 @@ bool orderByPriorityLessThan(const PKLAEntry &e1, const PKLAEntry &e2)
     return e1.fileOrder < e2.fileOrder;
 }
 
-ActionWidget::ActionWidget(PolkitQt1::ActionDescription* action, QWidget* parent)
+ActionWidget::ActionWidget(const PolkitQt1::ActionDescription &action, QWidget* parent)
         : QWidget(parent)
         , m_ui(new Ui::ActionWidget)
-        , m_action(0)
 {
     m_ui->setupUi(this);
 
@@ -93,7 +92,7 @@ void ActionWidget::reloadPKLAs()
         }
     }
 
-    if (m_action) {
+    if (!m_action.actionId().isEmpty()) {
         computeActionPolicies();
     }
 }
@@ -105,8 +104,8 @@ void ActionWidget::computeActionPolicies()
     qSort(m_entries.begin(), m_entries.end(), orderByPriorityLessThan);
     foreach (const PKLAEntry &entry, m_entries) {
         QStringList realActions = entry.action.split(';');
-        kDebug() << entry.action << m_action->actionId();
-        if (realActions.contains(m_action->actionId())) {
+        kDebug() << entry.action << m_action.actionId();
+        if (realActions.contains(m_action.actionId())) {
             // Match! Is it, actually, an implicit override?
             if (entry.title == "PolkitKdeOverrideImplicit") {
                 // It is!
@@ -137,15 +136,15 @@ QString ActionWidget::formatPKLAEntry(const PKLAEntry& entry)
 {
     QString authorizationText;
 
-    if (PKLAEntry::implFromText(entry.resultActive) != m_action->implicitActive()) {
+    if (PKLAEntry::implFromText(entry.resultActive) != m_action.implicitActive()) {
         authorizationText.append(i18n("'%1' on active console", entry.resultActive));
         authorizationText.append(", ");
     }
-    if (PKLAEntry::implFromText(entry.resultInactive) != m_action->implicitInactive()) {
+    if (PKLAEntry::implFromText(entry.resultInactive) != m_action.implicitInactive()) {
         authorizationText.append(i18n("'%1' on inactive console", entry.resultActive));
         authorizationText.append(", ");
     }
-    if (PKLAEntry::implFromText(entry.resultAny) != m_action->implicitAny()) {
+    if (PKLAEntry::implFromText(entry.resultAny) != m_action.implicitAny()) {
         authorizationText.append(i18n("'%1' on any console", entry.resultActive));
         authorizationText.append(", ");
     }
@@ -230,17 +229,17 @@ PolkitQt1::ActionDescription::ImplicitAuthorization ActionWidget::implicitAuthor
     return PolkitQt1::ActionDescription::Unknown;
 }
 
-void ActionWidget::setAction(PolkitQt1::ActionDescription* action)
+void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
 {
     m_action = action;
-    setImplicitAuthorization(action->implicitActive(), m_ui->activeComboBox);
-    setImplicitAuthorization(action->implicitInactive(), m_ui->inactiveComboBox);
-    setImplicitAuthorization(action->implicitAny(), m_ui->anyComboBox);
+    setImplicitAuthorization(action.implicitActive(), m_ui->activeComboBox);
+    setImplicitAuthorization(action.implicitInactive(), m_ui->inactiveComboBox);
+    setImplicitAuthorization(action.implicitAny(), m_ui->anyComboBox);
 
-    m_ui->descriptionLabel->setText(action->description());
-    m_ui->vendorLabel->setText(action->vendorName());
-    m_ui->vendorLabel->setUrl(action->vendorUrl());
-    m_ui->pixmapLabel->setPixmap(KIcon(action->iconName()).pixmap(64));
+    m_ui->descriptionLabel->setText(action.description());
+    m_ui->vendorLabel->setText(action.vendorName());
+    m_ui->vendorLabel->setUrl(action.vendorUrl());
+    m_ui->pixmapLabel->setPixmap(KIcon(action.iconName()).pixmap(64));
 
     computeActionPolicies();
 }
@@ -274,7 +273,7 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
 
 void ActionWidget::addExplicitPKLAEntry()
 {
-    QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(m_action->actionId(), this);
+    QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(m_action.actionId(), this);
     if (dialog.data()->exec() == KDialog::Accepted) {
         dialog.data()->commitChangesToPKLA();
         PKLAEntry result = dialog.data()->pkla();

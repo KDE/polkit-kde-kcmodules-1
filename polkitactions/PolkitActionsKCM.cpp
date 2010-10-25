@@ -45,6 +45,8 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
 
     setAboutData(about);
 
+    qRegisterMetaType<PolkitQt1::ActionDescription>();
+
     // Build the UI
     m_ui->setupUi(this);
     m_model = new PolkitKde::PoliciesModel(this);
@@ -112,20 +114,18 @@ void PolkitActionsKCM::slotCheckAuthorizationFinished(PolkitQt1::Authority::Resu
 void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QModelIndex& )
 {
     if (current.data(PolkitKde::PoliciesModel::IsGroupRole).toBool() == false) {
-        PolkitQt1::ActionDescription *action;
-        action = current.data(PolkitKde::PoliciesModel::PolkitEntryRole).value<PolkitQt1::ActionDescription *>();
+        PolkitQt1::ActionDescription action;
+        action = current.data(PolkitKde::PoliciesModel::PolkitEntryRole).value<PolkitQt1::ActionDescription>();
 
-        if (action) {
-            if (m_actionWidget.isNull()) {
-                if (layout()->count() == 2) {
-                    layout()->takeAt(1)->widget()->deleteLater();
-                }
-                m_actionWidget = new PolkitKde::ActionWidget(action);
-                connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
-                layout()->addWidget(m_actionWidget.data());
-            } else {
-                m_actionWidget.data()->setAction(action);
+        if (m_actionWidget.isNull()) {
+            if (layout()->count() == 2) {
+                layout()->takeAt(1)->widget()->deleteLater();
             }
+            m_actionWidget = new PolkitKde::ActionWidget(action);
+            connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
+            layout()->addWidget(m_actionWidget.data());
+        } else {
+            m_actionWidget.data()->setAction(action);
         }
     } else {
         // TODO

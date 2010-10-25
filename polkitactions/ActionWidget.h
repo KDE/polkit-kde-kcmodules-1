@@ -27,7 +27,7 @@ class ActionWidget : public QWidget
 {
     Q_OBJECT
     public:
-        explicit ActionWidget(PolkitQt1::ActionDescription *action, QWidget* parent = 0);
+        explicit ActionWidget(const PolkitQt1::ActionDescription &action, QWidget* parent = 0);
         virtual ~ActionWidget();
 
         static int comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthorization auth);
@@ -36,7 +36,7 @@ class ActionWidget : public QWidget
         PKLAEntryList entries() const;
 
     public Q_SLOTS:
-        void setAction(PolkitQt1::ActionDescription *action);
+        void setAction(const PolkitQt1::ActionDescription &action);
         void computeActionPolicies();
         void editExplicitPKLAEntry(QListWidgetItem *item);
         void addExplicitPKLAEntry();
@@ -58,7 +58,7 @@ class ActionWidget : public QWidget
         QString formatIdentities(const QString &identities);
 
         Ui::ActionWidget *m_ui;
-        PolkitQt1::ActionDescription *m_action;
+        PolkitQt1::ActionDescription m_action;
         PKLAEntryList m_entries;
 };
 

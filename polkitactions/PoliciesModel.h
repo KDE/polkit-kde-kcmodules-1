@@ -60,7 +60,7 @@ public slots:
     void setCurrentEntries(const PolkitQt1::ActionDescription::List &entries);
 
 private:
-    void insertOrUpdate(const QStringList &actionPath, PolkitQt1::ActionDescription *entry,
+    void insertOrUpdate(const QStringList &actionPath, const PolkitQt1::ActionDescription &entry,
                         PolicyItem *parent, int level = 0);
     bool removeEntries(const QStringList &entries, PolicyItem *parent);
     QModelIndex indexFromId(const QString &id, PolicyItem *parent) const;

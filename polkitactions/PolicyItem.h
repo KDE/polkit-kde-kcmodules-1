@@ -24,6 +24,7 @@
 #include <QList>
 #include <QHash>
 #include <QVariant>
+#include <QMetaType>
 
 namespace PolkitQt1 {
 class ActionDescription;
@@ -49,7 +50,7 @@ public:
     PolicyItem *parent();
 
     bool isGroup() const;
-    void setPolkitEntry(PolkitQt1::ActionDescription *entry);
+    void setPolkitEntry(const PolkitQt1::ActionDescription &entry);
 
 private:
     QList<PolicyItem*> childItems;
@@ -59,6 +60,6 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(PolkitQt1::ActionDescription*)
+Q_DECLARE_METATYPE(PolkitQt1::ActionDescription);
 
 #endif

@@ -117,15 +117,15 @@ void PoliciesModel::setCurrentEntries(const PolkitQt1::ActionDescription::List &
     // before inserting let's remove entries (policies)
     // that don't exist anymore
     QStringList stringEntries;
-    foreach(PolkitQt1::ActionDescription *entry, entries) {
-        stringEntries.append(entry->actionId());
+    foreach (const PolkitQt1::ActionDescription &entry, entries) {
+        stringEntries.append(entry.actionId());
     }
     removeEntries(stringEntries, rootItem);
 
     // now we insert or update all the items
-    foreach(PolkitQt1::ActionDescription *entry, entries) {
+    foreach (const PolkitQt1::ActionDescription &entry, entries) {
         QStringList actionPath;
-        actionPath = entry->actionId().split('.');
+        actionPath = entry.actionId().split('.');
         if (actionPath.size() > 2) {
             // if we have an action id bigger than
             // "org.kde"
@@ -139,7 +139,7 @@ void PoliciesModel::setCurrentEntries(const PolkitQt1::ActionDescription::List &
             // id is bigger than "org"
             insertOrUpdate(actionPath, entry, rootItem);
         } else {
-            kWarning() << "Bad Policy file entry" << entry->actionId() << entry;
+            kWarning() << "Bad Policy file entry" << entry.actionId();
         }
     }
 }
@@ -213,7 +213,7 @@ bool PoliciesModel::removeEntries(const QStringList &entries, PolicyItem *parent
     return parent->childCount() == 0;
 }
 
-void PoliciesModel::insertOrUpdate(const QStringList &actionPath, PolkitQt1::ActionDescription *entry,
+void PoliciesModel::insertOrUpdate(const QStringList &actionPath, const PolkitQt1::ActionDescription &entry,
                                    PolicyItem *parent, int level)
 {
 //     kDebug() << actionPath << actionPath.size() << entry << level << parent;
@@ -275,7 +275,7 @@ void PoliciesModel::insertOrUpdate(const QStringList &actionPath, PolkitQt1::Act
             // if we are at the lowest level of a group
             // we try to get the vendorName
             if (actionPath.size() - 2 == level) {
-                const QString vendorName = entry->vendorName();
+                const QString vendorName = entry.vendorName();
                 if (vendorName.isEmpty()) {
                     group->setData(Qt::DisplayRole, path);
                 } else {

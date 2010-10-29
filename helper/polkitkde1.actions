@@ -1,43 +1,88 @@
 [Domain]
 Name=System policy settings
+Name[de]=Systemberechtigungseinstellungen
+Name[nds]=Systeemregeln instellen
+Name[pt]=Configuração da política do sistema
+Name[sv]=Inställningar av systempolicy
 Name[uk]=Параметри системних правил доступу
 Name[x-test]=xxSystem policy settingsxx
+Name[zh_TW]=系統政策設定
 Icon=security-high
 
 [org.kde.polkitkde1.readauthorizations]
 Name=Read system authorizations
+Name[de]=Systemberechtigungen einlesen
+Name[nds]=Systeemverlööfnissen lesen
+Name[pt]=Ler as autorizações do sistema
+Name[sv]=Läs systembehörigheter
 Name[uk]=Читання системних уповноважень
 Name[x-test]=xxRead system authorizationsxx
+Name[zh_TW]=讀取系統授權
 Description=Authorization is required to read system authorizations
+Description[de]=Berechtigung ist für das Einlesen von Systemberechtigungen erforderlich
+Description[nds]=För't Lesen vun Systeemverlööfnissen deit Verlööf noot.
+Description[pt]=É necessária a autorização para ler as autorizações do sistema
+Description[sv]=Behörighet krävs för att läsa systembehörigheter
 Description[uk]=Для читання системних уповноважень потрібно пройти уповноваження
 Description[x-test]=xxAuthorization is required to read system authorizationsxx
+Description[zh_TW]=您需要授權才能讀取系統授權
 Policy=auth_admin
 Persistence=session
 
 [org.kde.polkitkde1.changeimplicitauthorizations]
 Name=Change implicit authorizations for an action
+Name[de]=Implizite Berechtigungen für eine Aktion ändern
+Name[nds]=Inslaten Verlööfnissen för en Akschoon ännern
+Name[pt]=Modificar as autorizações implícitas para uma acção
+Name[sv]=Ändra implicit behörighet för en åtgärd
 Name[uk]=Змінити неявні уповноваження на дію
 Name[x-test]=xxChange implicit authorizations for an actionxx
+Name[zh_TW]=變更動作的內部授權
 Description=Authorization is required to change implicit authorizations
+Description[de]=Berechtigung ist für das Ändern von impliziten Berechtigungen erforderlich
+Description[nds]=För't Ännern vun inslaten Verlööfnissen deit Verlööf noot.
+Description[pt]=É necessária a autorização para modificar as autorizações implícitas
+Description[sv]=Behörighet krävs för att ändra implicita behörigheter
 Description[uk]=Для зміни неявних уповноважень потрібно пройти уповноваження
 Description[x-test]=xxAuthorization is required to change implicit authorizationsxx
+Description[zh_TW]=您需要授權才能變更動作的內部授權
 Policy=auth_admin
 
 [org.kde.polkitkde1.changeexplicitauthorizations]
 Name=Change explicit authorizations for an action
+Name[de]=Explizite Berechtigungen für eine Aktion ändern
+Name[nds]=Utspraken Verlööfnissen för en Akschoon ännern
+Name[pt]=Modificar as autorizações explícitas para uma acção
+Name[sv]=Ändra explicit behörighet för en åtgärd
 Name[uk]=Змінити явні уповноваження на дію
 Name[x-test]=xxChange explicit authorizations for an actionxx
+Name[zh_TW]=變更動作的外部授權
 Description=Authorization is required to change explicit authorizations
+Description[de]=Berechtigung ist für das Ändern von expliziten Berechtigungen erforderlich
+Description[nds]=För't Ännern vun utspraken Verlööfnissen deit Verlööf noot.
+Description[pt]=É necessária a autorização para modificar as autorizações explícitas
+Description[sv]=Behörighet krävs för att ändra explicita behörigheter
 Description[uk]=Для зміни явних уповноважень потрібно пройти уповноваження
 Description[x-test]=xxAuthorization is required to change explicit authorizationsxx
+Description[zh_TW]=您需要授權才能變更動作的外部授權
 Policy=auth_admin
 Persistence=session
 
 [org.kde.polkitkde1.changesystemconfiguration]
 Name=Change global configuration for system policies
+Name[de]=Allgemeine Einstellung für Systemberechtigungen ändern
+Name[nds]=Globaal Instellen för Systeemregeln ännern
+Name[pt]=Modificar a configuração global das políticas do sistema
+Name[sv]=Ändra global inställning av systempolicy
 Name[uk]=Змінити загальні налаштування системних правил доступу
 Name[x-test]=xxChange global configuration for system policiesxx
+Name[zh_TW]=變更系統政策的全域設定
 Description=Authorization is required to change global configuration for system policies
+Description[de]=Die Berechtigung ist für das Ändern der allgemeinen Einstellungen für Systemberechtigungen erforderlich
+Description[nds]=För't Ännern vun globaal Instellen för Systeemregeln deit Verlööf noot.
+Description[pt]=É necessária a autorização para modificar a configuração global das políticas do sistema
+Description[sv]=Behörighet krävs för att ändra global inställning av systempolicy
 Description[uk]=Для зміни загального налаштування системних прав доступу потрібно пройти уповноваження
 Description[x-test]=xxAuthorization is required to change global configuration for system policiesxx
+Description[zh_TW]=您需要授權才能變更系統政策的全域設定
 Policy=auth_admin

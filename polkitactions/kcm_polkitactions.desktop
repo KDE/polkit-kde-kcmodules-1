@@ -11,11 +11,21 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Actions Policy
+Name[de]=Aktionsberechtigungen
+Name[nds]=Akschonenregel
+Name[pt]=Política das Acções
+Name[sv]=Åtgärdspolicy
 Name[uk]=Правила дій
 Name[x-test]=xxActions Policyxx
+Name[zh_TW]=動作政策
 
 Comment=Configure policies for trusted actions in the system
+Comment[de]=Berechtigungen für vertrauliche Aktionen im System einrichten
+Comment[nds]=Regeln för troot Akschonen op Dien Systeem fastleggen
+Comment[pt]=Configurar as políticas para as acções fidedignas no sistema
+Comment[sv]=Anpassa policy för pålitliga åtgärder i systemet
 Comment[uk]=Налаштування правил щодо виконання довірених дій у системі
 Comment[x-test]=xxConfigure policies for trusted actions in the systemxx
+Comment[zh_TW]=設定系統內受到信任的動作的政策
 
 X-KDE-Keywords=system,policy,policies,security,polkit,policykit,password

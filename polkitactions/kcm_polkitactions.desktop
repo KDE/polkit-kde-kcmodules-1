@@ -11,7 +11,10 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Actions Policy
+Name[da]=Politik for handlinger
 Name[de]=Aktionsberechtigungen
+Name[hu]=Műveleti házirend
+Name[nb]=Praksis for handlinger
 Name[nds]=Akschonenregel
 Name[pt]=Política das Acções
 Name[pt_BR]=Política de ações
@@ -21,7 +24,10 @@ Name[x-test]=xxActions Policyxx
 Name[zh_TW]=動作政策
 
 Comment=Configure policies for trusted actions in the system
+Comment[da]=Indstil politikker for betroede handlinger i systemet
 Comment[de]=Berechtigungen für vertrauliche Aktionen im System einrichten
+Comment[hu]=Házirendek beállítása a rendszerben a megbízható műveletekhez
+Comment[nb]=Sett opp praksis for tiltrodde handlinger i systemet
 Comment[nds]=Regeln för troot Akschonen op Dien Systeem fastleggen
 Comment[pt]=Configurar as políticas para as acções fidedignas no sistema
 Comment[pt_BR]=Configura as políticas para as ações confiáveis no sistema

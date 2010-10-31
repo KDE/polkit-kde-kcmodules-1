@@ -1,6 +1,9 @@
 [Domain]
 Name=System policy settings
+Name[da]=Indstillinger for systempolitik
 Name[de]=Systemberechtigungseinstellungen
+Name[hu]=Rendszerházirend beállításai
+Name[nb]=Praksisinnstillinger for systemet
 Name[nds]=Systeemregeln instellen
 Name[pt]=Configuração da política do sistema
 Name[pt_BR]=Configurações das políticas do sistema
@@ -12,7 +15,10 @@ Icon=security-high
 
 [org.kde.polkitkde1.readauthorizations]
 Name=Read system authorizations
+Name[da]=Læs systemgodkendelser
 Name[de]=Systemberechtigungen einlesen
+Name[hu]=Rendszerhitelesítések olvasása
+Name[nb]=Les systemets autoriseringer
 Name[nds]=Systeemverlööfnissen lesen
 Name[pt]=Ler as autorizações do sistema
 Name[pt_BR]=Ler as autorizações do sistema
@@ -21,7 +27,10 @@ Name[uk]=Читання системних уповноважень
 Name[x-test]=xxRead system authorizationsxx
 Name[zh_TW]=讀取系統授權
 Description=Authorization is required to read system authorizations
+Description[da]=Godkendelse kræves for at læse systemgodkendelser
 Description[de]=Berechtigung ist für das Einlesen von Systemberechtigungen erforderlich
+Description[hu]=A rendszerhitelesítések olvasásához hitelesítés szükséges
+Description[nb]=Autorisering kreves for å lese systemautoriseringer
 Description[nds]=För't Lesen vun Systeemverlööfnissen deit Verlööf noot.
 Description[pt]=É necessária a autorização para ler as autorizações do sistema
 Description[pt_BR]=É necessário autorização para ler as políticas do sistema
@@ -34,7 +43,10 @@ Persistence=session
 
 [org.kde.polkitkde1.changeimplicitauthorizations]
 Name=Change implicit authorizations for an action
+Name[da]=Ændr implicitte godkendelser for en handling
 Name[de]=Implizite Berechtigungen für eine Aktion ändern
+Name[hu]=Implicit hitelesítések megváltoztatása egy művelethez
+Name[nb]=Endre implisitte autoriseringer for en handling
 Name[nds]=Inslaten Verlööfnissen för en Akschoon ännern
 Name[pt]=Modificar as autorizações implícitas para uma acção
 Name[pt_BR]=Alterar autorizações implícitas para uma ação
@@ -43,7 +55,10 @@ Name[uk]=Змінити неявні уповноваження на дію
 Name[x-test]=xxChange implicit authorizations for an actionxx
 Name[zh_TW]=變更動作的內部授權
 Description=Authorization is required to change implicit authorizations
+Description[da]=Godkendelse kræves for at ændre implicitte godkendelser
 Description[de]=Berechtigung ist für das Ändern von impliziten Berechtigungen erforderlich
+Description[hu]=Az implicit hitelesítések megváltoztatásához hitelesítés szükséges
+Description[nb]=Autorisering kreves for å endre implisitte autoriseringer
 Description[nds]=För't Ännern vun inslaten Verlööfnissen deit Verlööf noot.
 Description[pt]=É necessária a autorização para modificar as autorizações implícitas
 Description[pt_BR]=É necessário autorização para alterar as autorizações implícitas
@@ -55,7 +70,10 @@ Policy=auth_admin
 
 [org.kde.polkitkde1.changeexplicitauthorizations]
 Name=Change explicit authorizations for an action
+Name[da]=Ændr eksplicitte godkendelser for en handling
 Name[de]=Explizite Berechtigungen für eine Aktion ändern
+Name[hu]=Explicit hitelesítések megváltoztatása egy művelethez
+Name[nb]=Endre uttrykkelige autoriseringer for en handling
 Name[nds]=Utspraken Verlööfnissen för en Akschoon ännern
 Name[pt]=Modificar as autorizações explícitas para uma acção
 Name[pt_BR]=Alterar autorizações explícitas para uma ação
@@ -64,7 +82,10 @@ Name[uk]=Змінити явні уповноваження на дію
 Name[x-test]=xxChange explicit authorizations for an actionxx
 Name[zh_TW]=變更動作的外部授權
 Description=Authorization is required to change explicit authorizations
+Description[da]=Godkendelse kræves for at ændre eksplicitte godkendelser
 Description[de]=Berechtigung ist für das Ändern von expliziten Berechtigungen erforderlich
+Description[hu]=Az explicit hitelesítések megváltoztatásához hitelesítés szükséges
+Description[nb]=Autorisering kreves for å endre uttrykkelige autoriseringer
 Description[nds]=För't Ännern vun utspraken Verlööfnissen deit Verlööf noot.
 Description[pt]=É necessária a autorização para modificar as autorizações explícitas
 Description[pt_BR]=É necessário autorização para alterar as autorizações explícitas
@@ -77,7 +98,10 @@ Persistence=session
 
 [org.kde.polkitkde1.changesystemconfiguration]
 Name=Change global configuration for system policies
+Name[da]=Ændr global konfiguration af systempolitikker
 Name[de]=Allgemeine Einstellung für Systemberechtigungen ändern
+Name[hu]=Globális beállítások megváltoztatása a rendszerházirendekre
+Name[nb]=Endre globalt oppsett for systempraksis
 Name[nds]=Globaal Instellen för Systeemregeln ännern
 Name[pt]=Modificar a configuração global das políticas do sistema
 Name[pt_BR]=Alterar a configuração global para as políticas do sistema
@@ -86,7 +110,10 @@ Name[uk]=Змінити загальні налаштування системн
 Name[x-test]=xxChange global configuration for system policiesxx
 Name[zh_TW]=變更系統政策的全域設定
 Description=Authorization is required to change global configuration for system policies
+Description[da]=Godkendelse kræves for at ændre global konfiguration af systempolitikker
 Description[de]=Die Berechtigung ist für das Ändern der allgemeinen Einstellungen für Systemberechtigungen erforderlich
+Description[hu]=Hitelesítés szükséges a rendszerházirendek globális beállításainak megváltoztatásához
+Description[nb]=Autorisering kreves for å endre globalt oppsett for systempraksis
 Description[nds]=För't Ännern vun globaal Instellen för Systeemregeln deit Verlööf noot.
 Description[pt]=É necessária a autorização para modificar a configuração global das políticas do sistema
 Description[pt_BR]=É necessário autorização para alterar a configuração global para as políticas do sistema

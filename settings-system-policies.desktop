@@ -6,7 +6,10 @@ X-KDE-System-Settings-Parent-Category=system-administration
 Icon=preferences-desktop-user-password
 
 Name=System policies
+Name[da]=Systempolitikker
 Name[de]=Systemberechtigungen
+Name[hu]=Rendszerházirendek
+Name[nb]=Systempraksis
 Name[nds]=Systeemregeln
 Name[pt]=Políticas do sistema
 Name[pt_BR]=Políticas do sistema

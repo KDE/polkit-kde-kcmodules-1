@@ -12,6 +12,7 @@ X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Actions Policy
 Name[ca]=Política d'accions
+Name[ca@valencia]=Política d'accions
 Name[cs]=Pravidla činností
 Name[da]=Politik for handlinger
 Name[de]=Aktionsberechtigungen

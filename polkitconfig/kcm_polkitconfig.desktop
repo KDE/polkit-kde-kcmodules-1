@@ -12,6 +12,7 @@ X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Global Policy Configuration
 Name[ca]=Configuració de la política global
+Name[ca@valencia]=Configuració de la política global
 Name[cs]=Nastavení globálních pravidel
 Name[da]=Konfiguration af global politik
 Name[de]=Allgemeine Berechtigungseinstellung

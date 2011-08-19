@@ -24,6 +24,7 @@ class PKLAEntry {
     QString resultAny;
     QString resultInactive;
     QString resultActive;
+    QString filePath;
 
     int filePriority;
     int fileOrder;
@@ -33,6 +34,7 @@ class PKLAEntry {
     static QString textFromImpl(PolkitQt1::ActionDescription::ImplicitAuthorization implicit);
 };
 Q_DECLARE_METATYPE(PKLAEntry)
+Q_DECLARE_METATYPE(QList<PKLAEntry>);
 
 typedef QList<PKLAEntry> PKLAEntryList;
 

@@ -23,6 +23,7 @@
 #include "PolicyItem.h"
 #include <QDBusMessage>
 #include <QDBusConnection>
+#include <QDBusMetaType>
 #include <qdbuspendingcall.h>
 
 K_PLUGIN_FACTORY(KCMPolkitActionsFactory,
@@ -46,6 +47,9 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
     setAboutData(about);
 
     qRegisterMetaType<PolkitQt1::ActionDescription>();
+    qRegisterMetaType<PKLAEntry>("PKLAEntry");
+    qDBusRegisterMetaType<PKLAEntry>();
+    qDBusRegisterMetaType<QList<PKLAEntry> >();
 
     // Build the UI
     m_ui->setupUi(this);
@@ -90,11 +94,11 @@ void PolkitActionsKCM::save()
                                                           "org.kde.polkitkde1.helper",
                                                           QLatin1String("writePolicy"));
     QList<QVariant> argumentList;
-    QVariantList policies;
+    QList<PKLAEntry> policies;
     foreach (const PKLAEntry &entry, m_actionWidget.data()->entries()) {
-        policies << QVariant::fromValue(entry);
+        policies << entry;
     }
-    argumentList << policies;
+    argumentList << QVariant::fromValue(policies);
 
     message.setArguments(argumentList);
 

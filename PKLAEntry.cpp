@@ -14,7 +14,7 @@
 QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry)
 {
     argument.beginStructure();
-    argument << entry.title << entry.identity << entry.action << entry.resultAny << entry.resultInactive << entry.resultActive
+    argument << entry.title << entry.identity << entry.action << entry.resultAny << entry.resultInactive << entry.resultActive << entry.filePath
              << entry.filePriority << entry.fileOrder;
     argument.endStructure();
     return argument;
@@ -23,7 +23,7 @@ QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry)
 const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry)
 {
     argument.beginStructure();
-    argument >> entry.title >> entry.identity >> entry.action >> entry.resultAny >> entry.resultInactive >> entry.resultActive
+    argument >> entry.title >> entry.identity >> entry.action >> entry.resultAny >> entry.resultInactive >> entry.resultActive >> entry.filePath
              >> entry.filePriority >> entry.fileOrder;
     argument.endStructure();
     return argument;

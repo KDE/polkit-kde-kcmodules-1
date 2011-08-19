@@ -11,6 +11,7 @@
 #ifndef POLKITKDE1HELPER_H
 #define POLKITKDE1HELPER_H
 
+#include <QDir>
 #include <QtCore/QObject>
 #include <QtDBus/QDBusContext>
 #include <QtDBus/qdbusargument.h>
@@ -28,11 +29,12 @@ class PolkitKde1Helper : public QObject, protected QDBusContext
     public Q_SLOTS:
         void saveGlobalConfiguration(const QString &adminIdentities, int systemPriority, int policiesPriority);
         QVariantList retrievePolicies();
-        void writePolicy(const QVariantList &policy);
+        void writePolicy(const QList<PKLAEntry> &policy);
 
     private:
         QVariantList entriesFromFile(int filePriority, const QString &fileContents);
         QString formatPKLAEntry(const PKLAEntry &entry);
+        QFileInfoList oldNestedList;
 };
 
 #endif // POLKITKDE1HELPER_H

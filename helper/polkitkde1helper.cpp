@@ -29,6 +29,7 @@ PolkitKde1Helper::PolkitKde1Helper(QObject* parent)
     : QObject(parent)
 {
     qDBusRegisterMetaType<PKLAEntry>();
+    qDBusRegisterMetaType<QList<PKLAEntry> >();
     (void) new HelperAdaptor(this);
     // Register the DBus service
     if (!QDBusConnection::systemBus().registerService("org.kde.polkitkde1.helper")) {
@@ -119,6 +120,9 @@ QVariantList PolkitKde1Helper::retrievePolicies()
             qDebug() << "Parsing file " << nestedInfo.absoluteFilePath();
             retlist.append(entriesFromFile(filePriority, nestedInfo.absoluteFilePath()));
         }
+
+        // Save all the fileinfo's, for a later delete if we choose to save
+        oldNestedList << nestedList;
     }
 
     return retlist;
@@ -141,6 +145,7 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
         if (line.startsWith('[')) {
             // Ok, that's a key entry
             PKLAEntry entry;
+            entry.filePath = filePath;
             entry.title = line.split('[').last().split(']').first();
             entry.filePriority = filePriority;
             entry.fileOrder = priority;
@@ -165,7 +170,7 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
 
                 // Did we parse it all?
                 if (!entry.identity.isEmpty() && !entry.action.isEmpty() && !entry.resultActive.isEmpty() &&
-                    !entry.resultAny.isEmpty() && !entry.resultInactive.isEmpty()) {
+                    !entry.resultAny.isEmpty() && !entry.resultInactive.isEmpty() && !entry.filePath.isEmpty()) {
                     // Awesome, add and wave goodbye. And also increase the priority
                     ++priority;
                     qDebug() << "PKLA Parsed:" << entry.title << entry.action << entry.identity << entry.resultAny
@@ -180,36 +185,60 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
     return retlist;
 }
 
-void PolkitKde1Helper::writePolicy(const QVariantList& policy)
+void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
 {
-    PKLAEntryList entries;
-    foreach (const QVariant &variant, policy) {
-        entries.append(variant.value<PKLAEntry>());
+    QList<PKLAEntry> entries = policy;
+
+    // First delete all the old files, we do not need them anymore
+    foreach(const QFileInfo &nestedInfo, oldNestedList) {
+        QFile::remove(nestedInfo.absoluteFilePath());
     }
+    oldNestedList.clear();
+
     qSort(entries.begin(), entries.end(), orderByPriorityLessThan);
 
     QSettings kdesettings("/etc/polkit-1/polkit-kde-1.conf", QSettings::IniFormat);
     kdesettings.beginGroup("General");
 
-    QString path = QString("/var/lib/polkit-1/localauthority/%1-polkitkde/%2.conf")
-                          .arg(kdesettings.value("PoliciesPriority",75).toInt()).arg(entries.first().action);
+    QString pathName = QString("/var/lib/polkit-1/localauthority/%1-polkitkde.d/")
+                            .arg(kdesettings.value("PoliciesPriority",75).toInt());
 
-    if (QFile::exists(path)) {
-        QFile::remove(path);
-    }
+    foreach(const PKLAEntry &entry, entries) {
+        QString fullPath;
 
-    QString contents;
+        // First check if it already has a filePath,
+        // else generate fullPath from the policy action name
+        if (!entry.filePath.isEmpty()) {
+            fullPath = entry.filePath;
+        } else {
+            QStringList dotSplittedFileName = entry.action.split(".");
 
-    foreach (const PKLAEntry &entry, entries) {
+            // Skip the action name
+            dotSplittedFileName.removeLast();
+            dotSplittedFileName << "pkla";
+
+            // Check if the polkitkde.d dir exists. If not, create it.
+            QDir path(pathName);
+
+            if (!path.exists()) {
+                if (!path.mkpath(path.absolutePath())) {
+                    return;
+                }
+            }
+
+            fullPath = pathName + dotSplittedFileName.join(".");
+        }
+
+        QString contents;
         contents.append(formatPKLAEntry(entry));
         contents.append('\n');
-    }
 
-    QFile wfile(path);
-    wfile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
-    wfile.write(contents.toUtf8());
-    wfile.flush();
-    wfile.close();
+        QFile wfile(fullPath);
+        wfile.open(QIODevice::Append | QIODevice::Truncate | QIODevice::Text);
+        wfile.write(contents.toUtf8());
+        wfile.flush();
+        wfile.close();
+    }
 }
 
 QString PolkitKde1Helper::formatPKLAEntry(const PKLAEntry& entry)

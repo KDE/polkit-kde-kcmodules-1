@@ -12,8 +12,8 @@
            <arg direction="out" type="av" />
        </method>
        <method name="writePolicy" >
-           <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantList"/>
-           <arg direction="in" type="av" />
+           <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QList&lt;PKLAEntry&gt;"/>
+           <arg direction="in" type="a(sssssssii)" />
        </method>
 
    </interface>

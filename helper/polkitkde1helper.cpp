@@ -103,29 +103,7 @@ QVariantList PolkitKde1Helper::retrievePolicies()
         return QVariantList();
     }
 
-    QVariantList retlist;
-
-    // Iterate over the directory and find out everything
-    QDir baseDir("/var/lib/polkit-1/localauthority/");
-    QFileInfoList baseList = baseDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-    foreach (const QFileInfo &info, baseList) {
-        int filePriority = info.baseName().split('-').first().toInt();
-        qDebug() << "Iterating over the directory " << info.absoluteFilePath() << ", which has a priority of " << filePriority;
-
-        QDir nestedDir(info.absoluteFilePath());
-        QFileInfoList nestedList = nestedDir.entryInfoList(QDir::Files);
-
-        foreach (const QFileInfo &nestedInfo, nestedList) {
-            qDebug() << "Parsing file " << nestedInfo.absoluteFilePath();
-            retlist.append(entriesFromFile(filePriority, nestedInfo.absoluteFilePath()));
-        }
-
-        // Save all the fileinfo's, for a later delete if we choose to save
-        oldNestedList << nestedList;
-    }
-
-    return retlist;
+    return reloadFileList();
 }
 
 QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& filePath)
@@ -193,7 +171,6 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
     foreach(const QFileInfo &nestedInfo, oldNestedList) {
         QFile::remove(nestedInfo.absoluteFilePath());
     }
-    oldNestedList.clear();
 
     qSort(entries.begin(), entries.end(), orderByPriorityLessThan);
 
@@ -239,6 +216,9 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
         wfile.flush();
         wfile.close();
     }
+
+    // Reload fileList;
+    reloadFileList();
 }
 
 QString PolkitKde1Helper::formatPKLAEntry(const PKLAEntry& entry)
@@ -253,3 +233,30 @@ QString PolkitKde1Helper::formatPKLAEntry(const PKLAEntry& entry)
     return retstring;
 }
 
+QVariantList PolkitKde1Helper::reloadFileList()
+{
+    QVariantList retlist;
+    oldNestedList.clear();
+
+    // Iterate over the directory and find out everything
+    QDir baseDir("/var/lib/polkit-1/localauthority/");
+    QFileInfoList baseList = baseDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+    foreach (const QFileInfo &info, baseList) {
+        int filePriority = info.baseName().split('-').first().toInt();
+        qDebug() << "Iterating over the directory " << info.absoluteFilePath() << ", which has a priority of " << filePriority;
+
+        QDir nestedDir(info.absoluteFilePath());
+        QFileInfoList nestedList = nestedDir.entryInfoList(QDir::Files);
+
+        foreach (const QFileInfo &nestedInfo, nestedList) {
+            qDebug() << "Parsing file " << nestedInfo.absoluteFilePath();
+            retlist.append(entriesFromFile(filePriority, nestedInfo.absoluteFilePath()));
+        }
+
+        // Save all the fileinfo's, for a later delete if we choose to save
+        oldNestedList << nestedList;
+    }
+
+    return retlist;
+}

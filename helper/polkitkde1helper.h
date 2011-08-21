@@ -34,6 +34,7 @@ class PolkitKde1Helper : public QObject, protected QDBusContext
     private:
         QVariantList entriesFromFile(int filePriority, const QString &fileContents);
         QString formatPKLAEntry(const PKLAEntry &entry);
+        QVariantList reloadFileList();
         QFileInfoList oldNestedList;
 };
 

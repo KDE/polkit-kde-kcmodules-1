@@ -167,6 +167,20 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
 {
     QList<PKLAEntry> entries = policy;
 
+    PolkitQt1::Authority::Result result;
+    PolkitQt1::SystemBusNameSubject subject(message().service());
+
+    result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changeexplicitauthorizations",
+                                                                      subject, PolkitQt1::Authority::AllowUserInteraction);
+    if (result == PolkitQt1::Authority::Yes) {
+        qDebug() << "Authorized successfully";
+        // It's ok
+    } else {
+        // It's not ok
+        qDebug() << "UnAuthorized! " << PolkitQt1::Authority::instance()->lastError();
+        return;
+    }
+
     // First delete all the old files, we do not need them anymore
     foreach(const QFileInfo &nestedInfo, oldNestedList) {
         QFile::remove(nestedInfo.absoluteFilePath());

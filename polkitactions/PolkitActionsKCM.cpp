@@ -98,9 +98,9 @@ void PolkitActionsKCM::save()
                                                                 QLatin1String("writeImplicitPolicies"));
         QList<QVariant> implicitArgumentList;
         implicitArgumentList << QVariant::fromValue(m_actionWidget.data()->implicitEntries());
-            
+
         messageImplicit.setArguments(implicitArgumentList);
-            
+
         QDBusPendingCall replyImplicit = QDBusConnection::systemBus().asyncCall(messageImplicit);
     }
 

@@ -244,7 +244,7 @@ void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
             implicit_override = true;
             break;
         }
-    }   
+    }
 
     // No implicit override found. Lets use the action
     if (!implicit_override) {
@@ -468,7 +468,7 @@ void ActionWidget::implicitSettingChanged(PolkitQt1::ActionDescription::Implicit
     if (auth != implicitAuthorizationFor(box->currentIndex())) {
         // The setting has been changed. Now add the new setting to the implicitlist
         addImplicitSetting();
-        
+
         // Settings changed. Enable apply button.
         emit changed();
     }

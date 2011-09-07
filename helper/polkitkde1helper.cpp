@@ -215,7 +215,7 @@ void PolkitKde1Helper::writeImplicitPolicies(const QList<PKLAEntry>& policy)
         // Create XML doc.
         doc.setContent(pfile);
         pfile->close();
-        
+
         QDomElement el = doc.firstChildElement("policyconfig").firstChildElement("action");
         while (!el.isNull() && el.attribute("id", QString()) != entry.action) {
             el = el.nextSiblingElement("action");
@@ -227,7 +227,7 @@ void PolkitKde1Helper::writeImplicitPolicies(const QList<PKLAEntry>& policy)
         while (nodelist.length() > 0) {
             el.removeChild(nodelist.item(0));
         }
-        
+
         // Add new elements
         QDomElement inactiveElem = el.appendChild(doc.createElement("allow_inactive")).toElement();
         QDomElement activeElem = el.appendChild(doc.createElement("allow_active")).toElement();

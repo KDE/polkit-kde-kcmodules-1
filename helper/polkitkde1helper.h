@@ -30,6 +30,7 @@ class PolkitKde1Helper : public QObject, protected QDBusContext
         void saveGlobalConfiguration(const QString &adminIdentities, int systemPriority, int policiesPriority);
         QVariantList retrievePolicies();
         void writePolicy(const QList<PKLAEntry> &policy);
+        void writeImplicitPolicies(const QList<PKLAEntry> &policy);
 
     private:
         QVariantList entriesFromFile(int filePriority, const QString &fileContents);

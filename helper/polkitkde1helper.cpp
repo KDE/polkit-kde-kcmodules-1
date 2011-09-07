@@ -14,6 +14,7 @@
 
 #include <QTimer>
 #include <QSettings>
+#include <QDomDocument>
 
 #include <QtDBus/QDBusConnection>
 
@@ -161,6 +162,91 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
     }
 
     return retlist;
+}
+
+void PolkitKde1Helper::writeImplicitPolicies(const QList<PKLAEntry>& policy)
+{
+    QList<PKLAEntry> entries = policy;
+
+    if (entries.empty()) {
+        return;
+    }
+
+    PolkitQt1::Authority::Result result;
+    PolkitQt1::SystemBusNameSubject subject(message().service());
+
+    result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changeimplicitauthorizations",
+                                                                      subject, PolkitQt1::Authority::AllowUserInteraction);
+
+    if (result == PolkitQt1::Authority::Yes) {
+        qDebug() << "Authorized successfully";
+        // It's ok
+    } else {
+        // It's not ok
+        qDebug() << "UnAuthorized! " << PolkitQt1::Authority::instance()->lastError();
+        return;
+    }
+
+    foreach(const PKLAEntry &entry, entries) {
+        QDomDocument doc = QDomDocument("policy");
+        QStringList actionNameSplitted = entry.action.split(".");
+        QString NewName;
+        QFile *pfile = new QFile("/usr/share/polkit-1/actions/org.freedesktop.kit.policy");
+        // Search for a valid file
+        foreach(const QString &nameSplitted , actionNameSplitted) {
+            NewName.append(nameSplitted);
+            pfile = new QFile("/usr/share/polkit-1/actions/" + NewName + ".policy");
+            if (!pfile->open(QIODevice::ReadOnly)) {
+                NewName.append(".");
+                delete pfile;
+                continue;
+            }
+            if (!pfile->exists()) {
+                NewName.append(".");
+                pfile->close();
+                delete pfile;
+                continue;
+            }
+
+            // We should now have found a valid file.
+            break;
+        }
+
+        // Create XML doc.
+        doc.setContent(pfile);
+        pfile->close();
+        
+        QDomElement el = doc.firstChildElement("policyconfig").firstChildElement("action");
+        while (!el.isNull() && el.attribute("id", QString()) != entry.action) {
+            el = el.nextSiblingElement("action");
+        }
+        el = el.firstChildElement("defaults");
+
+        // Delete all its childrens, :P
+        QDomNodeList nodelist = el.childNodes();
+        while (nodelist.length() > 0) {
+            el.removeChild(nodelist.item(0));
+        }
+        
+        // Add new elements
+        QDomElement inactiveElem = el.appendChild(doc.createElement("allow_inactive")).toElement();
+        QDomElement activeElem = el.appendChild(doc.createElement("allow_active")).toElement();
+        QDomElement anyElem = el.appendChild(doc.createElement("allow_any")).toElement();
+        inactiveElem.appendChild(doc.createTextNode(entry.resultInactive));
+        activeElem.appendChild(doc.createTextNode(entry.resultActive));
+        anyElem.appendChild(doc.createTextNode(entry.resultAny));
+
+        // Write the settings to the XML
+        if (!pfile->open(QIODevice::WriteOnly)) {
+            // Failed to write to the file?
+            qDebug() << "Failed writing to file: " << pfile->fileName();
+            continue;
+        }
+        QTextStream stream(pfile);
+        doc.save(stream, 2);
+        pfile->close();
+        delete pfile;
+    }
 }
 
 void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)

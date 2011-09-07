@@ -34,12 +34,16 @@ class ActionWidget : public QWidget
         static PolkitQt1::ActionDescription::ImplicitAuthorization implicitAuthorizationFor(int comboBoxIndex);
 
         PKLAEntryList entries() const;
+        PKLAEntryList implicitEntries() const;
+        bool explicitSettingsChanged() const;
+        bool implicitSettingsChanged() const;
 
     public Q_SLOTS:
         void setAction(const PolkitQt1::ActionDescription &action);
         void computeActionPolicies();
         void editExplicitPKLAEntry(QListWidgetItem *item);
         void addExplicitPKLAEntry();
+        void settingsSaved();
 
     private Q_SLOTS:
         void reloadPKLAs();
@@ -47,19 +51,27 @@ class ActionWidget : public QWidget
         void movePKLAUp();
         void explicitSelectionChanged(QListWidgetItem *current,QListWidgetItem*);
         void removePKLAEntry();
+        void anyImplicitSettingChanged();
+        void activeImplicitSettingChanged();
+        void inactiveImplicitSettingChanged();
 
     Q_SIGNALS:
         void changed();
 
     private:
+        void implicitSettingChanged(PolkitQt1::ActionDescription::ImplicitAuthorization auth, KComboBox *box);
         void setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, KComboBox *box);
+        void addImplicitSetting();
         void addNewPKLAEntry(const PKLAEntry &entry);
         QString formatPKLAEntry(const PKLAEntry &entry);
         QString formatIdentities(const QString &identities);
 
+        bool m_explicit_is_changed;
+        bool m_implicit_is_changed;
         Ui::ActionWidget *m_ui;
-        PolkitQt1::ActionDescription m_action;
+        PKLAEntry m_current_policy;
         PKLAEntryList m_entries;
+        PKLAEntryList m_implicit_entries;
 };
 
 }

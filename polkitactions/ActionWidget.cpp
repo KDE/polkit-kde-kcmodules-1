@@ -76,8 +76,8 @@ void ActionWidget::reloadPKLAs()
 {
     m_entries.clear();
     m_implicit_entries.clear();
-    m_explicit_is_changed = false;
-    m_implicit_is_changed = false;
+    m_explicitIsChanged = false;
+    m_implicitIsChanged = false;
 
     QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
                                                           "/Helper",
@@ -329,7 +329,7 @@ void ActionWidget::addNewPKLAEntry(const PKLAEntry& entry)
 
     // Ok, now append it to the list
     kDebug() << "Explicit settings changed";
-    m_explicit_is_changed = true;
+    m_explicitIsChanged = true;
     m_entries.append(toInsert);
     kDebug() << "Inserting entry named " << toInsert.title << " for " << toInsert.action;
 
@@ -356,7 +356,7 @@ void ActionWidget::removePKLAEntry()
         }
     }
     kDebug() << "Explicit settings changed";
-    m_explicit_is_changed = true;
+    m_explicitIsChanged = true;
     emit changed();
 
     // Reload
@@ -401,7 +401,7 @@ void ActionWidget::movePKLADown()
         }
     }
     kDebug() << "Explicit settings changed";
-    m_explicit_is_changed = true;
+    m_explicitIsChanged = true;
     emit changed();
 
     // Reload
@@ -430,7 +430,7 @@ void ActionWidget::movePKLAUp()
         }
     }
     kDebug() << "Explicit settings changed";
-    m_explicit_is_changed = true;
+    m_explicitIsChanged = true;
     emit changed();
 
     // Reload
@@ -491,7 +491,7 @@ void ActionWidget::addImplicitSetting()
         }
     }
     kDebug() << "Implicit settings changed";
-    m_implicit_is_changed = true;
+    m_implicitIsChanged = true;
     m_implicit_entries.push_back(entry);
 
     // Update the old settings container
@@ -501,18 +501,18 @@ void ActionWidget::addImplicitSetting()
 }
 
 void ActionWidget::settingsSaved() {
-    m_explicit_is_changed = false;
-    m_implicit_is_changed = false;
+    m_explicitIsChanged = false;
+    m_implicitIsChanged = false;
 }
 
-bool ActionWidget::explicitSettingsChanged() const
+bool ActionWidget::isExplicitSettingsChanged() const
 {
-    return m_explicit_is_changed;
+    return m_explicitIsChanged;
 }
 
-bool ActionWidget::implicitSettingsChanged() const
+bool ActionWidget::isImplicitSettingsChanged() const
 {
-    return m_implicit_is_changed;
+    return m_implicitIsChanged;
 }
 
 }

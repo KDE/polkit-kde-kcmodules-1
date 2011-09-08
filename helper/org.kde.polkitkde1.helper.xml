@@ -15,7 +15,7 @@
            <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QList&lt;PKLAEntry&gt;"/>
            <arg direction="in" type="a(sssssssii)" />
        </method>
-       <method name="writeImplicitPolicies" >
+       <method name="writeImplicitPolicy" >
            <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QList&lt;PKLAEntry&gt;"/>
            <arg direction="in" type="a(sssssssii)" />
        </method>

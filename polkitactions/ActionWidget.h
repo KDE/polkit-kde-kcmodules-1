@@ -35,8 +35,8 @@ class ActionWidget : public QWidget
 
         PKLAEntryList entries() const;
         PKLAEntryList implicitEntries() const;
-        bool explicitSettingsChanged() const;
-        bool implicitSettingsChanged() const;
+        bool isExplicitSettingsChanged() const;
+        bool isImplicitSettingsChanged() const;
 
     public Q_SLOTS:
         void setAction(const PolkitQt1::ActionDescription &action);
@@ -66,8 +66,8 @@ class ActionWidget : public QWidget
         QString formatPKLAEntry(const PKLAEntry &entry);
         QString formatIdentities(const QString &identities);
 
-        bool m_explicit_is_changed;
-        bool m_implicit_is_changed;
+        bool m_explicitIsChanged;
+        bool m_implicitIsChanged;
         Ui::ActionWidget *m_ui;
         PKLAEntry m_current_policy;
         PKLAEntryList m_entries;

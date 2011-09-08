@@ -164,7 +164,7 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
     return retlist;
 }
 
-void PolkitKde1Helper::writeImplicitPolicies(const QList<PKLAEntry>& policy)
+void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry>& policy)
 {
     QList<PKLAEntry> entries = policy;
 
@@ -190,19 +190,19 @@ void PolkitKde1Helper::writeImplicitPolicies(const QList<PKLAEntry>& policy)
     foreach(const PKLAEntry &entry, entries) {
         QDomDocument doc = QDomDocument("policy");
         QStringList actionNameSplitted = entry.action.split(".");
-        QString NewName;
+        QString newName;
         QFile *pfile = new QFile("/usr/share/polkit-1/actions/org.freedesktop.kit.policy");
         // Search for a valid file
         foreach(const QString &nameSplitted , actionNameSplitted) {
-            NewName.append(nameSplitted);
-            pfile = new QFile("/usr/share/polkit-1/actions/" + NewName + ".policy");
+            newName.append(nameSplitted);
+            pfile = new QFile("/usr/share/polkit-1/actions/" + newName + ".policy");
             if (!pfile->open(QIODevice::ReadOnly)) {
-                NewName.append(".");
+                newName.append(".");
                 delete pfile;
                 continue;
             }
             if (!pfile->exists()) {
-                NewName.append(".");
+                newName.append(".");
                 pfile->close();
                 delete pfile;
                 continue;

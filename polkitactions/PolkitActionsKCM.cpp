@@ -89,20 +89,40 @@ void PolkitActionsKCM::save()
         return;
     }
 
-    QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
-                                                          "/Helper",
-                                                          "org.kde.polkitkde1.helper",
-                                                          QLatin1String("writePolicy"));
-    QList<QVariant> argumentList;
-    QList<PKLAEntry> policies;
-    foreach (const PKLAEntry &entry, m_actionWidget.data()->entries()) {
-        policies << entry;
+    // HACK: Check if we want to save the implicit settings. This will be changed
+    // in the future, where entries() will only contain the changed settings.
+    if (m_actionWidget.data()->isImplicitSettingsChanged()) {
+        QDBusMessage messageImplicit = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
+                                                                "/Helper",
+                                                                "org.kde.polkitkde1.helper",
+                                                                QLatin1String("writeImplicitPolicy"));
+        QList<QVariant> implicitArgumentList;
+        implicitArgumentList << QVariant::fromValue(m_actionWidget.data()->implicitEntries());
+
+        messageImplicit.setArguments(implicitArgumentList);
+
+        QDBusPendingCall replyImplicit = QDBusConnection::systemBus().asyncCall(messageImplicit);
     }
-    argumentList << QVariant::fromValue(policies);
 
-    message.setArguments(argumentList);
+    // HACK: Check if we want to save the explicit settings. This will be changed
+    // in the future, where entries() will only contain the changed settings.
+    if (m_actionWidget.data()->isExplicitSettingsChanged()) {
+        QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
+                                                            "/Helper",
+                                                            "org.kde.polkitkde1.helper",
+                                                            QLatin1String("writePolicy"));
+        QList<QVariant> argumentList;
+        QList<PKLAEntry> policies;
+        foreach (const PKLAEntry &entry, m_actionWidget.data()->entries()) {
+            policies << entry;
+        }
+        argumentList << QVariant::fromValue(policies);
 
-    QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
+        message.setArguments(argumentList);
+
+        QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
+    }
+    emit saved();
 }
 
 void PolkitActionsKCM::defaults()
@@ -127,6 +147,7 @@ void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QMod
             }
             m_actionWidget = new PolkitKde::ActionWidget(action);
             connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
+            connect(this, SIGNAL(saved()), m_actionWidget, SLOT(settingsSaved()));
             layout()->addWidget(m_actionWidget.data());
         } else {
             m_actionWidget.data()->setAction(action);

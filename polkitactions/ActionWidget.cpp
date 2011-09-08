@@ -60,11 +60,11 @@ ActionWidget::ActionWidget(const PolkitQt1::ActionDescription &action, QWidget* 
     connect(m_ui->moveUpButton, SIGNAL(clicked(bool)),
             this, SLOT(movePKLAUp()));
     connect(m_ui->anyComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(changed()));
+            this, SLOT(anyImplicitSettingChanged()));
     connect(m_ui->inactiveComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(changed()));
+            this, SLOT(inactiveImplicitSettingChanged()));
     connect(m_ui->activeComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(changed()));
+            this, SLOT(activeImplicitSettingChanged()));
 }
 
 ActionWidget::~ActionWidget()
@@ -75,6 +75,10 @@ ActionWidget::~ActionWidget()
 void ActionWidget::reloadPKLAs()
 {
     m_entries.clear();
+    m_implicit_entries.clear();
+    m_explicitIsChanged = false;
+    m_implicitIsChanged = false;
+
     QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
                                                           "/Helper",
                                                           "org.kde.polkitkde1.helper",
@@ -92,7 +96,7 @@ void ActionWidget::reloadPKLAs()
         }
     }
 
-    if (!m_action.actionId().isEmpty()) {
+    if (!m_current_policy.action.isEmpty()) {
         computeActionPolicies();
     }
 }
@@ -104,23 +108,23 @@ void ActionWidget::computeActionPolicies()
     qSort(m_entries.begin(), m_entries.end(), orderByPriorityLessThan);
     foreach (const PKLAEntry &entry, m_entries) {
         QStringList realActions = entry.action.split(';');
-        kDebug() << entry.action << m_action.actionId();
-        if (realActions.contains(m_action.actionId())) {
+        kDebug() << entry.action << m_current_policy.action;
+        if (realActions.contains(m_current_policy.action)) {
             // Match! Is it, actually, an implicit override?
-            if (entry.title == "PolkitKdeOverrideImplicit") {
+            /* if (entry.title == "PolkitKdeOverrideImplicit") {
                 // It is!
                 kDebug() << "Found implicit override";
                 setImplicitAuthorization(PKLAEntry::implFromText(entry.resultActive), m_ui->activeComboBox);
                 setImplicitAuthorization(PKLAEntry::implFromText(entry.resultInactive), m_ui->inactiveComboBox);
                 setImplicitAuthorization(PKLAEntry::implFromText(entry.resultAny), m_ui->anyComboBox);
-            } else {
+            } else { */
                 // TODO: Add it to the local auths
                 //LocalAuthorization *auth = new LocalAuthorization(entry);
                 kDebug() << "Found PKLA override";
                 QListWidgetItem *item = new QListWidgetItem(entry.title);
                 item->setData(Qt::UserRole, formatPKLAEntry(entry));
                 m_ui->localAuthListWidget->addItem(item);
-            }
+            // }
         }
     }
 
@@ -136,15 +140,15 @@ QString ActionWidget::formatPKLAEntry(const PKLAEntry& entry)
 {
     QString authorizationText;
 
-    if (PKLAEntry::implFromText(entry.resultActive) != m_action.implicitActive()) {
+    if (entry.resultActive != m_current_policy.resultActive) {
         authorizationText.append(i18n("'%1' on active console", entry.resultActive));
         authorizationText.append(", ");
     }
-    if (PKLAEntry::implFromText(entry.resultInactive) != m_action.implicitInactive()) {
+    if (entry.resultInactive != m_current_policy.resultInactive) {
         authorizationText.append(i18n("'%1' on inactive console", entry.resultActive));
         authorizationText.append(", ");
     }
-    if (PKLAEntry::implFromText(entry.resultAny) != m_action.implicitAny()) {
+    if (entry.resultAny != m_current_policy.resultAny) {
         authorizationText.append(i18n("'%1' on any console", entry.resultActive));
         authorizationText.append(", ");
     }
@@ -231,10 +235,28 @@ PolkitQt1::ActionDescription::ImplicitAuthorization ActionWidget::implicitAuthor
 
 void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
 {
-    m_action = action;
-    setImplicitAuthorization(action.implicitActive(), m_ui->activeComboBox);
-    setImplicitAuthorization(action.implicitInactive(), m_ui->inactiveComboBox);
-    setImplicitAuthorization(action.implicitAny(), m_ui->anyComboBox);
+    bool implicit_override = false;
+    // Check for implicit override
+    foreach (const PKLAEntry &entry, m_implicit_entries) {
+        if (entry.action == action.actionId()) {
+            kDebug() << "Found implicit override!";
+            m_current_policy = entry;
+            implicit_override = true;
+            break;
+        }
+    }
+
+    // No implicit override found. Lets use the action
+    if (!implicit_override) {
+        m_current_policy.action = action.actionId();
+        m_current_policy.resultActive = PKLAEntry::textFromImpl(action.implicitActive());
+        m_current_policy.resultInactive = PKLAEntry::textFromImpl(action.implicitInactive());
+        m_current_policy.resultAny = PKLAEntry::textFromImpl(action.implicitAny());
+    }
+
+    setImplicitAuthorization(PKLAEntry::implFromText(m_current_policy.resultActive), m_ui->activeComboBox);
+    setImplicitAuthorization(PKLAEntry::implFromText(m_current_policy.resultInactive), m_ui->inactiveComboBox);
+    setImplicitAuthorization(PKLAEntry::implFromText(m_current_policy.resultAny), m_ui->anyComboBox);
 
     m_ui->descriptionLabel->setText(action.description());
     m_ui->vendorLabel->setText(action.vendorName());
@@ -260,7 +282,6 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
                         break;
                     }
                 }
-
                 addNewPKLAEntry(result);
             }
 
@@ -273,7 +294,7 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
 
 void ActionWidget::addExplicitPKLAEntry()
 {
-    QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(m_action.actionId(), this);
+    QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(m_current_policy.action, this);
     if (dialog.data()->exec() == KDialog::Accepted) {
         dialog.data()->commitChangesToPKLA();
         PKLAEntry result = dialog.data()->pkla();
@@ -307,6 +328,8 @@ void ActionWidget::addNewPKLAEntry(const PKLAEntry& entry)
     }
 
     // Ok, now append it to the list
+    kDebug() << "Explicit settings changed";
+    m_explicitIsChanged = true;
     m_entries.append(toInsert);
     kDebug() << "Inserting entry named " << toInsert.title << " for " << toInsert.action;
 
@@ -332,7 +355,8 @@ void ActionWidget::removePKLAEntry()
             break;
         }
     }
-
+    kDebug() << "Explicit settings changed";
+    m_explicitIsChanged = true;
     emit changed();
 
     // Reload
@@ -376,7 +400,8 @@ void ActionWidget::movePKLADown()
             break;
         }
     }
-
+    kDebug() << "Explicit settings changed";
+    m_explicitIsChanged = true;
     emit changed();
 
     // Reload
@@ -404,7 +429,8 @@ void ActionWidget::movePKLAUp()
             break;
         }
     }
-
+    kDebug() << "Explicit settings changed";
+    m_explicitIsChanged = true;
     emit changed();
 
     // Reload
@@ -414,6 +440,79 @@ void ActionWidget::movePKLAUp()
 PKLAEntryList ActionWidget::entries() const
 {
     return m_entries;
+}
+
+PKLAEntryList ActionWidget::implicitEntries() const
+{
+    return m_implicit_entries;
+}
+
+void ActionWidget::anyImplicitSettingChanged()
+{
+    implicitSettingChanged(PKLAEntry::implFromText(m_current_policy.resultAny), m_ui->anyComboBox);
+}
+
+void ActionWidget::activeImplicitSettingChanged()
+{
+    implicitSettingChanged(PKLAEntry::implFromText(m_current_policy.resultActive), m_ui->activeComboBox);
+}
+
+void ActionWidget::inactiveImplicitSettingChanged()
+{
+    implicitSettingChanged(PKLAEntry::implFromText(m_current_policy.resultInactive), m_ui->inactiveComboBox);
+}
+
+void ActionWidget::implicitSettingChanged(PolkitQt1::ActionDescription::ImplicitAuthorization auth, KComboBox *box)
+{
+    // Check if the setting has been changed or if it is just an action change
+    if (auth != implicitAuthorizationFor(box->currentIndex())) {
+        // The setting has been changed. Now add the new setting to the implicitlist
+        addImplicitSetting();
+
+        // Settings changed. Enable apply button.
+        emit changed();
+    }
+}
+
+void ActionWidget::addImplicitSetting()
+{
+    PKLAEntry entry;
+    entry.resultAny = PKLAEntry::textFromImpl(implicitAuthorizationFor(m_ui->anyComboBox->currentIndex()));
+    entry.resultActive = PKLAEntry::textFromImpl(implicitAuthorizationFor(m_ui->activeComboBox->currentIndex()));
+    entry.resultInactive = PKLAEntry::textFromImpl(implicitAuthorizationFor(m_ui->inactiveComboBox->currentIndex()));
+    entry.action = m_current_policy.action;
+
+    // Before adding the new setting, delete all former settings on our list
+    for (PKLAEntryList::iterator it = m_implicit_entries.begin(); it != m_implicit_entries.end(); ++it) {
+        // Match! Delete old entry
+        if ((*it).action == m_current_policy.action) {
+            m_implicit_entries.erase(it);
+            break;
+        }
+    }
+    kDebug() << "Implicit settings changed";
+    m_implicitIsChanged = true;
+    m_implicit_entries.push_back(entry);
+
+    // Update the old settings container
+    m_current_policy.resultActive = entry.resultActive;
+    m_current_policy.resultAny = entry.resultAny;
+    m_current_policy.resultInactive = entry.resultInactive;
+}
+
+void ActionWidget::settingsSaved() {
+    m_explicitIsChanged = false;
+    m_implicitIsChanged = false;
+}
+
+bool ActionWidget::isExplicitSettingsChanged() const
+{
+    return m_explicitIsChanged;
+}
+
+bool ActionWidget::isImplicitSettingsChanged() const
+{
+    return m_implicitIsChanged;
 }
 
 }

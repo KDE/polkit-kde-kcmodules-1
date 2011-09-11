@@ -29,7 +29,6 @@ install(FILES ${_output} DESTINATION ${POLKITQT-1_POLICY_FILES_INSTALL_DIR})
 set(polkitkde1helper_SRCS
     main.cpp
     polkitkde1helper.cpp
-    ../PKLAEntry.cpp
 )
 
 qt4_add_dbus_adaptor(polkitkde1helper_SRCS
@@ -40,7 +39,7 @@ qt4_add_dbus_adaptor(polkitkde1helper_SRCS
 
 kde4_add_executable(polkitkde1helper ${polkitkde1helper_SRCS})
 
-target_link_libraries(polkitkde1helper ${QT_QTCORE_LIBRARY} ${QT_QTDBUS_LIBRARY} ${POLKITQT-1_CORE_LIBRARY})
+target_link_libraries(polkitkde1helper ${QT_QTCORE_LIBRARY} ${QT_QTDBUS_LIBRARY} ${POLKITQT-1_CORE_LIBRARY} polkitkdekcmodulesprivate)
 
 install(TARGETS polkitkde1helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 

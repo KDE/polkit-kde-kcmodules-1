@@ -12,7 +12,7 @@
 #define EXPLICITAUTHORIZATIONDIALOG_H
 
 #include <KDialog>
-#include "../PKLAEntry.h"
+#include "PKLAEntry.h"
 
 namespace Ui {
     class ExplicitAuthorizationWidget;

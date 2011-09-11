@@ -11,7 +11,7 @@
 #include "explicitauthorizationdialog.h"
 #include "ui_explicitwidget.h"
 #include "ActionWidget.h"
-#include "../polkitconfig/identitywidget.h"
+#include "identitywidget.h"
 
 namespace PolkitKde {
 

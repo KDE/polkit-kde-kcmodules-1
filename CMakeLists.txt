@@ -19,8 +19,10 @@ set(POLKITQT-1_MIN_VERSION "0.98.1")
 find_package(PolkitQt-1 REQUIRED)
 
 include_directories(${KDE4_INCLUDES}
-                    ${POLKITQT-1_INCLUDE_DIR})
+                    ${POLKITQT-1_INCLUDE_DIR}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
+add_subdirectory(common)
 add_subdirectory(polkitactions)
 add_subdirectory(polkitconfig)
 add_subdirectory(helper)

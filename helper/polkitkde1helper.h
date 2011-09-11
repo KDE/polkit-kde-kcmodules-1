@@ -15,7 +15,7 @@
 #include <QtCore/QObject>
 #include <QtDBus/QDBusContext>
 #include <QtDBus/qdbusargument.h>
-#include "../PKLAEntry.h"
+#include "PKLAEntry.h"
 
 class PolkitKde1Helper : public QObject, protected QDBusContext
 {

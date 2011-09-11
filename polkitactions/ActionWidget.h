@@ -12,7 +12,7 @@
 #define ACTIONWIDGET_H
 
 #include <QtGui/QWidget>
-#include "../PKLAEntry.h"
+#include "PKLAEntry.h"
 #include <PolkitQt1/ActionDescription>
 
 class KComboBox;

@@ -8,16 +8,13 @@ set( kcm_polkitactions_SRCS
     PolicyItem.cpp
     ActionWidget.cpp
     explicitauthorizationdialog.cpp
-    ../PKLAEntry.cpp
     pkitemdelegate.cpp
-    ../polkitconfig/identitywidget.cpp
 )
 
 kde4_add_ui_files(kcm_polkitactions_SRCS
     mainview.ui
     explicitwidget.ui
-    actionwidget.ui
-    ../polkitconfig/identitywidget.ui)
+    actionwidget.ui)
 
 kde4_add_plugin(kcm_polkitactions ${kcm_polkitactions_SRCS})
 
@@ -25,6 +22,7 @@ target_link_libraries(kcm_polkitactions
      ${KDE4_KDECORE_LIBS}
      ${KDE4_KDEUI_LIBRARY}
      ${POLKITQT-1_CORE_LIBRARY}
+     polkitkdekcmodulesprivate
 )
 
 install(TARGETS kcm_polkitactions  DESTINATION ${PLUGIN_INSTALL_DIR} )

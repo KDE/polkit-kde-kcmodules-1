@@ -29,14 +29,12 @@ bool orderByPriorityLessThan(const PKLAEntry &e1, const PKLAEntry &e2)
     return e1.fileOrder < e2.fileOrder;
 }
 
-ActionWidget::ActionWidget(const PolkitQt1::ActionDescription &action, QWidget* parent)
+ActionWidget::ActionWidget(QWidget* parent)
         : QWidget(parent)
+        , m_PKLALoaded(false)
         , m_ui(new Ui::ActionWidget)
 {
     m_ui->setupUi(this);
-
-    // Initialize
-    reloadPKLAs();
 
     // Icons 'n stuff
     m_ui->removeButton->setIcon(KIcon("list-remove"));
@@ -44,8 +42,8 @@ ActionWidget::ActionWidget(const PolkitQt1::ActionDescription &action, QWidget* 
     m_ui->moveDownButton->setIcon(KIcon("go-down"));
     m_ui->moveUpButton->setIcon(KIcon("go-up"));
 
-    setAction(action);
     m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
+    this->setEnabled(false);
 
     connect(m_ui->localAuthListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
             this, SLOT(editExplicitPKLAEntry(QListWidgetItem*)));
@@ -236,6 +234,12 @@ PolkitQt1::ActionDescription::ImplicitAuthorization ActionWidget::implicitAuthor
 void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
 {
     bool implicit_override = false;
+
+    // Check if PKLA's are loaded
+    if (!m_PKLALoaded) {
+        reloadPKLAs();
+        m_PKLALoaded = true;
+    }
     // Check for implicit override
     foreach (const PKLAEntry &entry, m_implicit_entries) {
         if (entry.action == action.actionId()) {
@@ -264,6 +268,7 @@ void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
     m_ui->pixmapLabel->setPixmap(KIcon(action.iconName()).pixmap(64));
 
     computeActionPolicies();
+    this->setEnabled(true);
 }
 
 void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)

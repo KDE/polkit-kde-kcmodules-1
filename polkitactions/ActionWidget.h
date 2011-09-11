@@ -27,7 +27,7 @@ class ActionWidget : public QWidget
 {
     Q_OBJECT
     public:
-        explicit ActionWidget(const PolkitQt1::ActionDescription &action, QWidget* parent = 0);
+        explicit ActionWidget(QWidget* parent = 0);
         virtual ~ActionWidget();
 
         static int comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthorization auth);
@@ -68,6 +68,7 @@ class ActionWidget : public QWidget
 
         bool m_explicitIsChanged;
         bool m_implicitIsChanged;
+        bool m_PKLALoaded;
         Ui::ActionWidget *m_ui;
         PKLAEntry m_current_policy;
         PKLAEntryList m_entries;

@@ -71,6 +71,15 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
     connect(PolkitQt1::Authority::instance(), SIGNAL(enumerateActionsFinished(PolkitQt1::ActionDescription::List)),
             m_model, SLOT(setCurrentEntries(PolkitQt1::ActionDescription::List)));
     PolkitQt1::Authority::instance()->enumerateActions();
+
+    // Initialize ActionWidget
+    if (layout()->count() == 2) {
+        layout()->takeAt(1)->widget()->deleteLater();
+    }
+    m_actionWidget = new PolkitKde::ActionWidget();
+    connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
+    connect(this, SIGNAL(saved()), m_actionWidget, SLOT(settingsSaved()));
+    layout()->addWidget(m_actionWidget.data());
 }
 
 PolkitActionsKCM::~PolkitActionsKCM()
@@ -90,7 +99,7 @@ void PolkitActionsKCM::save()
     }
 
     // HACK: Check if we want to save the implicit settings. This will be changed
-    // in the future, where entries() will only contain the changed settings.
+    // in the future, where implicitEntries() will only contain the changed settings.
     if (m_actionWidget.data()->isImplicitSettingsChanged()) {
         QDBusMessage messageImplicit = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
                                                                 "/Helper",
@@ -141,17 +150,7 @@ void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QMod
         PolkitQt1::ActionDescription action;
         action = current.data(PolkitKde::PoliciesModel::PolkitEntryRole).value<PolkitQt1::ActionDescription>();
 
-        if (m_actionWidget.isNull()) {
-            if (layout()->count() == 2) {
-                layout()->takeAt(1)->widget()->deleteLater();
-            }
-            m_actionWidget = new PolkitKde::ActionWidget(action);
-            connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
-            connect(this, SIGNAL(saved()), m_actionWidget, SLOT(settingsSaved()));
-            layout()->addWidget(m_actionWidget.data());
-        } else {
-            m_actionWidget.data()->setAction(action);
-        }
+        m_actionWidget.data()->setAction(action);
     } else {
         // TODO
     }

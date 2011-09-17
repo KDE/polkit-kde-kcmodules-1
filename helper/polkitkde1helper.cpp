@@ -189,7 +189,7 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry>& policy)
 
     foreach(const PKLAEntry &entry, entries) {
         QDomDocument doc = QDomDocument("policy");
-        QStringList actionNameSplitted = entry.action.split(".");
+        QStringList actionNameSplitted = entry.action.split('.');
         QString newName;
         QFile *pfile = new QFile("/usr/share/polkit-1/actions/org.freedesktop.kit.policy");
         // Search for a valid file
@@ -288,7 +288,7 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
         if (!entry.filePath.isEmpty()) {
             fullPath = entry.filePath;
         } else {
-            QStringList dotSplittedFileName = entry.action.split(".");
+            QStringList dotSplittedFileName = entry.action.split('.');
 
             // Skip the action name
             dotSplittedFileName.removeLast();

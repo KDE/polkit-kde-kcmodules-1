@@ -11,7 +11,7 @@
 #ifndef POLKITKDE1HELPER_H
 #define POLKITKDE1HELPER_H
 
-#include <QDir>
+#include <QtCore/QDir>
 #include <QtCore/QObject>
 #include <QtDBus/QDBusContext>
 #include <QtDBus/qdbusargument.h>

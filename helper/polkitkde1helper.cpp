@@ -12,9 +12,9 @@
 
 #include "helperadaptor.h"
 
-#include <QTimer>
-#include <QSettings>
-#include <QDomDocument>
+#include <QtCore/QTimer>
+#include <QtCore/QSettings>
+#include <QtXml/QDomDocument>
 
 #include <QtDBus/QDBusConnection>
 

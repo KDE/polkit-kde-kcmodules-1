@@ -13,7 +13,6 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <PolkitQt1/Authority>
 #include "ui_mainview.h"
 #include "PoliciesModel.h"
@@ -79,8 +78,7 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
     }
     m_actionWidget = new PolkitKde::ActionWidget();
     connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
-    connect(this, SIGNAL(implicitSaved()), m_actionWidget, SLOT(implicitSettingsSaved()));
-    connect(this, SIGNAL(explicitSaved()), m_actionWidget, SLOT(explicitSettingsSaved()));
+    connect(this, SIGNAL(saved()), m_actionWidget, SLOT(settingsSaved()));
     layout()->addWidget(m_actionWidget.data());
 }
 
@@ -113,17 +111,6 @@ void PolkitActionsKCM::save()
         messageImplicit.setArguments(implicitArgumentList);
 
         QDBusPendingCall replyImplicit = QDBusConnection::systemBus().asyncCall(messageImplicit);
-        replyImplicit.waitForFinished();
-        if (replyImplicit.isError()) {
-            KMessageBox::detailedError(     this,
-                                            replyImplicit.error().name(),
-                                            replyImplicit.error().message()
-            );
-            changed();
-        }
-        else {
-            emit implicitSaved();
-        }
     }
 
     // HACK: Check if we want to save the explicit settings. This will be changed
@@ -143,17 +130,8 @@ void PolkitActionsKCM::save()
         message.setArguments(argumentList);
 
         QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
-        if (reply.isError()) {
-            KMessageBox::detailedError(     this,
-                                            reply.error().name(),
-                                            reply.error().message()
-            );
-            changed();
-        }
-        else {
-            emit explicitSaved();
-        }
     }
+    emit saved();
 }
 
 void PolkitActionsKCM::defaults()

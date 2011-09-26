@@ -43,8 +43,7 @@ class ActionWidget : public QWidget
         void computeActionPolicies();
         void editExplicitPKLAEntry(QListWidgetItem *item);
         void addExplicitPKLAEntry();
-        void implicitSettingsSaved();
-        void explicitSettingsSaved();
+        void settingsSaved();
 
     private Q_SLOTS:
         void reloadPKLAs();

@@ -505,9 +505,12 @@ void ActionWidget::addImplicitSetting()
     m_current_policy.resultInactive = entry.resultInactive;
 }
 
-void ActionWidget::settingsSaved() {
-    m_explicitIsChanged = false;
+void ActionWidget::implicitSettingsSaved() {
     m_implicitIsChanged = false;
+}
+
+void ActionWidget::explicitSettingsSaved() {
+    m_explicitIsChanged = false;
 }
 
 bool ActionWidget::isExplicitSettingsChanged() const

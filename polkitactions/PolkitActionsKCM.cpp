@@ -12,7 +12,8 @@
 
 #include <KPluginFactory>
 #include <KAboutData>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <PolkitQt1/Authority>
 #include "ui_mainview.h"
 #include "PoliciesModel.h"
@@ -24,7 +25,7 @@
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QDBusMetaType>
-#include <qdbuspendingcall.h>
+#include <QDBusPendingCall>
 
 K_PLUGIN_FACTORY(KCMPolkitActionsFactory,
                  registerPlugin<PolkitActionsKCM>();
@@ -78,7 +79,8 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
     }
     m_actionWidget = new PolkitKde::ActionWidget();
     connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
-    connect(this, SIGNAL(saved()), m_actionWidget, SLOT(settingsSaved()));
+    connect(this, SIGNAL(implicitSaved()), m_actionWidget, SLOT(implicitSettingsSaved()));
+    connect(this, SIGNAL(explicitSaved()), m_actionWidget, SLOT(explicitSettingsSaved()));
     layout()->addWidget(m_actionWidget.data());
 }
 
@@ -111,6 +113,17 @@ void PolkitActionsKCM::save()
         messageImplicit.setArguments(implicitArgumentList);
 
         QDBusPendingCall replyImplicit = QDBusConnection::systemBus().asyncCall(messageImplicit);
+        replyImplicit.waitForFinished();
+        if (replyImplicit.isError()) {
+            KMessageBox::detailedError(     this,
+                                            replyImplicit.error().name(),
+                                            replyImplicit.error().message()
+            );
+            changed();
+        }
+        else {
+            emit implicitSaved();
+        }
     }
 
     // HACK: Check if we want to save the explicit settings. This will be changed
@@ -130,8 +143,17 @@ void PolkitActionsKCM::save()
         message.setArguments(argumentList);
 
         QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
+        if (reply.isError()) {
+            KMessageBox::detailedError(     this,
+                                            reply.error().name(),
+                                            reply.error().message()
+            );
+            changed();
+        }
+        else {
+            emit explicitSaved();
+        }
     }
-    emit saved();
 }
 
 void PolkitActionsKCM::defaults()

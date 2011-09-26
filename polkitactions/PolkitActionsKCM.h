@@ -38,7 +38,8 @@ class PolkitActionsKCM : public KCModule
         virtual void defaults();
 
     Q_SIGNALS:
-        void saved();
+        void explicitSaved();
+        void implicitSaved();
 
     public slots:
         void slotCheckAuthorizationFinished(PolkitQt1::Authority::Result result);

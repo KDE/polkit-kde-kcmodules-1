@@ -85,15 +85,15 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, i
     qDebug() << contents << "will be wrote to the local authority file";
     QFile wfile(QString("/etc/polkit-1/localauthority.conf.d/%1-polkitkde.conf").arg(systemPriority));
     if (!wfile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
-        sendErrorReply(QDBusError::Failed, i18n("Error opening the global configuration file: %1\nErrorcode: %2.", wfile.fileName(), wfile.error()));
+        sendErrorReply(QDBusError::Failed, i18n("Error opening the global configuration file: %1\nError code: %2.", wfile.fileName(), wfile.error()));
         return;
     }
     if (wfile.write(contents.toUtf8()) < 0) {
-        sendErrorReply(QDBusError::Failed, i18n("Error occured while writing settings to file: %1.", wfile.fileName()));
+        sendErrorReply(QDBusError::Failed, i18n("Error occurred while writing settings to file: %1.", wfile.fileName()));
         return;
     }
     if (!wfile.flush()) {
-        sendErrorReply(QDBusError::Failed, i18n("Error occured while flushing settings to file: %1.", wfile.fileName()));
+        sendErrorReply(QDBusError::Failed, i18n("Error occurred while flushing settings to file: %1.", wfile.fileName()));
         return;
     }
     wfile.close();
@@ -131,7 +131,7 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "Failed to open " << filePath;
-        sendErrorReply(QDBusError::Failed, i18n("Error opening the file: %1\nErrorcode: %2.", file.fileName(), file.error()));
+        sendErrorReply(QDBusError::Failed, i18n("Error opening the file: %1\nError code: %2.", file.fileName(), file.error()));
         return QVariantList();
     }
 
@@ -247,7 +247,7 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry>& policy)
         QString domDocumentError;
         if (!doc.setContent(pfile, &domDocumentError)) {
             pfile->close();
-            sendErrorReply(QDBusError::Failed, i18n("Error occured while parsing file: %1\nErrormessage: %2", pfile->fileName(), domDocumentError));
+            sendErrorReply(QDBusError::Failed, i18n("Error occurred while parsing file: %1\nError message: %2", pfile->fileName(), domDocumentError));
             return;
         }
         pfile->close();
@@ -276,7 +276,7 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry>& policy)
         if (!pfile->open(QIODevice::WriteOnly)) {
             // Failed to write to the file?
             qDebug() << "Failed writing to file: " << pfile->fileName();
-            sendErrorReply(QDBusError::Failed, i18n("Error opening the file: %1\nErrorcode: %2.", pfile->fileName(), pfile->error()));
+            sendErrorReply(QDBusError::Failed, i18n("Error opening the file: %1\nError code: %2.", pfile->fileName(), pfile->error()));
             return;
         }
         QTextStream stream(pfile);
@@ -354,15 +354,15 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
 
         QFile wfile(fullPath);
         if (!wfile.open(QIODevice::Append | QIODevice::Truncate | QIODevice::Text)) {
-            sendErrorReply(QDBusError::Failed, i18n("Error opening the explicit setting file: %1\nErrorcode: %2.", wfile.fileName(), wfile.error()));
+            sendErrorReply(QDBusError::Failed, i18n("Error opening the explicit setting file: %1\nError code: %2.", wfile.fileName(), wfile.error()));
             return;
         }
         if (wfile.write(contents.toUtf8()) < 0) {
-            sendErrorReply(QDBusError::Failed, i18n("Error occured while writing explicit settings to file: %1.", wfile.fileName()));
+            sendErrorReply(QDBusError::Failed, i18n("Error occurred while writing explicit settings to file: %1.", wfile.fileName()));
             return;
         }
         if (!wfile.flush()) {
-            sendErrorReply(QDBusError::Failed, i18n("Error occured while flushing explicit settings to file: %1.", wfile.fileName()));
+            sendErrorReply(QDBusError::Failed, i18n("Error occurred while flushing explicit settings to file: %1.", wfile.fileName()));
             return;
         }
     }

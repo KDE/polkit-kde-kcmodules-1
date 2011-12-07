@@ -82,3 +82,7 @@ Comment[x-test]=xxConfigure global settings for system policiesxx
 Comment[zh_TW]=設定系統政策的全域設定
 
 X-KDE-Keywords=system,policy,policies,security,polkit,policykit,password
+X-KDE-Keywords[nl]=systeem,beleid,beleidsregels,beveiliging,polkit,policykit,wachtwoord
+X-KDE-Keywords[sv]=system,policy,säkerhet,polkit,policykit,lösenord
+X-KDE-Keywords[uk]=system,policy,policies,security,polkit,policykit,password,система,правило,правила,безпека,пароль,паролі
+X-KDE-Keywords[x-test]=xxsystem,policy,policies,security,polkit,policykit,passwordxx

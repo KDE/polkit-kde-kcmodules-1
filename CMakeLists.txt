@@ -18,6 +18,8 @@ endfunction(dbus_add_activation_system_service _sources)
 set(POLKITQT-1_MIN_VERSION "0.98.1")
 find_package(PolkitQt-1 REQUIRED)
 
+include(FindPkgConfig)
+
 include_directories(${KDE4_INCLUDES}
                     ${POLKITQT-1_INCLUDE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/common)

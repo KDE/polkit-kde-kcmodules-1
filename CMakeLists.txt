@@ -15,7 +15,7 @@ function(dbus_add_activation_system_service _sources)
     endforeach (_i ${ARGN})
 endfunction(dbus_add_activation_system_service _sources)
 
-set(POLKITQT-1_MIN_VERSION "0.98.1")
+set(POLKITQT-1_MIN_VERSION "0.103.0")
 find_package(PolkitQt-1 REQUIRED)
 
 include(FindPkgConfig)

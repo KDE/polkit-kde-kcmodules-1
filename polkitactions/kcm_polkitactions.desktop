@@ -11,6 +11,7 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Actions Policy
+Name[ar]=سياسات الإجراءات
 Name[ca]=Política d'accions
 Name[ca@valencia]=Política d'accions
 Name[cs]=Pravidla činností
@@ -46,6 +47,7 @@ Name[x-test]=xxActions Policyxx
 Name[zh_TW]=動作政策
 
 Comment=Configure policies for trusted actions in the system
+Comment[ar]=ضبط السياسات للإجراءات المأمونة في النظام
 Comment[ca]=Configura les polítiques per accions fiables en el sistema
 Comment[ca@valencia]=Configura les polítiques per accions fiables en el sistema
 Comment[cs]=Nastavit pravidla pro důvěryhodné činnosti v systému
@@ -83,6 +85,7 @@ Comment[x-test]=xxConfigure policies for trusted actions in the systemxx
 Comment[zh_TW]=設定系統內受到信任的動作的政策
 
 X-KDE-Keywords=system,policy,policies,security,polkit,policykit,password
+X-KDE-Keywords[ar]=نظام,سياسة,سياسات,أمن, polkit, policykit,كلمة السر
 X-KDE-Keywords[ca]=sistema,política,polítiques,seguretat,polkit,policykit,contrasenya
 X-KDE-Keywords[ca@valencia]=sistema,política,polítiques,seguretat,polkit,policykit,contrasenya
 X-KDE-Keywords[cs]=systém,pravidlo,pravidla,bezpečnost,polkit,policykit,heslo

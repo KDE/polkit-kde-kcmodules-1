@@ -1,5 +1,6 @@
 [Domain]
 Name=System policy settings
+Name[ar]=إعدادات سياسة النظام
 Name[bs]=Postavke sistemskih pravila
 Name[ca]=Arranjament de la política del sistema
 Name[ca@valencia]=Arranjament de la política del sistema
@@ -40,6 +41,7 @@ Icon=security-high
 
 [org.kde.polkitkde1.readauthorizations]
 Name=Read system authorizations
+Name[ar]=قراءة أذون النظام
 Name[bs]=Čitaj sistemske autorizacije
 Name[ca]=Llegeix les autoritzacions del sistema
 Name[ca@valencia]=Llig les autoritzacions del sistema
@@ -77,6 +79,7 @@ Name[uk]=Читання системних уповноважень
 Name[x-test]=xxRead system authorizationsxx
 Name[zh_TW]=讀取系統授權
 Description=Authorization is required to read system authorizations
+Description[ar]=يتطلب أذن لقراءة أذون النظام
 Description[ca]=Es requereix autorització per llegir les autoritzacions del sistema
 Description[ca@valencia]=Es requereix autorització per llegir les autoritzacions del sistema
 Description[cs]=Pro čtení systémových oprávnění je třeba patřičná oprávnění
@@ -117,6 +120,7 @@ Persistence=session
 
 [org.kde.polkitkde1.changeimplicitauthorizations]
 Name=Change implicit authorizations for an action
+Name[ar]=تغيير الأذون الضمنية لإجراء
 Name[ca]=Canvia les autoritzacions implícites per una acció
 Name[ca@valencia]=Canvia les autoritzacions implícites per una acció
 Name[cs]=Změnit implicitní oprávnění pro činnost
@@ -152,6 +156,7 @@ Name[uk]=Змінити неявні уповноваження на дію
 Name[x-test]=xxChange implicit authorizations for an actionxx
 Name[zh_TW]=變更動作的內部授權
 Description=Authorization is required to change implicit authorizations
+Description[ar]=يتطلب إذناً لتغير الأذون الضمنية
 Description[ca]=Es requereix autorització per canviar les autoritzacions implícites
 Description[ca@valencia]=Es requereix autorització per canviar les autoritzacions implícites
 Description[cs]=Pro změnu implicitních oprávnění je třeba mít patřičná práva
@@ -190,6 +195,7 @@ Policy=auth_admin
 
 [org.kde.polkitkde1.changeexplicitauthorizations]
 Name=Change explicit authorizations for an action
+Name[ar]=تغيير الأذون الصريحة لإجراء
 Name[ca]=Canvia les autoritzacions explícites per una acció
 Name[ca@valencia]=Canvia les autoritzacions explícites per una acció
 Name[cs]=Změnit explicitní oprávnění pro činnost
@@ -225,6 +231,7 @@ Name[uk]=Змінити явні уповноваження на дію
 Name[x-test]=xxChange explicit authorizations for an actionxx
 Name[zh_TW]=變更動作的外部授權
 Description=Authorization is required to change explicit authorizations
+Description[ar]=يتطلب إذن لتغيير الأذون الصريحة
 Description[ca]=Es requereix autorització per canviar les autoritzacions explícites
 Description[ca@valencia]=Es requereix autorització per canviar les autoritzacions explícites
 Description[cs]=Pro změnu explicitních oprávnění je třeba mít patřičná práva
@@ -264,6 +271,7 @@ Persistence=session
 
 [org.kde.polkitkde1.changesystemconfiguration]
 Name=Change global configuration for system policies
+Name[ar]=تغيير الإعدادات العامة لسياسات النظام
 Name[ca]=Canvia la configuració global de les polítiques del sistema
 Name[ca@valencia]=Canvia la configuració global de les polítiques del sistema
 Name[cs]=Změnit globální nastavení pro pravidla systému
@@ -300,6 +308,7 @@ Name[uk]=Змінити загальні налаштування системн
 Name[x-test]=xxChange global configuration for system policiesxx
 Name[zh_TW]=變更系統政策的全域設定
 Description=Authorization is required to change global configuration for system policies
+Description[ar]=يتطلب أذن لتغيير الإعدادات العامة لسياسات النظام
 Description[ca]=Es requereix autorització per canviar la configuració global de les polítiques del sistema
 Description[ca@valencia]=Es requereix autorització per canviar la configuració global de les polítiques del sistema
 Description[cs]=Pro změnu globálního nastavení pravidel systému je třeba oprávnění

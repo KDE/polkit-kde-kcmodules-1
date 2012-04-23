@@ -44,6 +44,7 @@ Name[sv]=Inställning av global policy
 Name[tr]=Genel Politika Yapılandırması
 Name[uk]=Налаштування загальних правил доступу
 Name[x-test]=xxGlobal Policy Configurationxx
+Name[zh_CN]=全局策略配置
 Name[zh_TW]=全域政策設定
 
 Comment=Configure global settings for system policies

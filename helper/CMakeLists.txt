@@ -22,7 +22,7 @@ add_custom_command(OUTPUT ${_output}
                    DEPENDS polkit-kde-helper-policy-gen)
 add_custom_target("actions for polkit-kde" ALL DEPENDS ${_output})
 
-install(FILES ${_output} DESTINATION ${POLKITQT-1_POLICY_FILES_INSTALL_DIR})
+install(FILES ${_output} DESTINATION ${KDE4_AUTH_POLICY_FILES_INSTALL_DIR})
 
 #########
 

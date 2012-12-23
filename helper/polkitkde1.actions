@@ -1,7 +1,6 @@
 [Domain]
 Name=System policy settings
 Name[ar]=إعدادات سياسة النظام
-Name[bs]=Postavke sistemskih pravila
 Name[ca]=Arranjament de la política del sistema
 Name[ca@valencia]=Arranjament de la política del sistema
 Name[cs]=Nastavení pravidel systému
@@ -50,7 +49,6 @@ Icon=security-high
 [org.kde.polkitkde1.readauthorizations]
 Name=Read system authorizations
 Name[ar]=قراءة أذون النظام
-Name[bs]=Čitaj sistemske autorizacije
 Name[ca]=Llegeix les autoritzacions del sistema
 Name[ca@valencia]=Llig les autoritzacions del sistema
 Name[cs]=Načíst systémová oprávnění

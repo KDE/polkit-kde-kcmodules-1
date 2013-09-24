@@ -47,7 +47,6 @@ class ActionWidget : public QWidget
         void explicitSettingsSaved();
 
     private Q_SLOTS:
-        void reloadPKLAs();
         void movePKLADown();
         void movePKLAUp();
         void explicitSelectionChanged(QListWidgetItem *current,QListWidgetItem*);
@@ -66,6 +65,7 @@ class ActionWidget : public QWidget
         void addNewPKLAEntry(const PKLAEntry &entry);
         QString formatPKLAEntry(const PKLAEntry &entry);
         QString formatIdentities(const QString &identities);
+        bool reloadPKLAs();
 
         bool m_explicitIsChanged;
         bool m_implicitIsChanged;

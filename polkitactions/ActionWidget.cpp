@@ -18,6 +18,7 @@
 #include <QtDBus/qdbusmetatype.h>
 #include <PolkitQt1/ActionDescription>
 #include <KDebug>
+#include <KMessageBox>
 #include "pkitemdelegate.h"
 #include "explicitauthorizationdialog.h"
 #include <QSettings>
@@ -70,7 +71,7 @@ ActionWidget::~ActionWidget()
     delete m_ui;
 }
 
-void ActionWidget::reloadPKLAs()
+bool ActionWidget::reloadPKLAs()
 {
     m_entries.clear();
     m_implicit_entries.clear();
@@ -83,9 +84,24 @@ void ActionWidget::reloadPKLAs()
                                                           QLatin1String("retrievePolicies"));
     QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
     reply.waitForFinished();
-    if (reply.reply().arguments().count() >= 1) {
+    if (reply.isError()) {
+        const QDBusError dbusError = reply.error();
+        // from PolkitKde1Helper::retrievePolicies()
+        const QString requiredAuth("org.kde.polkit1.readauthorizations");
+
+        KMessageBox::detailedError(this,
+                                   i18n("<qt>Could not retrieve PolicyKit policies.<br>Either the authorization failed, or there is a system configuration problem."),
+                                   i18n("<qt>Bus: system<br>Call: %1 %2 %3.%4<br>Error: %5 \"%6\"<br>Action: %7",
+                                        message.service(), message.path(), message.interface(), message.member(),
+                                        dbusError.name(), dbusError.message(),
+                                        requiredAuth));
+        return (false);
+    }
+
+    const QDBusMessage r = reply.reply();
+    if (r.arguments().count() >= 1) {
         QVariantList vlist;
-        reply.reply().arguments().first().value<QDBusArgument>() >> vlist;
+        r.arguments().first().value<QDBusArgument>() >> vlist;
         foreach (const QVariant &variant, vlist) {
             PKLAEntry entry;
             variant.value<QDBusArgument>() >> entry;
@@ -97,6 +113,8 @@ void ActionWidget::reloadPKLAs()
     if (!m_current_policy.action.isEmpty()) {
         computeActionPolicies();
     }
+
+    return (true);
 }
 
 void ActionWidget::computeActionPolicies()
@@ -237,7 +255,10 @@ void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
 
     // Check if PKLA's are loaded
     if (!m_PKLALoaded) {
-        reloadPKLAs();
+        if (!reloadPKLAs()) {
+            setEnabled(false);
+            return;
+        }
         m_PKLALoaded = true;
     }
     // Check for implicit override

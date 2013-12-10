@@ -77,11 +77,11 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
     if (layout()->count() == 2) {
         layout()->takeAt(1)->widget()->deleteLater();
     }
-    m_actionWidget = new PolkitKde::ActionWidget();
+    m_actionWidget = new PolkitKde::ActionWidget(this);
     connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
     connect(this, SIGNAL(implicitSaved()), m_actionWidget, SLOT(implicitSettingsSaved()));
     connect(this, SIGNAL(explicitSaved()), m_actionWidget, SLOT(explicitSettingsSaved()));
-    layout()->addWidget(m_actionWidget.data());
+    layout()->addWidget(m_actionWidget);
 }
 
 PolkitActionsKCM::~PolkitActionsKCM()
@@ -96,19 +96,15 @@ void PolkitActionsKCM::load()
 
 void PolkitActionsKCM::save()
 {
-    if (m_actionWidget.isNull()) {
-        return;
-    }
-
     // HACK: Check if we want to save the implicit settings. This will be changed
     // in the future, where implicitEntries() will only contain the changed settings.
-    if (m_actionWidget.data()->isImplicitSettingsChanged()) {
+    if (m_actionWidget->isImplicitSettingsChanged()) {
         QDBusMessage messageImplicit = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
                                                                 "/Helper",
                                                                 "org.kde.polkitkde1.helper",
                                                                 QLatin1String("writeImplicitPolicy"));
         QList<QVariant> implicitArgumentList;
-        implicitArgumentList << QVariant::fromValue(m_actionWidget.data()->implicitEntries());
+        implicitArgumentList << QVariant::fromValue(m_actionWidget->implicitEntries());
 
         messageImplicit.setArguments(implicitArgumentList);
 
@@ -128,14 +124,14 @@ void PolkitActionsKCM::save()
 
     // HACK: Check if we want to save the explicit settings. This will be changed
     // in the future, where entries() will only contain the changed settings.
-    if (m_actionWidget.data()->isExplicitSettingsChanged()) {
+    if (m_actionWidget->isExplicitSettingsChanged()) {
         QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
                                                             "/Helper",
                                                             "org.kde.polkitkde1.helper",
                                                             QLatin1String("writePolicy"));
         QList<QVariant> argumentList;
         QList<PKLAEntry> policies;
-        foreach (const PKLAEntry &entry, m_actionWidget.data()->entries()) {
+        foreach (const PKLAEntry &entry, m_actionWidget->entries()) {
             policies << entry;
         }
         argumentList << QVariant::fromValue(policies);
@@ -172,7 +168,7 @@ void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QMod
         PolkitQt1::ActionDescription action;
         action = current.data(PolkitKde::PoliciesModel::PolkitEntryRole).value<PolkitQt1::ActionDescription>();
 
-        m_actionWidget.data()->setAction(action);
+        m_actionWidget->setAction(action);
     } else {
         // TODO
     }

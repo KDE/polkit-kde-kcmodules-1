@@ -12,6 +12,7 @@ X-KDE-System-Settings-Parent-Category=system-administration
 
 Name=Global Policy Configuration
 Name[ar]=ضبط السياسة العامة
+Name[bs]=Globalna postavka pravila
 Name[ca]=Configuració de la política global
 Name[ca@valencia]=Configuració de la política global
 Name[cs]=Nastavení globálních pravidel
@@ -56,6 +57,7 @@ Name[zh_TW]=全域政策設定
 
 Comment=Configure global settings for system policies
 Comment[ar]=ضبط الإعدادات العامة لسياسات النظام
+Comment[bs]=Postavi globalne postavke za sistemska pravila
 Comment[ca]=Configura l'arranjament global de les polítiques del sistema
 Comment[ca@valencia]=Configura l'arranjament global de les polítiques del sistema
 Comment[cs]=Nastavit globální nastavení pro pravidla systému
@@ -101,6 +103,7 @@ Comment[zh_TW]=設定系統政策的全域設定
 
 X-KDE-Keywords=system,policy,policies,security,polkit,policykit,password
 X-KDE-Keywords[ar]=نظام,سياسة,سياسات,أمن, polkit, policykit,كلمة السر
+X-KDE-Keywords[bs]=sistem,pravilo,pravila,sigurnost,polkit,lozinka
 X-KDE-Keywords[ca]=sistema,política,polítiques,seguretat,polkit,policykit,contrasenya
 X-KDE-Keywords[ca@valencia]=sistema,política,polítiques,seguretat,polkit,policykit,contrasenya
 X-KDE-Keywords[cs]=systém,pravidlo,pravidla,bezpečnost,polkit,policykit,heslo

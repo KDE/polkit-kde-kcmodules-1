@@ -52,7 +52,6 @@ Name[sv]=Inställning av global policy
 Name[tr]=Genel Politika Yapılandırması
 Name[uk]=Налаштування загальних правил доступу
 Name[vi]=Cấu hình chính sách toàn hệ thống
-Name[x-test]=xxGlobal Policy Configurationxx
 Name[zh_CN]=全局策略配置
 Name[zh_TW]=全域政策設定
 
@@ -99,7 +98,6 @@ Comment[th]=ปรับแต่งการตั้งค่าทั่ว�
 Comment[tr]=Sistem politikaları için genel ayarları yapılandır
 Comment[uk]=Налаштування загальних параметрів системних правил доступу
 Comment[vi]=Cấu hình thiết lập toàn hệ thống chính sách
-Comment[x-test]=xxConfigure global settings for system policiesxx
 Comment[zh_CN]=配置系统策略的全局配置
 Comment[zh_TW]=設定系統政策的全域設定
 
@@ -142,6 +140,5 @@ X-KDE-Keywords[sv]=system,policy,säkerhet,polkit,policykit,lösenord
 X-KDE-Keywords[tr]=sistem,politika,politikalar,güvenlik,polkit,policykit,parola
 X-KDE-Keywords[uk]=system,policy,policies,security,polkit,policykit,password,система,правило,правила,безпека,пароль,паролі
 X-KDE-Keywords[vi]=system,policy,policies,security,polkit,policykit,password,hệ thống,mật khẩu,chính sách,bảo mật,mật khẩu
-X-KDE-Keywords[x-test]=xxsystem,policy,policies,security,polkit,policykit,passwordxx
 X-KDE-Keywords[zh_CN]=system,policy,policies,security,polkit,policykit,password,系统,策略,安全,密码
 X-KDE-Keywords[zh_TW]=system,policy,policies,security,polkit,policykit,password

@@ -53,6 +53,7 @@ Name[tr]=Eylem Politikaları
 Name[ug]=مەشغۇلات سىياسىتى
 Name[uk]=Правила дій
 Name[vi]=Chính sách hành động
+Name[x-test]=xxActions Policyxx
 Name[zh_CN]=动作策略
 Name[zh_TW]=動作政策
 
@@ -99,6 +100,7 @@ Comment[th]=ปรับแต่งค่านโยบายต่าง ๆ 
 Comment[tr]=Sistemin güvenilen eylem politikalarını yapılandır
 Comment[uk]=Налаштування правил щодо виконання довірених дій у системі
 Comment[vi]=Cấu hình chính sách cho các hành động tin cậy trong hệ thống
+Comment[x-test]=xxConfigure policies for trusted actions in the systemxx
 Comment[zh_CN]=配置系统中信任的动作的策略
 Comment[zh_TW]=設定系統內受到信任的動作的政策
 
@@ -141,5 +143,6 @@ X-KDE-Keywords[sv]=system,policy,säkerhet,polkit,policykit,lösenord
 X-KDE-Keywords[tr]=sistem,politika,politikalar,güvenlik,polkit,policykit,parola
 X-KDE-Keywords[uk]=system,policy,policies,security,polkit,policykit,password,система,правило,правила,безпека,пароль,паролі
 X-KDE-Keywords[vi]=system,policy,policies,security,polkit,policykit,password,hệ thống,mật khẩu,chính sách,bảo mật,mật khẩu
+X-KDE-Keywords[x-test]=xxsystem,policy,policies,security,polkit,policykit,passwordxx
 X-KDE-Keywords[zh_CN]=system,policy,policies,security,polkit,policykit,password,系统,策略,安全,密码
 X-KDE-Keywords[zh_TW]=system,policy,policies,security,polkit,policykit,password

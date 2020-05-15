@@ -11,7 +11,7 @@
 #ifndef IDENTITYWIDGET_H
 #define IDENTITYWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <kdemacros.h>
 

@@ -13,6 +13,7 @@
 #include "ui_identitywidget.h"
 #include <KUser>
 #include <KDebug>
+#include <KIcon>
 
 IdentityWidget::IdentityWidget(IdentityWidget::IdentityType type, const QString& name, QWidget* parent)
     : QWidget(parent)

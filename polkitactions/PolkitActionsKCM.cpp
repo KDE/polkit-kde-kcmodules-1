@@ -32,18 +32,20 @@ K_PLUGIN_FACTORY(KCMPolkitActionsFactory,
                 )
 K_EXPORT_PLUGIN(KCMPolkitActionsFactory("kcm_polkitactions"))
 
+#include <PolkitActionsKCM.moc>
+
 PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
-    : KCModule(KCMPolkitActionsFactory::componentData(), parent, args)
+    : KCModule(parent, args)
     , m_ui(new Ui::PolkitActionsMainView)
 {
     KAboutData *about =
-        new KAboutData("kcm_polkitactions", "kcm_polkitactions", ki18n("Global system policy settings"),
-                       "1.0.0", ki18n("A configuration for polkit-1 system administrators and policy priorities"),
-                       KAboutData::License_GPL, ki18n("(c), 2009 Dario Freddi"),
-                       ki18n("From this module, you can configure system administrators and priorities "
-                             "for the policies defined in the Actions module"));
+        new KAboutData("kcm_polkitactions", "kcm_polkitactions",
+                       "1.0.0", i18n("A configuration for polkit-1 system administrators and policy priorities"),
+                       KAboutLicense::GPL, i18n("(c), 2009 Dario Freddi"),
+                       i18n("From this module, you can configure system administrators and priorities "
+                            "for the policies defined in the Actions module"));
 
-    about->addAuthor(ki18n("Dario Freddi"), ki18n("Maintainer") , "drf@kde.org", "http://drfav.wordpress.com");
+    about->addAuthor(i18n("Dario Freddi"), i18n("Maintainer"), "drf@kde.org", "http://drfav.wordpress.com");
 
     setAboutData(about);
 

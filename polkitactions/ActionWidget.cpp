@@ -19,6 +19,7 @@
 #include <PolkitQt1/ActionDescription>
 #include <KDebug>
 #include <KMessageBox>
+#include <KLocalizedString>
 #include "pkitemdelegate.h"
 #include "explicitauthorizationdialog.h"
 #include <QSettings>

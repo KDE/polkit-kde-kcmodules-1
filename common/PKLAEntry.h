@@ -12,7 +12,7 @@
 #define PKLAENTRY_H
 
 #include <QMetaType>
-#include <PolkitQt1/ActionDescription>
+#include <polkit-qt5-1/PolkitQt1/ActionDescription>
 
 #include <kdemacros.h>
 

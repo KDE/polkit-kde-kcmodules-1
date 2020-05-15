@@ -5,14 +5,14 @@ set( kcm_polkitconfig_SRCS
      kcmpolkitconfig.cpp
 )
 
-kde4_add_ui_files(kcm_polkitconfig_SRCS 
+ki18n_wrap_ui(kcm_polkitconfig_SRCS
     polkitconfig.ui)
 
-kde4_add_plugin(kcm_polkitconfig ${kcm_polkitconfig_SRCS})
+add_library(kcm_polkitconfig ${kcm_polkitconfig_SRCS})
 
 target_link_libraries(kcm_polkitconfig  
-     ${KDE4_KDECORE_LIBS}
-     ${KDE4_KDEUI_LIBRARY}
+     ${KDE5_KDECORE_LIBS}
+     ${KDE5_KDEUI_LIBRARY}
      polkitkdekcmodulesprivate
 )
 

@@ -12,6 +12,7 @@
 #include "ui_explicitwidget.h"
 #include "ActionWidget.h"
 #include "identitywidget.h"
+#include "KIcon"
 
 namespace PolkitKde {
 

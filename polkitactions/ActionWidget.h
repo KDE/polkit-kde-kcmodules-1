@@ -11,7 +11,7 @@
 #ifndef ACTIONWIDGET_H
 #define ACTIONWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "PKLAEntry.h"
 #include <PolkitQt1/ActionDescription>
 

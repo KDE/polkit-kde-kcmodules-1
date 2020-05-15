@@ -11,16 +11,16 @@ set( kcm_polkitactions_SRCS
     pkitemdelegate.cpp
 )
 
-kde4_add_ui_files(kcm_polkitactions_SRCS
+ki18n_wrap_ui(kcm_polkitactions_SRCS
     mainview.ui
     explicitwidget.ui
     actionwidget.ui)
 
-kde4_add_plugin(kcm_polkitactions ${kcm_polkitactions_SRCS})
+add_library(kcm_polkitactions ${kcm_polkitactions_SRCS})
 
 target_link_libraries(kcm_polkitactions
-     ${KDE4_KDECORE_LIBS}
-     ${KDE4_KDEUI_LIBRARY}
+     ${KDE5_KDECORE_LIBS}
+     ${KDE5_KDEUI_LIBRARY}
      ${POLKITQT-1_CORE_LIBRARY}
      polkitkdekcmodulesprivate
 )

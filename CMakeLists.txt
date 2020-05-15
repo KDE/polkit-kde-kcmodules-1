@@ -1,9 +1,15 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(polkit-kde-kcmodules-1)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+set(QT_MIN_VERSION "5.9.0")
+find_package(ECM 1.0.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-find_package(KDE4 REQUIRED)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+
+find_package(KF5 REQUIRED COMPONENTS KDELibs4Support I18n KCMUtils Auth)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets DBus)
 
 function(dbus_add_activation_system_service _sources)
     pkg_search_module( DBUS dbus-1 )
@@ -16,13 +22,12 @@ function(dbus_add_activation_system_service _sources)
     endforeach (_i ${ARGN})
 endfunction(dbus_add_activation_system_service _sources)
 
-set(POLKITQT-1_MIN_VERSION "0.103.0")
-find_package(PolkitQt-1 REQUIRED)
+set(POLKITQT5-1_MIN_VERSION "0.103.0")
+find_package(PolkitQt5-1 REQUIRED)
 
 include(FindPkgConfig)
 
-include_directories(${KDE4_INCLUDES}
-                    ${POLKITQT-1_INCLUDE_DIR}
+include_directories(${POLKITQT-1_INCLUDE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 add_subdirectory(common)

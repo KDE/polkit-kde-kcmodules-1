@@ -12,7 +12,7 @@
 #include "ui_explicitwidget.h"
 #include "ActionWidget.h"
 #include "identitywidget.h"
-#include "KIcon"
+#include "QIcon"
 
 namespace PolkitKde {
 
@@ -46,7 +46,7 @@ void ExplicitAuthorizationDialog::init()
     setMainWidget(widget);
     setModal(true);
 
-    m_ui->addButton->setIcon(KIcon("list-add"));
+    m_ui->addButton->setIcon(QIcon::fromTheme("list-add"));
 
     m_identitiesLayout = new QVBoxLayout;
     m_identitiesLayout->addStretch();

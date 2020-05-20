@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QFontMetrics>
 
-#include <KIcon>
+#include <QIcon>
 #include <KGlobalSettings>
 #include <KDebug>
 
@@ -62,7 +62,7 @@ void PkItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     p.setClipRect(clipRect);
 
     // here we draw the icon
-    KIcon icon(qvariant_cast<QIcon>(index.data(Qt::DecorationRole)));
+    QIcon icon(qvariant_cast<QIcon>(index.data(Qt::DecorationRole)));
 
     QIcon::Mode iconMode = QIcon::Normal;
 

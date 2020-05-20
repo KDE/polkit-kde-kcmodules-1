@@ -39,10 +39,10 @@ ActionWidget::ActionWidget(QWidget* parent)
     m_ui->setupUi(this);
 
     // Icons 'n stuff
-    m_ui->removeButton->setIcon(KIcon("list-remove"));
-    m_ui->addLocalButton->setIcon(KIcon("list-add"));
-    m_ui->moveDownButton->setIcon(KIcon("go-down"));
-    m_ui->moveUpButton->setIcon(KIcon("go-up"));
+    m_ui->removeButton->setIcon(QIcon::fromTheme("list-remove"));
+    m_ui->addLocalButton->setIcon(QIcon::fromTheme("list-add"));
+    m_ui->moveDownButton->setIcon(QIcon::fromTheme("go-down"));
+    m_ui->moveUpButton->setIcon(QIcon::fromTheme("go-up"));
 
     m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
     this->setEnabled(false);
@@ -287,7 +287,7 @@ void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
     m_ui->descriptionLabel->setText(action.description());
     m_ui->vendorLabel->setText(action.vendorName());
     m_ui->vendorLabel->setUrl(action.vendorUrl());
-    m_ui->pixmapLabel->setPixmap(KIcon(action.iconName()).pixmap(64));
+    m_ui->pixmapLabel->setPixmap(QIcon::fromTheme(action.iconName()).pixmap(64));
 
     computeActionPolicies();
     this->setEnabled(true);

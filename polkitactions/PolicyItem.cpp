@@ -20,8 +20,7 @@
 
 #include "PolicyItem.h"
 
-#include <KIconLoader>
-#include <KIcon>
+#include <QIcon>
 
 #include "PoliciesModel.h"
 
@@ -31,9 +30,9 @@ PolicyItem::PolicyItem(bool isGroup, PolicyItem *parent)
     : parentItem(parent)
 {
     if (isGroup) {
-        itemData[Qt::DecorationRole] = KIcon("folder-locked");
+        itemData[Qt::DecorationRole] = QIcon::fromTheme("folder-locked");
     } else {
-        itemData[Qt::DecorationRole] = KIcon("preferences-desktop-cryptography");
+        itemData[Qt::DecorationRole] = QIcon::fromTheme("preferences-desktop-cryptography");
     }
     itemData[PoliciesModel::IsGroupRole] = isGroup;
 }
@@ -45,13 +44,8 @@ PolicyItem::~PolicyItem()
 
 void PolicyItem::setPolkitEntry(const PolkitQt1::ActionDescription &entry)
 {
-    // yep, caching the icon DOES improve speed
     QString iconName = entry.iconName();
-    if (KIconLoader::global()->iconPath(iconName, KIconLoader::NoGroup, true).isEmpty()) {
-        itemData[Qt::DecorationRole] = KIcon("preferences-desktop-cryptography");
-    } else {
-        itemData[Qt::DecorationRole] = KIcon(iconName);
-    }
+    itemData[Qt::DecorationRole] = QIcon::fromTheme(iconName, QIcon::fromTheme("preferences-desktop-cryptography"));
 
     itemData[Qt::DisplayRole] = entry.description();
     itemData[PoliciesModel::PathRole] = entry.actionId();

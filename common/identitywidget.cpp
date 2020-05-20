@@ -13,7 +13,7 @@
 #include "ui_identitywidget.h"
 #include <KUser>
 #include <KDebug>
-#include <KIcon>
+#include <QIcon>
 
 IdentityWidget::IdentityWidget(IdentityWidget::IdentityType type, const QString& name, QWidget* parent)
     : QWidget(parent)
@@ -37,9 +37,9 @@ void IdentityWidget::init(IdentityType type)
 {
     m_ui = new Ui::IdentityWidget;
     m_ui->setupUi(this);
-    m_ui->removeButton->setIcon(KIcon("list-remove"));
-    m_ui->identityTypeBox->setItemIcon(0, KIcon("user-identity"));
-    m_ui->identityTypeBox->setItemIcon(1, KIcon("system-users"));
+    m_ui->removeButton->setIcon(QIcon::fromTheme("list-remove"));
+    m_ui->identityTypeBox->setItemIcon(0, QIcon::fromTheme("user-identity"));
+    m_ui->identityTypeBox->setItemIcon(1, QIcon::fromTheme("system-users"));
     m_ui->identityTypeBox->setCurrentIndex((int)type);
     populateIdentityNameBox();
 
@@ -89,7 +89,7 @@ void IdentityWidget::populateIdentityNameBox()
             if (!user.faceIconPath().isEmpty()) {
                 icon.addPixmap(QPixmap(user.faceIconPath()));
             } else {
-                icon = KIcon("user-identity");
+                icon = QIcon::fromTheme("user-identity");
             }
             if (user.fullName().isEmpty()) {
                 displayName = user.loginName();
@@ -103,7 +103,7 @@ void IdentityWidget::populateIdentityNameBox()
         QList<KUserGroup> groups = KUserGroup::allGroups();
 
         foreach (const KUserGroup &group, groups) {
-            m_ui->identityNameBox->addItem(KIcon("system-users"), group.name(), group.name());
+            m_ui->identityNameBox->addItem(QIcon::fromTheme("system-users"), group.name(), group.name());
         }
     }
 }

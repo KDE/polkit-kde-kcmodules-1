@@ -21,7 +21,7 @@
 
 #include <QStyledItemDelegate>
 
-#include <KIcon>
+#include <QIcon>
 
 class QStyleOptionViewItem;
 
@@ -52,7 +52,7 @@ public:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 private:
-    KIcon m_passwordIcon;
+    QIcon m_passwordIcon;
 };
 
 }

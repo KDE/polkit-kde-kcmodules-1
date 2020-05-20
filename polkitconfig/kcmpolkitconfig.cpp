@@ -24,7 +24,7 @@
 #include <qdir.h>
 #include <qlayoutitem.h>
 #include "identitywidget.h"
-#include <KIcon>
+#include <QIcon>
 #include <KDebug>
 
 K_PLUGIN_FACTORY(KCMPolkitConfigFactory,
@@ -53,7 +53,7 @@ KCMPolkitConfig::KCMPolkitConfig(QWidget* parent, const QVariantList& args)
 
     m_ui->warningTextLabel->setVisible(false);
     m_ui->warningPixmapLabel->setVisible(false);
-    m_ui->addIdentityButton->setIcon(KIcon("list-add"));
+    m_ui->addIdentityButton->setIcon(QIcon::fromTheme("list-add"));
 
     m_identitiesLayout = new QVBoxLayout;
     m_identitiesLayout->addStretch();
@@ -107,7 +107,7 @@ void KCMPolkitConfig::load()
                                              "(%1). Please change the priority of policies defined through this module to an "
                                              "higher value.", highestPriority));
         m_ui->warningTextLabel->setVisible(true);
-        m_ui->warningPixmapLabel->setPixmap(KIcon("dialog-warning").pixmap(48));
+        m_ui->warningPixmapLabel->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(48));
         m_ui->warningPixmapLabel->setVisible(true);
     }
 

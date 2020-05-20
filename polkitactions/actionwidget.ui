@@ -227,7 +227,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="KPushButton" name="moveUpButton">
+           <widget class="QPushButton" name="moveUpButton">
             <property name="minimumSize">
              <size>
               <width>40</width>
@@ -249,7 +249,7 @@
            </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="moveDownButton">
+           <widget class="QPushButton" name="moveDownButton">
             <property name="minimumSize">
              <size>
               <width>40</width>
@@ -290,7 +290,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="KPushButton" name="removeButton">
+         <widget class="QPushButton" name="removeButton">
           <property name="text">
            <string>Remove</string>
           </property>
@@ -310,7 +310,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="KPushButton" name="addLocalButton">
+         <widget class="QPushButton" name="addLocalButton">
           <property name="text">
            <string>Add</string>
           </property>
@@ -324,11 +324,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>KUrlLabel</class>
    <extends>QLabel</extends>

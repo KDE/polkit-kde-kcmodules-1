@@ -44,7 +44,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="KPushButton" name="removeButton">
+      <widget class="QPushButton" name="removeButton">
        <property name="text">
         <string>Remove</string>
        </property>
@@ -62,11 +62,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>

@@ -17,7 +17,7 @@
 #include <qdbuspendingcall.h>
 #include <QtDBus/qdbusmetatype.h>
 #include <PolkitQt1/ActionDescription>
-#include <KDebug>
+#include <QDebug>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include "pkitemdelegate.h"
@@ -120,24 +120,24 @@ bool ActionWidget::reloadPKLAs()
 
 void ActionWidget::computeActionPolicies()
 {
-    kDebug();
+    qDebug();
     m_ui->localAuthListWidget->clear();
     qSort(m_entries.begin(), m_entries.end(), orderByPriorityLessThan);
     foreach (const PKLAEntry &entry, m_entries) {
         QStringList realActions = entry.action.split(';');
-        kDebug() << entry.action << m_current_policy.action;
+        qDebug() << entry.action << m_current_policy.action;
         if (realActions.contains(m_current_policy.action)) {
             // Match! Is it, actually, an implicit override?
             /* if (entry.title == "PolkitKdeOverrideImplicit") {
                 // It is!
-                kDebug() << "Found implicit override";
+                qDebug() << "Found implicit override";
                 setImplicitAuthorization(PKLAEntry::implFromText(entry.resultActive), m_ui->activeComboBox);
                 setImplicitAuthorization(PKLAEntry::implFromText(entry.resultInactive), m_ui->inactiveComboBox);
                 setImplicitAuthorization(PKLAEntry::implFromText(entry.resultAny), m_ui->anyComboBox);
             } else { */
                 // TODO: Add it to the local auths
                 //LocalAuthorization *auth = new LocalAuthorization(entry);
-                kDebug() << "Found PKLA override";
+                qDebug() << "Found PKLA override";
                 QListWidgetItem *item = new QListWidgetItem(entry.title);
                 item->setData(Qt::UserRole, formatPKLAEntry(entry));
                 m_ui->localAuthListWidget->addItem(item);
@@ -265,7 +265,7 @@ void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
     // Check for implicit override
     foreach (const PKLAEntry &entry, m_implicit_entries) {
         if (entry.action == action.actionId()) {
-            kDebug() << "Found implicit override!";
+            qDebug() << "Found implicit override!";
             m_current_policy = entry;
             implicit_override = true;
             break;
@@ -355,10 +355,10 @@ void ActionWidget::addNewPKLAEntry(const PKLAEntry& entry)
     }
 
     // Ok, now append it to the list
-    kDebug() << "Explicit settings changed";
+    qDebug() << "Explicit settings changed";
     m_explicitIsChanged = true;
     m_entries.append(toInsert);
-    kDebug() << "Inserting entry named " << toInsert.title << " for " << toInsert.action;
+    qDebug() << "Inserting entry named " << toInsert.title << " for " << toInsert.action;
 
     emit changed();
 
@@ -382,7 +382,7 @@ void ActionWidget::removePKLAEntry()
             break;
         }
     }
-    kDebug() << "Explicit settings changed";
+    qDebug() << "Explicit settings changed";
     m_explicitIsChanged = true;
     emit changed();
 
@@ -420,14 +420,14 @@ void ActionWidget::movePKLADown()
         if ((*it).title == item->text()) {
             // Decrease the priority
             ++(*it).fileOrder;
-            kDebug() << (*it).title << " is now " << (*it).fileOrder;
+            qDebug() << (*it).title << " is now " << (*it).fileOrder;
             // Increase the priority of the next one
             ++it;
             --(*it).fileOrder;
             break;
         }
     }
-    kDebug() << "Explicit settings changed";
+    qDebug() << "Explicit settings changed";
     m_explicitIsChanged = true;
     emit changed();
 
@@ -449,14 +449,14 @@ void ActionWidget::movePKLAUp()
         if ((*it).title == item->text()) {
             // Increase the priority
             --(*it).fileOrder;
-            kDebug() << (*it).title << " is now " << (*it).fileOrder;
+            qDebug() << (*it).title << " is now " << (*it).fileOrder;
             // Decrease the priority of the previous one
             --it;
             ++(*it).fileOrder;
             break;
         }
     }
-    kDebug() << "Explicit settings changed";
+    qDebug() << "Explicit settings changed";
     m_explicitIsChanged = true;
     emit changed();
 
@@ -517,7 +517,7 @@ void ActionWidget::addImplicitSetting()
             break;
         }
     }
-    kDebug() << "Implicit settings changed";
+    qDebug() << "Implicit settings changed";
     m_implicitIsChanged = true;
     m_implicit_entries.push_back(entry);
 

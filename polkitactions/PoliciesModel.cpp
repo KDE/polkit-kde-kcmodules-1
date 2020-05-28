@@ -23,7 +23,7 @@
 #include "PoliciesModel.h"
 
 #include <QStringList>
-#include <KDebug>
+#include <QDebug>
 
 #include "PolicyItem.h"
 
@@ -139,7 +139,7 @@ void PoliciesModel::setCurrentEntries(const PolkitQt1::ActionDescription::List &
             // id is bigger than "org"
             insertOrUpdate(actionPath, entry, rootItem);
         } else {
-            kWarning() << "Bad Policy file entry" << entry.actionId();
+            qWarning() << "Bad Policy file entry" << entry.actionId();
         }
     }
 }
@@ -153,7 +153,7 @@ QModelIndex PoliciesModel::indexFromId(const QString &id, PolicyItem *parent) co
 {
     for (int i = 0; i < parent->childCount(); i++) {
         PolicyItem *item = parent->child(i);
-//         kDebug() << "ITEM" << item->data(PathRole).toString() << parent->childCount();
+//         qDebug() << "ITEM" << item->data(PathRole).toString() << parent->childCount();
         if (item->isGroup()) {
             const QModelIndex index = indexFromId(id, item);
             if (index != QModelIndex()) {
@@ -175,7 +175,7 @@ bool PoliciesModel::removeEntries(const QStringList &entries, PolicyItem *parent
 {
     for (int i = 0; i < parent->childCount(); i++) {
         PolicyItem *item = parent->child(i);
-//         kDebug() << "ITEM" << item->data(PathRole).toString() << parent->childCount();
+//         qDebug() << "ITEM" << item->data(PathRole).toString() << parent->childCount();
         if (item->isGroup()) {
             if (!removeEntries(entries, item)) {
                 // removeEntries returns true if the action does
@@ -202,7 +202,7 @@ bool PoliciesModel::removeEntries(const QStringList &entries, PolicyItem *parent
         if (parent != rootItem) {
             index = createIndex(parent->row(), 0, parent);
         }
-//         kDebug() << "REMOVING" << item->data(PathRole).toString() << index;
+//         qDebug() << "REMOVING" << item->data(PathRole).toString() << index;
         beginRemoveRows(index, item->row(), item->row());
         parent->removeChild(item);
         endRemoveRows();
@@ -216,7 +216,7 @@ bool PoliciesModel::removeEntries(const QStringList &entries, PolicyItem *parent
 void PoliciesModel::insertOrUpdate(const QStringList &actionPath, const PolkitQt1::ActionDescription &entry,
                                    PolicyItem *parent, int level)
 {
-//     kDebug() << actionPath << actionPath.size() << entry << level << parent;
+//     qDebug() << actionPath << actionPath.size() << entry << level << parent;
     if (actionPath.size() - 1 == level) {
         // if the actionPath size is equal as
         // the leve we are about to insert the
@@ -235,12 +235,12 @@ void PoliciesModel::insertOrUpdate(const QStringList &actionPath, const PolkitQt
         }
         if (action) {
             // ok action found let's update it.
-//             kDebug() << "Updating action:" << path << index;
+//             qDebug() << "Updating action:" << path << index;
             action->setPolkitEntry(entry);
             emit dataChanged(index, index);
         } else {
             // action not found lets add one
-//             kDebug() << "Adding action:" << path << index;
+//             qDebug() << "Adding action:" << path << index;
             beginInsertRows(index, parent->childCount(), parent->childCount());
             parent->appendChild(action = new PolicyItem(false, parent));
             action->setPolkitEntry(entry);
@@ -259,7 +259,7 @@ void PoliciesModel::insertOrUpdate(const QStringList &actionPath, const PolkitQt
             }
         }
         if (group) {
-//             kDebug() << "Group Found" << path;
+//             qDebug() << "Group Found" << path;
             insertOrUpdate(actionPath, entry, group, level + 1);
         } else {
             // ok we didn't find the group
@@ -268,7 +268,7 @@ void PoliciesModel::insertOrUpdate(const QStringList &actionPath, const PolkitQt
             if (parent != rootItem) {
                 index = createIndex(parent->row(), 0, parent);
             }
-//             kDebug() << "Group NOT Found, adding one: " << path << index;
+//             qDebug() << "Group NOT Found, adding one: " << path << index;
             beginInsertRows(index, parent->childCount(), parent->childCount());
             parent->appendChild(group = new PolicyItem(true, parent));
             group->setData(PathRole, path);

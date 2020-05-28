@@ -23,7 +23,7 @@
 
 #include "PoliciesModel.h"
 
-#include <KDebug>
+#include <QDebug>
 
 namespace PolkitKde
 {
@@ -57,7 +57,7 @@ bool AuthorizationsFilterModel::filterAcceptsRow(int source_row, const QModelInd
 
 bool AuthorizationsFilterModel::groupHasMatchingItem(const QModelIndex &parent) const
 {
-//     kDebug() << "group" << parent.data(Qt::DisplayRole);
+//     qDebug() << "group" << parent.data(Qt::DisplayRole);
     for (int i = 0; i < sourceModel()->rowCount(parent); i++) {
         QModelIndex index = sourceModel()->index(i, 0, parent);
         // we check to see if the item is a group
@@ -68,7 +68,7 @@ bool AuthorizationsFilterModel::groupHasMatchingItem(const QModelIndex &parent) 
                 return true;
             }
         } else {
-//             kDebug() << "item" << index.data(Qt::DisplayRole);
+//             qDebug() << "item" << index.data(Qt::DisplayRole);
             // here we have an action let's see it this match
             if (index.data(PolkitKde::PoliciesModel::PathRole).toString().contains(filterRegExp()) ||
                 index.data(Qt::DisplayRole).toString().contains(filterRegExp()))

@@ -25,7 +25,7 @@
 #include <qlayoutitem.h>
 #include "identitywidget.h"
 #include <QIcon>
-#include <KDebug>
+#include <QDebug>
 
 K_PLUGIN_FACTORY(KCMPolkitConfigFactory,
                  registerPlugin<KCMPolkitConfig>();
@@ -93,16 +93,16 @@ void KCMPolkitConfig::load()
 
     foreach (const QFileInfo &finfo, infolist) {
         int fpriority = finfo.baseName().split('-').first().toInt();
-        kDebug() << "Considering " << finfo.absoluteFilePath() << " which should have priority "<< fpriority;
+        qDebug() << "Considering " << finfo.absoluteFilePath() << " which should have priority "<< fpriority;
         if (fpriority > highestPriority) {
-            kDebug() << "Setting it as highest priority";
+            qDebug() << "Setting it as highest priority";
             highestPriority = fpriority;
             highestFilename = finfo.absoluteFilePath();
         }
     }
 
     if (highestPriority > priority) {
-        kDebug() << "Highest priority is " << highestPriority << ", polkit kde priority is " << priority;
+        qDebug() << "Highest priority is " << highestPriority << ", polkit kde priority is " << priority;
         m_ui->warningTextLabel->setText(i18n("The changes will have no effect, since another policy has an higher priority "
                                              "(%1). Please change the priority of policies defined through this module to an "
                                              "higher value.", highestPriority));
@@ -111,22 +111,22 @@ void KCMPolkitConfig::load()
         m_ui->warningPixmapLabel->setVisible(true);
     }
 
-    kDebug() << "The highest filename is " << highestFilename;
+    qDebug() << "The highest filename is " << highestFilename;
     QFile policyFile(highestFilename);
     policyFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QString identities = QString(policyFile.readAll()).split("AdminIdentities=").last();
     identities = identities.split('\n').first();
     policyFile.close();
 
-    kDebug() << "our identities are " << identities;
+    qDebug() << "our identities are " << identities;
     foreach (const QString &identity, identities.split(';')) {
         IdentityWidget::IdentityType type;
         if (identity.split(':').first() == "unix-user") {
             type = IdentityWidget::UserIdentity;
-            kDebug() << "It's an user";
+            qDebug() << "It's an user";
         } else {
             type = IdentityWidget::GroupIdentity;
-            kDebug() << "It's a group";
+            qDebug() << "It's a group";
         }
         QString name = identity.split(':').last();
         IdentityWidget *iw = new IdentityWidget(type, name);
@@ -167,7 +167,7 @@ void KCMPolkitConfig::save()
         identities.remove(identities.length() - 1, 1);
     }
 
-    kDebug() << "Identities to save: " << identities;
+    qDebug() << "Identities to save: " << identities;
 
     QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
                                                           "/Helper",

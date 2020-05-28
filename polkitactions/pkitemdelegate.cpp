@@ -26,7 +26,6 @@
 
 #include <QIcon>
 #include <KGlobalSettings>
-#include <KDebug>
 
 const int ITEM_ROW_HEIGHT = 32;
 const int GROUP_ROW_HEIGHT = 22;

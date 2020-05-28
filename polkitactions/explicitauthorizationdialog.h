@@ -11,7 +11,7 @@
 #ifndef EXPLICITAUTHORIZATIONDIALOG_H
 #define EXPLICITAUTHORIZATIONDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include "PKLAEntry.h"
 
 namespace Ui {
@@ -21,7 +21,7 @@ class QVBoxLayout;
 
 namespace PolkitKde {
 
-class ExplicitAuthorizationDialog : public KDialog
+class ExplicitAuthorizationDialog : public QDialog
 {
     Q_OBJECT
     public:

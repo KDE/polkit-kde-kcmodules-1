@@ -13,11 +13,12 @@
 #include "ActionWidget.h"
 #include "identitywidget.h"
 #include "QIcon"
+#include "QDialogButtonBox"
 
 namespace PolkitKde {
 
 ExplicitAuthorizationDialog::ExplicitAuthorizationDialog(const PKLAEntry& entry, QWidget* parent)
-        : KDialog(parent)
+        : QDialog(parent)
         , m_entry(entry)
 {
     init();
@@ -26,7 +27,7 @@ ExplicitAuthorizationDialog::ExplicitAuthorizationDialog(const PKLAEntry& entry,
 }
 
 ExplicitAuthorizationDialog::ExplicitAuthorizationDialog(const QString &action, QWidget* parent)
-        : KDialog(parent)
+        : QDialog(parent)
 {
     m_entry.action = action;
     m_entry.fileOrder = -1;
@@ -43,7 +44,16 @@ void ExplicitAuthorizationDialog::init()
     QWidget *widget = new QWidget;
     m_ui = new Ui::ExplicitAuthorizationWidget;
     m_ui->setupUi(widget);
-    setMainWidget(widget);
+
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    auto mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(widget);
+    mainLayout->addWidget(buttonBox);
+
     setModal(true);
 
     m_ui->addButton->setIcon(QIcon::fromTheme("list-add"));

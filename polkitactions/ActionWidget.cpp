@@ -298,7 +298,7 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
     foreach (const PKLAEntry &entry, m_entries) {
         if (entry.title == item->text()) {
             QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(entry, this);
-            if (dialog.data()->exec() == KDialog::Accepted) {
+            if (dialog.data()->exec() == QDialog::Accepted) {
                 dialog.data()->commitChangesToPKLA();
                 PKLAEntry result = dialog.data()->pkla();
                 // Register the entry. But first remove the previous one to avoid duplicates
@@ -322,7 +322,7 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
 void ActionWidget::addExplicitPKLAEntry()
 {
     QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(m_current_policy.action, this);
-    if (dialog.data()->exec() == KDialog::Accepted) {
+    if (dialog.data()->exec() == QDialog::Accepted) {
         dialog.data()->commitChangesToPKLA();
         PKLAEntry result = dialog.data()->pkla();
         // Register the entry.

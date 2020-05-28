@@ -25,7 +25,7 @@
 #include <QFontMetrics>
 
 #include <QIcon>
-#include <KGlobalSettings>
+#include <QFontDatabase>
 
 const int ITEM_ROW_HEIGHT = 32;
 const int GROUP_ROW_HEIGHT = 22;
@@ -43,7 +43,7 @@ PkItemDelegate::~PkItemDelegate()
 void PkItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const
 {
-    QStyleOptionViewItemV4 opt(option);
+    QStyleOptionViewItem opt(option);
 
     const int gHeight = (opt.rect.height() > GROUP_ROW_HEIGHT) ? opt.rect.height() : GROUP_ROW_HEIGHT;
     const int iHeight = (opt.rect.height() > ITEM_ROW_HEIGHT) ? opt.rect.height() : ITEM_ROW_HEIGHT;
@@ -103,7 +103,7 @@ void PkItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         clipRect.translate(0, qApp->fontMetrics().height());
         p.setClipRect(clipRect);
 
-        QFont actionNameFont = KGlobalSettings::smallestReadableFont();
+        QFont actionNameFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
         actionNameFont.setItalic(true);
         p.setFont(actionNameFont);
         p.drawText(clipRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(PolkitKde::PoliciesModel::PathRole).toString());
@@ -119,7 +119,7 @@ QSize PkItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelI
     QFont dFont = option.font;
 
 
-    const QFont rFont = KGlobalSettings::smallestReadableFont();
+    const QFont rFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
     QFontMetrics d_fm(dFont); // description font
     QFontMetrics r_fm(rFont); // raw string font
@@ -151,7 +151,7 @@ PKLAItemDelegate::~PKLAItemDelegate()
 void PKLAItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const
 {
-    QStyleOptionViewItemV4 opt(option);
+    QStyleOptionViewItem opt(option);
 
     QStyle *style = QApplication::style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget);
@@ -200,7 +200,7 @@ void PKLAItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     clipRect.translate(0, qApp->fontMetrics().height());
     p.setClipRect(clipRect);
 
-    QFont actionNameFont = KGlobalSettings::smallestReadableFont();
+    QFont actionNameFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     actionNameFont.setItalic(true);
     p.setFont(actionNameFont);
     p.drawText(clipRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::UserRole).toString());
@@ -214,7 +214,7 @@ QSize PKLAItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMode
 {
     QFont dFont = option.font;
 
-    const QFont rFont = KGlobalSettings::smallestReadableFont();
+    const QFont rFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
     QFontMetrics d_fm(dFont); // description font
     QFontMetrics r_fm(rFont); // raw string font

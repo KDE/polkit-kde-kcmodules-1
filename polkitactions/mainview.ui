@@ -14,7 +14,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="KLineEdit" name="searchLine"/>
+      <widget class="QLineEdit" name="searchLine"/>
      </item>
      <item>
       <widget class="QTreeView" name="treeView"/>
@@ -30,13 +30,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

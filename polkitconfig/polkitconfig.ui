@@ -122,7 +122,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="KIntSpinBox" name="configPrioritySpin">
+        <widget class="QSpinBox" name="configPrioritySpin">
          <property name="singleStep">
           <number>10</number>
          </property>
@@ -136,7 +136,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="KIntSpinBox" name="policyPrioritySpin">
+        <widget class="QSpinBox" name="policyPrioritySpin">
          <property name="singleStep">
           <number>10</number>
          </property>
@@ -161,13 +161,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KIntSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

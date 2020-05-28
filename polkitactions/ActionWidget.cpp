@@ -201,7 +201,7 @@ QString ActionWidget::formatIdentities(const QString& identities)
     return rettext;
 }
 
-void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, KComboBox* box)
+void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox* box)
 {
     box->setCurrentIndex(comboBoxIndexFor(auth));
 }
@@ -489,7 +489,7 @@ void ActionWidget::inactiveImplicitSettingChanged()
     implicitSettingChanged(PKLAEntry::implFromText(m_current_policy.resultInactive), m_ui->inactiveComboBox);
 }
 
-void ActionWidget::implicitSettingChanged(PolkitQt1::ActionDescription::ImplicitAuthorization auth, KComboBox *box)
+void ActionWidget::implicitSettingChanged(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox *box)
 {
     // Check if the setting has been changed or if it is just an action change
     if (auth != implicitAuthorizationFor(box->currentIndex())) {

@@ -14,7 +14,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KComboBox" name="identityTypeBox">
+      <widget class="QComboBox" name="identityTypeBox">
        <item>
         <property name="text">
          <string>User</string>
@@ -28,7 +28,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KComboBox" name="identityNameBox"/>
+      <widget class="QComboBox" name="identityNameBox"/>
      </item>
      <item>
       <spacer name="horizontalSpacer">
@@ -61,13 +61,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

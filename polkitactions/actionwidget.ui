@@ -80,7 +80,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="KComboBox" name="anyComboBox">
+         <widget class="QComboBox" name="anyComboBox">
           <item>
            <property name="text">
             <string>Yes</string>
@@ -121,7 +121,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="KComboBox" name="inactiveComboBox">
+         <widget class="QComboBox" name="inactiveComboBox">
           <item>
            <property name="text">
             <string>Yes</string>
@@ -162,7 +162,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="KComboBox" name="activeComboBox">
+         <widget class="QComboBox" name="activeComboBox">
           <item>
            <property name="text">
             <string>Yes</string>
@@ -328,11 +328,6 @@
    <class>KUrlLabel</class>
    <extends>QLabel</extends>
    <header>kurllabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

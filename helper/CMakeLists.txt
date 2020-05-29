@@ -8,7 +8,7 @@ set(policy_gen_SRCS
 
 add_executable(polkit-kde-helper-policy-gen ${policy_gen_SRCS})
 
-target_link_libraries(polkit-kde-helper-policy-gen ${QT_QTCORE_LIBRARY})
+target_link_libraries(polkit-kde-helper-policy-gen Qt5::Core)
 
 ## Execute it
 set(_output ${CMAKE_CURRENT_BINARY_DIR}/org.kde.polkitkde1.policy)
@@ -39,7 +39,12 @@ qt5_add_dbus_adaptor(polkitkde1helper_SRCS
 
 add_executable(polkitkde1helper ${polkitkde1helper_SRCS})
 
-target_link_libraries(polkitkde1helper ${KDE5_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTDBUS_LIBRARY} ${POLKITQT-1_CORE_LIBRARY} polkitkdekcmodulesprivate)
+target_link_libraries(polkitkde1helper
+    Qt5::Core
+    Qt5::DBus
+    Qt5::Xml
+    ${POLKITQT-1_CORE_LIBRARY}
+    polkitkdekcmodulesprivate)
 
 install(TARGETS polkitkde1helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 

@@ -8,7 +8,7 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 
-find_package(KF5 REQUIRED COMPONENTS KDELibs4Support I18n KCMUtils Auth)
+find_package(KF5 REQUIRED COMPONENTS I18n KCMUtils Auth)
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets DBus)
 
 function(dbus_add_activation_system_service _sources)

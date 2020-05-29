@@ -10,9 +10,7 @@ ki18n_wrap_ui(kcm_polkitconfig_SRCS
 
 add_library(kcm_polkitconfig ${kcm_polkitconfig_SRCS})
 
-target_link_libraries(kcm_polkitconfig  
-     ${KDE5_KDECORE_LIBS}
-     ${KDE5_KDEUI_LIBRARY}
+target_link_libraries(kcm_polkitconfig
      polkitkdekcmodulesprivate
 )
 

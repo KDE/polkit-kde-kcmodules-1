@@ -13,13 +13,11 @@
 
 #include <QWidget>
 
-#include <kdemacros.h>
-
 namespace Ui {
     class IdentityWidget;
 }
 
-class KDE_EXPORT IdentityWidget : public QWidget
+class Q_DECL_EXPORT IdentityWidget : public QWidget
 {
     Q_OBJECT
     public:

@@ -23,6 +23,7 @@
 #include "pkitemdelegate.h"
 #include "explicitauthorizationdialog.h"
 #include <QSettings>
+#include <QPointer>
 
 namespace PolkitKde {
 
@@ -297,7 +298,7 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
 {
     foreach (const PKLAEntry &entry, m_entries) {
         if (entry.title == item->text()) {
-            QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(entry, this);
+            QPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(entry, this);
             if (dialog.data()->exec() == QDialog::Accepted) {
                 dialog.data()->commitChangesToPKLA();
                 PKLAEntry result = dialog.data()->pkla();
@@ -321,7 +322,7 @@ void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
 
 void ActionWidget::addExplicitPKLAEntry()
 {
-    QWeakPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(m_current_policy.action, this);
+    QPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(m_current_policy.action, this);
     if (dialog.data()->exec() == QDialog::Accepted) {
         dialog.data()->commitChangesToPKLA();
         PKLAEntry result = dialog.data()->pkla();

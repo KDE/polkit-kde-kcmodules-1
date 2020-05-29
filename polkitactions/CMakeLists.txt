@@ -19,8 +19,8 @@ ki18n_wrap_ui(kcm_polkitactions_SRCS
 add_library(kcm_polkitactions ${kcm_polkitactions_SRCS})
 
 target_link_libraries(kcm_polkitactions
-     ${KDE5_KDECORE_LIBS}
-     ${KDE5_KDEUI_LIBRARY}
+     Qt5::Core
+     Qt5::DBus
      ${POLKITQT-1_CORE_LIBRARY}
      polkitkdekcmodulesprivate
 )

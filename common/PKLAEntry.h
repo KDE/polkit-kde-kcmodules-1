@@ -14,11 +14,9 @@
 #include <QMetaType>
 #include <polkit-qt5-1/PolkitQt1/ActionDescription>
 
-#include <kdemacros.h>
-
 class QDBusArgument;
 
-class KDE_EXPORT PKLAEntry {
+class Q_DECL_EXPORT PKLAEntry {
     public:
     QString title;
     QString identity;
@@ -40,7 +38,7 @@ Q_DECLARE_METATYPE(QList<PKLAEntry>);
 
 typedef QList<PKLAEntry> PKLAEntryList;
 
-KDE_EXPORT QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry);
-KDE_EXPORT const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry);
+Q_DECL_EXPORT QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry);
+Q_DECL_EXPORT const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry);
 
 #endif // PKLAENTRY_H

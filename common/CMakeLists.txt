@@ -16,7 +16,6 @@ set_target_properties (polkitkdekcmodulesprivate PROPERTIES VERSION   0.1.0
 
 target_link_libraries(polkitkdekcmodulesprivate
     KF5::KCMUtils
-    KF5::KDELibs4Support
     KF5::I18n
 )
 

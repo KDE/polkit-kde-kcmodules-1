@@ -33,9 +33,9 @@ class PolkitActionsKCM : public KCModule
         explicit PolkitActionsKCM(QWidget* parent = 0, const QVariantList& args = QVariantList());
         virtual ~PolkitActionsKCM();
 
-        virtual void load();
-        virtual void save();
-        virtual void defaults();
+        void load() override;
+        void save() override;
+        void defaults() override;
 
     Q_SIGNALS:
         void explicitSaved();

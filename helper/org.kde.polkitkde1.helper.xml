@@ -8,15 +8,15 @@
            <arg direction="in" type="i" name="policiesPriority" />
        </method>
        <method name="retrievePolicies" >
-           <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QVariantList"/>
+           <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantList"/>
            <arg direction="out" type="av" />
        </method>
        <method name="writePolicy" >
-           <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QList&lt;PKLAEntry&gt;"/>
+           <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList&lt;PKLAEntry&gt;"/>
            <arg direction="in" type="a(sssssssii)" />
        </method>
        <method name="writeImplicitPolicy" >
-           <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QList&lt;PKLAEntry&gt;"/>
+           <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList&lt;PKLAEntry&gt;"/>
            <arg direction="in" type="a(sssssssii)" />
        </method>
 

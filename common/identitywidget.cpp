@@ -90,10 +90,10 @@ void IdentityWidget::populateIdentityNameBox()
             } else {
                 icon = QIcon::fromTheme("user-identity");
             }
-            if (user.fullName().isEmpty()) {
+            if (!user.isValid()) {
                 displayName = user.loginName();
             } else {
-                displayName = QString("%1 (%2)").arg(user.fullName()).arg(user.loginName());
+                displayName = QString("%1 (%2)").arg(user.property(KUser::FullName).toString(), user.loginName());
             }
 
             m_ui->identityNameBox->addItem(icon, displayName, user.loginName());

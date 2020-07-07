@@ -22,7 +22,7 @@ add_custom_command(OUTPUT ${_output}
                    DEPENDS polkit-kde-helper-policy-gen)
 add_custom_target("actions for polkit-kde" ALL DEPENDS ${_output})
 
-install(FILES ${_output} DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
+install(FILES ${_output} DESTINATION ${POLKITQT-1_POLICY_FILES_INSTALL_DIR})
 
 #########
 
@@ -46,9 +46,9 @@ target_link_libraries(polkitkde1helper
     ${POLKITQT-1_CORE_LIBRARY}
     polkitkdekcmodulesprivate)
 
-install(TARGETS polkitkde1helper DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS polkitkde1helper DESTINATION ${CMAKE_INSTALL_FULL_LIBEXECDIR})
 
 dbus_add_activation_system_service(org.kde.polkitkde1.helper.service.in)
 
-install(FILES org.kde.polkitkde1.helper.conf DESTINATION ${SYSCONF_INSTALL_DIR}/dbus-1/system.d)
+install(FILES org.kde.polkitkde1.helper.conf DESTINATION ${KDE_INSTALL_DBUSDIR}/system.d)
 

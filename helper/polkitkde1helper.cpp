@@ -313,7 +313,7 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
         QFile::remove(nestedInfo.absoluteFilePath());
     }
 
-    qSort(entries.begin(), entries.end(), orderByPriorityLessThan);
+    std::sort(entries.begin(), entries.end(), orderByPriorityLessThan);
 
     QSettings kdesettings("/etc/polkit-1/polkit-kde-1.conf", QSettings::IniFormat);
     kdesettings.beginGroup("General");

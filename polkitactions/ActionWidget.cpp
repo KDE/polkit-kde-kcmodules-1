@@ -123,7 +123,7 @@ void ActionWidget::computeActionPolicies()
 {
     qDebug();
     m_ui->localAuthListWidget->clear();
-    qSort(m_entries.begin(), m_entries.end(), orderByPriorityLessThan);
+    std::sort(m_entries.begin(), m_entries.end(), orderByPriorityLessThan);
     foreach (const PKLAEntry &entry, m_entries) {
         QStringList realActions = entry.action.split(';');
         qDebug() << entry.action << m_current_policy.action;

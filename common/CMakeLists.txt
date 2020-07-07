@@ -19,4 +19,4 @@ target_link_libraries(polkitkdekcmodulesprivate
     KF5::I18n
 )
 
-install(TARGETS polkitkdekcmodulesprivate  DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS polkitkdekcmodulesprivate  DESTINATION ${LIB_INSTALL_DIR} LIBRARY NAMELINK_SKIP)

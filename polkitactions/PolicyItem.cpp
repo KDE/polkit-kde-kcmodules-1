@@ -92,8 +92,9 @@ PolicyItem *PolicyItem::parent()
 
 int PolicyItem::row() const
 {
-    if (parentItem)
-        return parentItem->childItems.indexOf(const_cast<PolicyItem*>(this));
+    if (parentItem) {
+        return parentItem->childItems.indexOf(const_cast<PolicyItem *>(this));
+    }
 
     return 0;
 }

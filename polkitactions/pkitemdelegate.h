@@ -25,7 +25,8 @@
 
 class QStyleOptionViewItem;
 
-namespace PolkitKde {
+namespace PolkitKde
+{
 
 class PkItemDelegate : public QStyledItemDelegate
 {

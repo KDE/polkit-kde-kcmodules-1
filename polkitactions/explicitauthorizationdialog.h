@@ -14,35 +14,37 @@
 #include <QDialog>
 #include "PKLAEntry.h"
 
-namespace Ui {
-    class ExplicitAuthorizationWidget;
+namespace Ui
+{
+class ExplicitAuthorizationWidget;
 }
 class QVBoxLayout;
 
-namespace PolkitKde {
+namespace PolkitKde
+{
 
 class ExplicitAuthorizationDialog : public QDialog
 {
     Q_OBJECT
-    public:
-        explicit ExplicitAuthorizationDialog(const PKLAEntry &entry, QWidget* parent = 0);
-        explicit ExplicitAuthorizationDialog(const QString &action, QWidget* parent = 0);
-        virtual ~ExplicitAuthorizationDialog();
+public:
+    explicit ExplicitAuthorizationDialog(const PKLAEntry &entry, QWidget *parent = 0);
+    explicit ExplicitAuthorizationDialog(const QString &action, QWidget *parent = 0);
+    virtual ~ExplicitAuthorizationDialog();
 
-        void commitChangesToPKLA();
-        PKLAEntry pkla();
+    void commitChangesToPKLA();
+    PKLAEntry pkla();
 
-    private slots:
-        void addIdentity();
+private slots:
+    void addIdentity();
 
-    private:
-        void init();
-        void reloadPKLA();
+private:
+    void init();
+    void reloadPKLA();
 
-    private:
-        PKLAEntry m_entry;
-        Ui::ExplicitAuthorizationWidget *m_ui;
-        QVBoxLayout *m_identitiesLayout;
+private:
+    PKLAEntry m_entry;
+    Ui::ExplicitAuthorizationWidget *m_ui;
+    QVBoxLayout *m_identitiesLayout;
 };
 
 }

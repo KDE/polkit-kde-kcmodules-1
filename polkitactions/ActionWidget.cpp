@@ -25,17 +25,18 @@
 #include <QSettings>
 #include <QPointer>
 
-namespace PolkitKde {
+namespace PolkitKde
+{
 
 bool orderByPriorityLessThan(const PKLAEntry &e1, const PKLAEntry &e2)
 {
     return e1.fileOrder < e2.fileOrder;
 }
 
-ActionWidget::ActionWidget(QWidget* parent)
-        : QWidget(parent)
-        , m_PKLALoaded(false)
-        , m_ui(new Ui::ActionWidget)
+ActionWidget::ActionWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_PKLALoaded(false)
+    , m_ui(new Ui::ActionWidget)
 {
     m_ui->setupUi(this);
 
@@ -154,7 +155,7 @@ void ActionWidget::computeActionPolicies()
     }
 }
 
-QString ActionWidget::formatPKLAEntry(const PKLAEntry& entry)
+QString ActionWidget::formatPKLAEntry(const PKLAEntry &entry)
 {
     QString authorizationText;
 
@@ -179,7 +180,7 @@ QString ActionWidget::formatPKLAEntry(const PKLAEntry& entry)
                  entry.identity.split(';').count(), formatIdentities(entry.identity), authorizationText);
 }
 
-QString ActionWidget::formatIdentities(const QString& identities)
+QString ActionWidget::formatIdentities(const QString &identities)
 {
     QString rettext;
     QStringList realIdentities = identities.split(';');
@@ -202,7 +203,7 @@ QString ActionWidget::formatIdentities(const QString& identities)
     return rettext;
 }
 
-void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox* box)
+void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::ImplicitAuthorization auth, QComboBox *box)
 {
     box->setCurrentIndex(comboBoxIndexFor(auth));
 }
@@ -210,20 +211,20 @@ void ActionWidget::setImplicitAuthorization(PolkitQt1::ActionDescription::Implic
 int ActionWidget::comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthorization auth)
 {
     switch (auth) {
-        case PolkitQt1::ActionDescription::Authorized:
-            return 0;
-        case PolkitQt1::ActionDescription::NotAuthorized:
-            return 1;
-        case PolkitQt1::ActionDescription::AuthenticationRequired:
-            return 4;
-        case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
-            return 5;
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
-            return 2;
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
-            return 3;
-        default:
-            break;
+    case PolkitQt1::ActionDescription::Authorized:
+        return 0;
+    case PolkitQt1::ActionDescription::NotAuthorized:
+        return 1;
+    case PolkitQt1::ActionDescription::AuthenticationRequired:
+        return 4;
+    case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
+        return 5;
+    case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
+        return 2;
+    case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
+        return 3;
+    default:
+        break;
     }
 
     return 1;
@@ -232,26 +233,26 @@ int ActionWidget::comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthori
 PolkitQt1::ActionDescription::ImplicitAuthorization ActionWidget::implicitAuthorizationFor(int comboBoxIndex)
 {
     switch (comboBoxIndex) {
-        case 0:
-            return PolkitQt1::ActionDescription::Authorized;
-        case 1:
-            return PolkitQt1::ActionDescription::NotAuthorized;
-        case 4:
-            return PolkitQt1::ActionDescription::AuthenticationRequired;
-        case 5:
-            return PolkitQt1::ActionDescription::AuthenticationRequiredRetained;
-        case 2:
-            return PolkitQt1::ActionDescription::AdministratorAuthenticationRequired;
-        case 3:
-            return PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained;
-        default:
-            break;
+    case 0:
+        return PolkitQt1::ActionDescription::Authorized;
+    case 1:
+        return PolkitQt1::ActionDescription::NotAuthorized;
+    case 4:
+        return PolkitQt1::ActionDescription::AuthenticationRequired;
+    case 5:
+        return PolkitQt1::ActionDescription::AuthenticationRequiredRetained;
+    case 2:
+        return PolkitQt1::ActionDescription::AdministratorAuthenticationRequired;
+    case 3:
+        return PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained;
+    default:
+        break;
     }
 
     return PolkitQt1::ActionDescription::Unknown;
 }
 
-void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
+void ActionWidget::setAction(const PolkitQt1::ActionDescription &action)
 {
     bool implicit_override = false;
 
@@ -294,7 +295,7 @@ void ActionWidget::setAction(const PolkitQt1::ActionDescription& action)
     this->setEnabled(true);
 }
 
-void ActionWidget::editExplicitPKLAEntry(QListWidgetItem* item)
+void ActionWidget::editExplicitPKLAEntry(QListWidgetItem *item)
 {
     foreach (const PKLAEntry &entry, m_entries) {
         if (entry.title == item->text()) {
@@ -335,7 +336,7 @@ void ActionWidget::addExplicitPKLAEntry()
     }
 }
 
-void ActionWidget::addNewPKLAEntry(const PKLAEntry& entry)
+void ActionWidget::addNewPKLAEntry(const PKLAEntry &entry)
 {
     PKLAEntry toInsert(entry);
     // Match it to the current config value
@@ -391,7 +392,7 @@ void ActionWidget::removePKLAEntry()
     computeActionPolicies();
 }
 
-void ActionWidget::explicitSelectionChanged(QListWidgetItem* current, QListWidgetItem* )
+void ActionWidget::explicitSelectionChanged(QListWidgetItem *current, QListWidgetItem *)
 {
     if (current) {
         m_ui->removeButton->setEnabled(true);
@@ -528,11 +529,13 @@ void ActionWidget::addImplicitSetting()
     m_current_policy.resultInactive = entry.resultInactive;
 }
 
-void ActionWidget::implicitSettingsSaved() {
+void ActionWidget::implicitSettingsSaved()
+{
     m_implicitIsChanged = false;
 }
 
-void ActionWidget::explicitSettingsSaved() {
+void ActionWidget::explicitSettingsSaved()
+{
     m_explicitIsChanged = false;
 }
 

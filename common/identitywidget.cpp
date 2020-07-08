@@ -14,14 +14,14 @@
 #include <KUser>
 #include <QIcon>
 
-IdentityWidget::IdentityWidget(IdentityWidget::IdentityType type, const QString& name, QWidget* parent)
+IdentityWidget::IdentityWidget(IdentityWidget::IdentityType type, const QString &name, QWidget *parent)
     : QWidget(parent)
 {
     init(type);
     setIdentityName(name);
 }
 
-IdentityWidget::IdentityWidget(QWidget* parent)
+IdentityWidget::IdentityWidget(QWidget *parent)
     : QWidget(parent)
 {
     init(UserIdentity);
@@ -54,8 +54,6 @@ void IdentityWidget::init(IdentityType type)
             this, SLOT(deleteLater()));
 }
 
-
-
 QString IdentityWidget::identityName() const
 {
     return m_ui->identityNameBox->itemData(m_ui->identityNameBox->currentIndex()).toString();
@@ -66,7 +64,7 @@ IdentityWidget::IdentityType IdentityWidget::identityType() const
     return (IdentityType)(m_ui->identityTypeBox->currentIndex());
 }
 
-void IdentityWidget::setIdentityName(const QString& name)
+void IdentityWidget::setIdentityName(const QString &name)
 {
     m_ui->identityNameBox->setCurrentIndex(m_ui->identityNameBox->findData(name));
 }

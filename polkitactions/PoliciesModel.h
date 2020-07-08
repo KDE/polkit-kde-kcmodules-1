@@ -68,7 +68,6 @@ private:
     PolicyItem *rootItem;
 };
 
-
 }
 
 #endif

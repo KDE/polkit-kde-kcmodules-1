@@ -34,7 +34,7 @@ K_EXPORT_PLUGIN(KCMPolkitActionsFactory("kcm_polkitactions"))
 
 #include <PolkitActionsKCM.moc>
 
-PolkitActionsKCM::PolkitActionsKCM(QWidget* parent, const QVariantList& args)
+PolkitActionsKCM::PolkitActionsKCM(QWidget *parent, const QVariantList &args)
     : KCModule(parent, args)
     , m_ui(new Ui::PolkitActionsMainView)
 {
@@ -102,9 +102,9 @@ void PolkitActionsKCM::save()
     // in the future, where implicitEntries() will only contain the changed settings.
     if (m_actionWidget->isImplicitSettingsChanged()) {
         QDBusMessage messageImplicit = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
-                                                                "/Helper",
-                                                                "org.kde.polkitkde1.helper",
-                                                                QLatin1String("writeImplicitPolicy"));
+                                                                      "/Helper",
+                                                                      "org.kde.polkitkde1.helper",
+                                                                      QLatin1String("writeImplicitPolicy"));
         QList<QVariant> implicitArgumentList;
         implicitArgumentList << QVariant::fromValue(m_actionWidget->implicitEntries());
 
@@ -113,13 +113,12 @@ void PolkitActionsKCM::save()
         QDBusPendingCall replyImplicit = QDBusConnection::systemBus().asyncCall(messageImplicit);
         replyImplicit.waitForFinished();
         if (replyImplicit.isError()) {
-            KMessageBox::detailedError(     this,
-                                            replyImplicit.error().name(),
-                                            replyImplicit.error().message()
-            );
+            KMessageBox::detailedError(this,
+                                       replyImplicit.error().name(),
+                                       replyImplicit.error().message()
+                                      );
             changed();
-        }
-        else {
+        } else {
             emit implicitSaved();
         }
     }
@@ -128,9 +127,9 @@ void PolkitActionsKCM::save()
     // in the future, where entries() will only contain the changed settings.
     if (m_actionWidget->isExplicitSettingsChanged()) {
         QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
-                                                            "/Helper",
-                                                            "org.kde.polkitkde1.helper",
-                                                            QLatin1String("writePolicy"));
+                                                              "/Helper",
+                                                              "org.kde.polkitkde1.helper",
+                                                              QLatin1String("writePolicy"));
         QList<QVariant> argumentList;
         QList<PKLAEntry> policies;
         foreach (const PKLAEntry &entry, m_actionWidget->entries()) {
@@ -142,13 +141,12 @@ void PolkitActionsKCM::save()
 
         QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
         if (reply.isError()) {
-            KMessageBox::detailedError(     this,
-                                            reply.error().name(),
-                                            reply.error().message()
-            );
+            KMessageBox::detailedError(this,
+                                       reply.error().name(),
+                                       reply.error().message()
+                                      );
             changed();
-        }
-        else {
+        } else {
             emit explicitSaved();
         }
     }
@@ -164,7 +162,7 @@ void PolkitActionsKCM::slotCheckAuthorizationFinished(PolkitQt1::Authority::Resu
 
 }
 
-void PolkitActionsKCM::slotCurrentChanged(const QModelIndex& current, const QModelIndex& )
+void PolkitActionsKCM::slotCurrentChanged(const QModelIndex &current, const QModelIndex &)
 {
     if (current.data(PolkitKde::PoliciesModel::IsGroupRole).toBool() == false) {
         PolkitQt1::ActionDescription action;

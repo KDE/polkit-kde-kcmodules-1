@@ -32,7 +32,8 @@ const int GROUP_ROW_HEIGHT = 22;
 const int ICON_SIZE = 22;
 const int MARGIN = 1;
 
-namespace PolkitKde {
+namespace PolkitKde
+{
 
 PkItemDelegate::PkItemDelegate(QObject *parent) : QStyledItemDelegate(parent)
 {}
@@ -120,7 +121,6 @@ QSize PkItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelI
 {
     QFont dFont = option.font;
 
-
     const QFont rFont = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 
     QFontMetrics d_fm(dFont); // description font
@@ -151,7 +151,7 @@ PKLAItemDelegate::~PKLAItemDelegate()
 {}
 
 void PKLAItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                           const QModelIndex &index) const
+                             const QModelIndex &index) const
 {
     QStyleOptionViewItem opt(option);
 

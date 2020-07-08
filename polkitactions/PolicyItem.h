@@ -26,7 +26,8 @@
 #include <QVariant>
 #include <QMetaType>
 
-namespace PolkitQt1 {
+namespace PolkitQt1
+{
 class ActionDescription;
 }
 
@@ -53,7 +54,7 @@ public:
     void setPolkitEntry(const PolkitQt1::ActionDescription &entry);
 
 private:
-    QList<PolicyItem*> childItems;
+    QList<PolicyItem *> childItems;
     QHash<int, QVariant> itemData;
     PolicyItem *parentItem;
 };

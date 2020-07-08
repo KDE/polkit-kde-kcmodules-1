@@ -13,38 +13,39 @@
 
 #include <QWidget>
 
-namespace Ui {
-    class IdentityWidget;
+namespace Ui
+{
+class IdentityWidget;
 }
 
 class Q_DECL_EXPORT IdentityWidget : public QWidget
 {
     Q_OBJECT
-    public:
-        enum IdentityType {
-            UserIdentity = 0,
-            GroupIdentity = 1
-        };
+public:
+    enum IdentityType {
+        UserIdentity = 0,
+        GroupIdentity = 1
+    };
 
-        IdentityWidget(IdentityType type, const QString &name, QWidget* parent = 0);
-        IdentityWidget(QWidget* parent = 0);
-        ~IdentityWidget();
-        void setIdentityType(IdentityType type);
-        void setIdentityName(const QString &name);
+    IdentityWidget(IdentityType type, const QString &name, QWidget *parent = 0);
+    IdentityWidget(QWidget *parent = 0);
+    ~IdentityWidget();
+    void setIdentityType(IdentityType type);
+    void setIdentityName(const QString &name);
 
-        IdentityType identityType() const;
-        QString identityName() const;
+    IdentityType identityType() const;
+    QString identityName() const;
 
-    Q_SIGNALS:
-        void changed();
+Q_SIGNALS:
+    void changed();
 
-    private Q_SLOTS:
-        void populateIdentityNameBox();
+private Q_SLOTS:
+    void populateIdentityNameBox();
 
-    private:
-        void init(IdentityType type);
+private:
+    void init(IdentityType type);
 
-        Ui::IdentityWidget *m_ui;
+    Ui::IdentityWidget *m_ui;
 };
 
 #endif // IDENTITYWIDGET_H

@@ -11,7 +11,7 @@
 #include "PKLAEntry.h"
 #include <QtDBus/qdbusargument.h>
 
-QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry)
+QDBusArgument &operator<<(QDBusArgument &argument, const PKLAEntry &entry)
 {
     argument.beginStructure();
     argument << entry.title << entry.identity << entry.action << entry.resultAny << entry.resultInactive << entry.resultActive << entry.filePath
@@ -20,7 +20,7 @@ QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry)
     return argument;
 }
 
-const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry)
+const QDBusArgument &operator>>(const QDBusArgument &argument, PKLAEntry &entry)
 {
     argument.beginStructure();
     argument >> entry.title >> entry.identity >> entry.action >> entry.resultAny >> entry.resultInactive >> entry.resultActive >> entry.filePath
@@ -29,7 +29,7 @@ const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry)
     return argument;
 }
 
-PolkitQt1::ActionDescription::ImplicitAuthorization PKLAEntry::implFromText(const QString& text)
+PolkitQt1::ActionDescription::ImplicitAuthorization PKLAEntry::implFromText(const QString &text)
 {
     if (text == "yes") {
         return PolkitQt1::ActionDescription::Authorized;
@@ -51,21 +51,20 @@ PolkitQt1::ActionDescription::ImplicitAuthorization PKLAEntry::implFromText(cons
 QString PKLAEntry::textFromImpl(PolkitQt1::ActionDescription::ImplicitAuthorization implicit)
 {
     switch (implicit) {
-        case PolkitQt1::ActionDescription::Authorized:
-            return "yes";
-        case PolkitQt1::ActionDescription::NotAuthorized:
-            return "no";
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
-            return "auth_admin";
-        case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
-            return "auth_admin_keep";
-        case PolkitQt1::ActionDescription::AuthenticationRequired:
-            return "auth_self";
-        case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
-            return "auth_self_keep";
-        default:
-            return QString();
+    case PolkitQt1::ActionDescription::Authorized:
+        return "yes";
+    case PolkitQt1::ActionDescription::NotAuthorized:
+        return "no";
+    case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
+        return "auth_admin";
+    case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
+        return "auth_admin_keep";
+    case PolkitQt1::ActionDescription::AuthenticationRequired:
+        return "auth_self";
+    case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
+        return "auth_self_keep";
+    default:
+        return QString();
     }
 }
-
 

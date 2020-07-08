@@ -34,7 +34,7 @@ K_EXPORT_PLUGIN(KCMPolkitConfigFactory("kcm_polkitconfig"))
 
 #include <kcmpolkitconfig.moc>
 
-KCMPolkitConfig::KCMPolkitConfig(QWidget* parent, const QVariantList& args)
+KCMPolkitConfig::KCMPolkitConfig(QWidget *parent, const QVariantList &args)
     : KCModule(parent, args)
 {
     KAboutData *about =
@@ -93,7 +93,7 @@ void KCMPolkitConfig::load()
 
     foreach (const QFileInfo &finfo, infolist) {
         int fpriority = finfo.baseName().split('-').first().toInt();
-        qDebug() << "Considering " << finfo.absoluteFilePath() << " which should have priority "<< fpriority;
+        qDebug() << "Considering " << finfo.absoluteFilePath() << " which should have priority " << fpriority;
         if (fpriority > highestPriority) {
             qDebug() << "Setting it as highest priority";
             highestPriority = fpriority;
@@ -119,7 +119,7 @@ void KCMPolkitConfig::load()
     policyFile.close();
 
     qDebug() << "our identities are " << identities;
-    foreach (const QString &identity, identities.split(';')) {
+    foreach (const QString & identity, identities.split(';')) {
         IdentityWidget::IdentityType type;
         if (identity.split(':').first() == "unix-user") {
             type = IdentityWidget::UserIdentity;
@@ -148,7 +148,7 @@ void KCMPolkitConfig::save()
         if (item != 0) {
             QWidget *widget = item->widget();
             if (widget != 0) {
-                IdentityWidget *identityWidget = qobject_cast< IdentityWidget* >(widget);
+                IdentityWidget *identityWidget = qobject_cast<IdentityWidget *>(widget);
                 if (identityWidget != 0) {
                     // Whew, let's add it
                     if (identityWidget->identityType() == IdentityWidget::UserIdentity) {

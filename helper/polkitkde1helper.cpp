@@ -27,7 +27,7 @@ bool orderByPriorityLessThan(const PKLAEntry &e1, const PKLAEntry &e2)
     return e1.fileOrder < e2.fileOrder;
 }
 
-PolkitKde1Helper::PolkitKde1Helper(QObject* parent)
+PolkitKde1Helper::PolkitKde1Helper(QObject *parent)
     : QObject(parent)
 {
     qDBusRegisterMetaType<PKLAEntry>();
@@ -52,7 +52,7 @@ PolkitKde1Helper::~PolkitKde1Helper()
 
 }
 
-void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, int systemPriority, int policiesPriority)
+void PolkitKde1Helper::saveGlobalConfiguration(const QString &adminIdentities, int systemPriority, int policiesPriority)
 {
     qDebug() << "Request to save the global configuration by " << message().service();
     PolkitQt1::Authority::Result result;
@@ -60,17 +60,16 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString& adminIdentities, i
 
     result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changesystemconfiguration",
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
-    switch (result)
-    {
-        case PolkitQt1::Authority::Yes:
-            qDebug() << "Authorized successfully";
-            break;
-        case PolkitQt1::Authority::No:
-            sendErrorReply(QDBusError::AccessDenied, i18n("Changing global configurations is unauthorized"));
-            return;
-        default:
-            sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1", PolkitQt1::Authority::instance()->errorDetails()));
-            return;
+    switch (result) {
+    case PolkitQt1::Authority::Yes:
+        qDebug() << "Authorized successfully";
+        break;
+    case PolkitQt1::Authority::No:
+        sendErrorReply(QDBusError::AccessDenied, i18n("Changing global configurations is unauthorized"));
+        return;
+    default:
+        sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1", PolkitQt1::Authority::instance()->errorDetails()));
+        return;
     }
 
     // Ok, let's see what we have to save here.
@@ -109,23 +108,22 @@ QVariantList PolkitKde1Helper::retrievePolicies()
 
     result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.readauthorizations",
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
-    switch (result)
-    {
-        case PolkitQt1::Authority::Yes:
-            qDebug() << "Authorized successfully";
-            break;
-        case PolkitQt1::Authority::No:
-            sendErrorReply(QDBusError::AccessDenied, i18n("Reading policy settings is unauthorized"));
-            return QVariantList();
-        default:
-            sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1",PolkitQt1::Authority::instance()->errorDetails()));
-            return QVariantList();
+    switch (result) {
+    case PolkitQt1::Authority::Yes:
+        qDebug() << "Authorized successfully";
+        break;
+    case PolkitQt1::Authority::No:
+        sendErrorReply(QDBusError::AccessDenied, i18n("Reading policy settings is unauthorized"));
+        return QVariantList();
+    default:
+        sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1", PolkitQt1::Authority::instance()->errorDetails()));
+        return QVariantList();
     }
 
     return reloadFileList();
 }
 
-QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& filePath)
+QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString &filePath)
 {
     QList< QVariant > retlist;
     QFile file(filePath);
@@ -168,7 +166,7 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
 
                 // Did we parse it all?
                 if (!entry.identity.isEmpty() && !entry.action.isEmpty() && !entry.resultActive.isEmpty() &&
-                    !entry.resultAny.isEmpty() && !entry.resultInactive.isEmpty() && !entry.filePath.isEmpty()) {
+                        !entry.resultAny.isEmpty() && !entry.resultInactive.isEmpty() && !entry.filePath.isEmpty()) {
                     // Awesome, add and wave goodbye. And also increase the priority
                     ++priority;
                     qDebug() << "PKLA Parsed:" << entry.title << entry.action << entry.identity << entry.resultAny
@@ -183,7 +181,7 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString& 
     return retlist;
 }
 
-void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry>& policy)
+void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
 {
     QList<PKLAEntry> entries = policy;
 
@@ -197,26 +195,25 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry>& policy)
     result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changeimplicitauthorizations",
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
 
-    switch (result)
-    {
-        case PolkitQt1::Authority::Yes:
-            qDebug() << "Authorized successfully";
-            break;
-        case PolkitQt1::Authority::No:
-            sendErrorReply(QDBusError::AccessDenied, i18n("Saving implicit policy settings is unauthorized"));
-            return;
-        default:
-            sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1", PolkitQt1::Authority::instance()->errorDetails()));
-            return;
+    switch (result) {
+    case PolkitQt1::Authority::Yes:
+        qDebug() << "Authorized successfully";
+        break;
+    case PolkitQt1::Authority::No:
+        sendErrorReply(QDBusError::AccessDenied, i18n("Saving implicit policy settings is unauthorized"));
+        return;
+    default:
+        sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1", PolkitQt1::Authority::instance()->errorDetails()));
+        return;
     }
 
-    foreach(const PKLAEntry &entry, entries) {
+    foreach (const PKLAEntry &entry, entries) {
         QDomDocument doc = QDomDocument("policy");
         QStringList actionNameSplitted = entry.action.split('.');
         QString newName;
         QFile *pfile = new QFile("/usr/share/polkit-1/actions/org.freedesktop.kit.policy");
         // Search for a valid file
-        foreach(const QString &nameSplitted , actionNameSplitted) {
+        foreach (const QString &nameSplitted, actionNameSplitted) {
             newName.append(nameSplitted);
             pfile = new QFile("/usr/share/polkit-1/actions/" + newName + ".policy");
             if (!pfile->open(QIODevice::ReadOnly)) {
@@ -286,7 +283,7 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry>& policy)
     }
 }
 
-void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
+void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
 {
     QList<PKLAEntry> entries = policy;
 
@@ -295,21 +292,20 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
 
     result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changeexplicitauthorizations",
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
-    switch (result)
-    {
-        case PolkitQt1::Authority::Yes:
-            qDebug() << "Authorized successfully";
-            break;
-        case PolkitQt1::Authority::No:
-            sendErrorReply(QDBusError::AccessDenied, "Saving explicit policy settings is unauthorized");
-            return;
-        default:
-            sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1", PolkitQt1::Authority::instance()->errorDetails()));
-            return;
+    switch (result) {
+    case PolkitQt1::Authority::Yes:
+        qDebug() << "Authorized successfully";
+        break;
+    case PolkitQt1::Authority::No:
+        sendErrorReply(QDBusError::AccessDenied, "Saving explicit policy settings is unauthorized");
+        return;
+    default:
+        sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1", PolkitQt1::Authority::instance()->errorDetails()));
+        return;
     }
 
     // First delete all the old files, we do not need them anymore
-    foreach(const QFileInfo &nestedInfo, oldNestedList) {
+    foreach (const QFileInfo &nestedInfo, oldNestedList) {
         QFile::remove(nestedInfo.absoluteFilePath());
     }
 
@@ -319,9 +315,9 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
     kdesettings.beginGroup("General");
 
     QString pathName = QString("/var/lib/polkit-1/localauthority/%1-polkitkde.d/")
-                            .arg(kdesettings.value("PoliciesPriority",75).toInt());
+                       .arg(kdesettings.value("PoliciesPriority", 75).toInt());
 
-    foreach(const PKLAEntry &entry, entries) {
+    foreach (const PKLAEntry &entry, entries) {
         QString fullPath;
 
         // First check if it already has a filePath,
@@ -371,7 +367,7 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry>& policy)
     reloadFileList();
 }
 
-QString PolkitKde1Helper::formatPKLAEntry(const PKLAEntry& entry)
+QString PolkitKde1Helper::formatPKLAEntry(const PKLAEntry &entry)
 {
     QString retstring;
     retstring.append(QString("[%1]\n").arg(entry.title));

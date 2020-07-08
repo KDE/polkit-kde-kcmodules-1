@@ -22,21 +22,21 @@ class PolkitKde1Helper : public QObject, protected QDBusContext
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.polkitkde1.helper")
 
-    public:
-        PolkitKde1Helper(QObject* parent = 0);
-        virtual ~PolkitKde1Helper();
+public:
+    PolkitKde1Helper(QObject *parent = 0);
+    virtual ~PolkitKde1Helper();
 
-    public Q_SLOTS:
-        void saveGlobalConfiguration(const QString &adminIdentities, int systemPriority, int policiesPriority);
-        QVariantList retrievePolicies();
-        void writePolicy(const QList<PKLAEntry> &policy);
-        void writeImplicitPolicy(const QList<PKLAEntry> &policy);
+public Q_SLOTS:
+    void saveGlobalConfiguration(const QString &adminIdentities, int systemPriority, int policiesPriority);
+    QVariantList retrievePolicies();
+    void writePolicy(const QList<PKLAEntry> &policy);
+    void writeImplicitPolicy(const QList<PKLAEntry> &policy);
 
-    private:
-        QVariantList entriesFromFile(int filePriority, const QString &fileContents);
-        QString formatPKLAEntry(const PKLAEntry &entry);
-        QVariantList reloadFileList();
-        QFileInfoList oldNestedList;
+private:
+    QVariantList entriesFromFile(int filePriority, const QString &fileContents);
+    QString formatPKLAEntry(const PKLAEntry &entry);
+    QVariantList reloadFileList();
+    QFileInfoList oldNestedList;
 };
 
 #endif // POLKITKDE1HELPER_H

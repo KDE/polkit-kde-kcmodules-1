@@ -48,52 +48,58 @@ int PoliciesModel::columnCount(const QModelIndex &parent) const
 
 QVariant PoliciesModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
-    PolicyItem *item = static_cast<PolicyItem*>(index.internalPointer());
+    PolicyItem *item = static_cast<PolicyItem *>(index.internalPointer());
 
     return item->data(role);
 }
 
 Qt::ItemFlags PoliciesModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return 0;
+    }
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QModelIndex PoliciesModel::index(int row, int column, const QModelIndex &parent)
-            const
+QModelIndex PoliciesModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!hasIndex(row, column, parent))
+    if (!hasIndex(row, column, parent)) {
         return QModelIndex();
+    }
 
     PolicyItem *parentItem;
 
-    if (!parent.isValid())
+    if (!parent.isValid()) {
         parentItem = rootItem;
-    else
-        parentItem = static_cast<PolicyItem*>(parent.internalPointer());
+    } else {
+        parentItem = static_cast<PolicyItem *>(parent.internalPointer());
+    }
 
     PolicyItem *childItem = parentItem->child(row);
-    if (childItem)
+    if (childItem) {
         return createIndex(row, column, childItem);
-    else
+    } else {
         return QModelIndex();
+    }
 }
 
 QModelIndex PoliciesModel::parent(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QModelIndex();
+    }
 
-    PolicyItem *childItem = static_cast<PolicyItem*>(index.internalPointer());
+    PolicyItem *childItem = static_cast<PolicyItem *>(index.internalPointer());
     PolicyItem *parentItem = childItem->parent();
 
-    if (parentItem == rootItem)
+    if (parentItem == rootItem) {
         return QModelIndex();
+    }
 
     return createIndex(parentItem->row(), 0, parentItem);
 }
@@ -101,13 +107,15 @@ QModelIndex PoliciesModel::parent(const QModelIndex &index) const
 int PoliciesModel::rowCount(const QModelIndex &parent) const
 {
     PolicyItem *parentItem;
-    if (parent.column() > 0)
+    if (parent.column() > 0) {
         return 0;
+    }
 
-    if (!parent.isValid())
+    if (!parent.isValid()) {
         parentItem = rootItem;
-    else
-        parentItem = static_cast<PolicyItem*>(parent.internalPointer());
+    } else {
+        parentItem = static_cast<PolicyItem *>(parent.internalPointer());
+    }
 
     return parentItem->childCount();
 }
@@ -163,7 +171,7 @@ QModelIndex PoliciesModel::indexFromId(const QString &id, PolicyItem *parent) co
             if (parent == rootItem) {
                 // i doubt this would ever happen :D
                 return QModelIndex();
-            } else{
+            } else {
                 return createIndex(item->row(), 0, item);
             }
         }

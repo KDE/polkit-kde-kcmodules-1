@@ -29,7 +29,7 @@ namespace PolkitKde
 {
 
 AuthorizationsFilterModel::AuthorizationsFilterModel(QObject *parent)
-        : QSortFilterProxyModel(parent)
+    : QSortFilterProxyModel(parent)
 {
 }
 
@@ -71,8 +71,7 @@ bool AuthorizationsFilterModel::groupHasMatchingItem(const QModelIndex &parent) 
 //             qDebug() << "item" << index.data(Qt::DisplayRole);
             // here we have an action let's see it this match
             if (index.data(PolkitKde::PoliciesModel::PathRole).toString().contains(filterRegExp()) ||
-                index.data(Qt::DisplayRole).toString().contains(filterRegExp()))
-            {
+                    index.data(Qt::DisplayRole).toString().contains(filterRegExp())) {
                 return true;
             }
         }
@@ -80,7 +79,6 @@ bool AuthorizationsFilterModel::groupHasMatchingItem(const QModelIndex &parent) 
     // if we don't find any matching action return false
     return false;
 }
-
 
 }
 

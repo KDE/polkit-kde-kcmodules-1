@@ -15,19 +15,20 @@
 #include "QIcon"
 #include "QDialogButtonBox"
 
-namespace PolkitKde {
+namespace PolkitKde
+{
 
-ExplicitAuthorizationDialog::ExplicitAuthorizationDialog(const PKLAEntry& entry, QWidget* parent)
-        : QDialog(parent)
-        , m_entry(entry)
+ExplicitAuthorizationDialog::ExplicitAuthorizationDialog(const PKLAEntry &entry, QWidget *parent)
+    : QDialog(parent)
+    , m_entry(entry)
 {
     init();
     m_ui->titleEdit->setEnabled(false);
     reloadPKLA();
 }
 
-ExplicitAuthorizationDialog::ExplicitAuthorizationDialog(const QString &action, QWidget* parent)
-        : QDialog(parent)
+ExplicitAuthorizationDialog::ExplicitAuthorizationDialog(const QString &action, QWidget *parent)
+    : QDialog(parent)
 {
     m_entry.action = action;
     m_entry.fileOrder = -1;
@@ -77,7 +78,7 @@ void ExplicitAuthorizationDialog::reloadPKLA()
     m_ui->inactiveComboBox->setCurrentIndex(ActionWidget::comboBoxIndexFor(PKLAEntry::implFromText(m_entry.resultInactive)));
     m_ui->activeComboBox->setCurrentIndex(ActionWidget::comboBoxIndexFor(PKLAEntry::implFromText(m_entry.resultActive)));
 
-    foreach (const QString &identity, m_entry.identity.split(';')) {
+    foreach (const QString & identity, m_entry.identity.split(';')) {
         IdentityWidget *idWidget = 0;
         if (identity.startsWith(QLatin1String("unix-user:"))) {
             idWidget = new IdentityWidget(IdentityWidget::UserIdentity, identity.split("unix-user:").last());
@@ -97,7 +98,7 @@ void ExplicitAuthorizationDialog::commitChangesToPKLA()
     m_entry.resultAny = PKLAEntry::textFromImpl(ActionWidget::implicitAuthorizationFor(m_ui->anyComboBox->currentIndex()));
     m_entry.resultActive = PKLAEntry::textFromImpl(ActionWidget::implicitAuthorizationFor(m_ui->activeComboBox->currentIndex()));
     m_entry.resultInactive =
-                PKLAEntry::textFromImpl(ActionWidget::implicitAuthorizationFor(m_ui->inactiveComboBox->currentIndex()));
+        PKLAEntry::textFromImpl(ActionWidget::implicitAuthorizationFor(m_ui->inactiveComboBox->currentIndex()));
 
     QString identities;
     for (int i = 0; i < m_identitiesLayout->count(); ++i) {
@@ -105,7 +106,7 @@ void ExplicitAuthorizationDialog::commitChangesToPKLA()
         if (item != 0) {
             QWidget *widget = item->widget();
             if (widget != 0) {
-                IdentityWidget *identityWidget = qobject_cast< IdentityWidget* >(widget);
+                IdentityWidget *identityWidget = qobject_cast<IdentityWidget *>(widget);
                 if (identityWidget != 0) {
                     // Whew, let's add it
                     if (identityWidget->identityType() == IdentityWidget::UserIdentity) {

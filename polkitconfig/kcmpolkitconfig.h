@@ -14,27 +14,28 @@
 #include <kcmodule.h>
 
 class QVBoxLayout;
-namespace Ui {
-    class PolkitConfig;
+namespace Ui
+{
+class PolkitConfig;
 }
 
 class KCMPolkitConfig : public KCModule
 {
     Q_OBJECT
-    public:
-        KCMPolkitConfig(QWidget* parent, const QVariantList& args);
-        virtual ~KCMPolkitConfig();
+public:
+    KCMPolkitConfig(QWidget *parent, const QVariantList &args);
+    virtual ~KCMPolkitConfig();
 
-        virtual void defaults();
-        virtual void load();
-        virtual void save();
+    virtual void defaults();
+    virtual void load();
+    virtual void save();
 
-    private slots:
-        void addNewIdentity();
+private slots:
+    void addNewIdentity();
 
-    private:
-        Ui::PolkitConfig *m_ui;
-        QVBoxLayout *m_identitiesLayout;
+private:
+    Ui::PolkitConfig *m_ui;
+    QVBoxLayout *m_identitiesLayout;
 };
 
 #endif // KCMPOLKITCONFIG_H

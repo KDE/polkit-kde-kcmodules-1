@@ -16,40 +16,42 @@
 #include <QtCore/QPointer>
 
 class QModelIndex;
-namespace PolkitKde {
+namespace PolkitKde
+{
 class PoliciesModel;
 class AuthorizationsFilterModel;
 class ActionWidget;
 }
 
-namespace Ui {
-    class PolkitActionsMainView;
+namespace Ui
+{
+class PolkitActionsMainView;
 }
 
 class PolkitActionsKCM : public KCModule
 {
     Q_OBJECT
-    public:
-        explicit PolkitActionsKCM(QWidget* parent = 0, const QVariantList& args = QVariantList());
-        virtual ~PolkitActionsKCM();
+public:
+    explicit PolkitActionsKCM(QWidget *parent = 0, const QVariantList &args = QVariantList());
+    virtual ~PolkitActionsKCM();
 
-        void load() override;
-        void save() override;
-        void defaults() override;
+    void load() override;
+    void save() override;
+    void defaults() override;
 
-    Q_SIGNALS:
-        void explicitSaved();
-        void implicitSaved();
+Q_SIGNALS:
+    void explicitSaved();
+    void implicitSaved();
 
-    public slots:
-        void slotCheckAuthorizationFinished(PolkitQt1::Authority::Result result);
-        void slotCurrentChanged(const QModelIndex &current, const QModelIndex&);
+public slots:
+    void slotCheckAuthorizationFinished(PolkitQt1::Authority::Result result);
+    void slotCurrentChanged(const QModelIndex &current, const QModelIndex &);
 
-    private:
-        Ui::PolkitActionsMainView *m_ui;
-        PolkitKde::PoliciesModel *m_model;
-        PolkitKde::AuthorizationsFilterModel *m_proxyModel;
-        PolkitKde::ActionWidget *m_actionWidget;
+private:
+    Ui::PolkitActionsMainView *m_ui;
+    PolkitKde::PoliciesModel *m_model;
+    PolkitKde::AuthorizationsFilterModel *m_proxyModel;
+    PolkitKde::ActionWidget *m_actionWidget;
 };
 
 #endif // POLKITACTIONSKCM_H

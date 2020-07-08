@@ -16,8 +16,9 @@
 
 class QDBusArgument;
 
-class Q_DECL_EXPORT PKLAEntry {
-    public:
+class Q_DECL_EXPORT PKLAEntry
+{
+public:
     QString title;
     QString identity;
     QString action;
@@ -30,7 +31,7 @@ class Q_DECL_EXPORT PKLAEntry {
     int fileOrder;
 
     // Static utils for PKLA
-    static PolkitQt1::ActionDescription::ImplicitAuthorization implFromText(const QString& text);
+    static PolkitQt1::ActionDescription::ImplicitAuthorization implFromText(const QString &text);
     static QString textFromImpl(PolkitQt1::ActionDescription::ImplicitAuthorization implicit);
 };
 Q_DECLARE_METATYPE(PKLAEntry)
@@ -38,7 +39,7 @@ Q_DECLARE_METATYPE(QList<PKLAEntry>);
 
 typedef QList<PKLAEntry> PKLAEntryList;
 
-Q_DECL_EXPORT QDBusArgument& operator<<(QDBusArgument& argument, const PKLAEntry& entry);
-Q_DECL_EXPORT const QDBusArgument& operator>>(const QDBusArgument& argument, PKLAEntry& entry);
+Q_DECL_EXPORT QDBusArgument &operator<<(QDBusArgument &argument, const PKLAEntry &entry);
+Q_DECL_EXPORT const QDBusArgument &operator>>(const QDBusArgument &argument, PKLAEntry &entry);
 
 #endif // PKLAENTRY_H

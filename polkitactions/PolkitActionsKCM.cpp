@@ -30,7 +30,6 @@
 K_PLUGIN_FACTORY(KCMPolkitActionsFactory,
                  registerPlugin<PolkitActionsKCM>();
                 )
-K_EXPORT_PLUGIN(KCMPolkitActionsFactory("kcm_polkitactions"))
 
 #include <PolkitActionsKCM.moc>
 

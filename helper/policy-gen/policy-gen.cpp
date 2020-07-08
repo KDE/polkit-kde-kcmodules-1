@@ -19,6 +19,7 @@
 */
 
 #include "policy-gen.h"
+#include <QFile>
 
 #include <QCoreApplication>
 #include <QSettings>
@@ -26,10 +27,13 @@
 #include <QStringList>
 #include <QDebug>
 
+#include <cstdio>
+#include <errno.h>
+
 using namespace std;
 
 QList<Action> parse(QSettings &ini);
-QHash<QString, QString> parseDomain(QSettings &ini);
+QMap<QString, QString> parseDomain(QSettings &ini);
 
 int main(int argc, char **argv)
 {
@@ -40,11 +44,25 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    QSettings ini(argv[1], QSettings::IniFormat);
+    QSettings ini(QFile::decodeName(argv[1]), QSettings::IniFormat);
     ini.setIniCodec("UTF-8");
     if (ini.status()) {
         qCritical("Error loading file: %s", argv[1]);
         return 1;
+    }
+
+    if (argc == 3) {
+        // Support an optional 2nd argument pointing to the output file
+        //
+        // This is safer to use in build systems than
+        // "kauth-policy-gen foo.actions > foo.policy" because when using a
+        // redirection "foo.policy" is created even if kauth-policy-gen fails.
+        // This means the first call to make fails, but a second call succeeds
+        // because an empty "foo.policy" exists.
+        if (!freopen(argv[2], "w", stdout)) {
+            qCritical("Failed to open %s for writing: %s", argv[2], strerror(errno));
+            return 1;
+        }
     }
 
     output(parse(ini), parseDomain(ini));
@@ -53,18 +71,19 @@ int main(int argc, char **argv)
 QList<Action> parse(QSettings &ini)
 {
     QList<Action> actions;
-    QRegExp actionExp("[0-9a-z]+(\\.[0-9a-z]+)*");
-    QRegExp descriptionExp("description(?:\\[(\\w+)\\])?");
-    QRegExp nameExp("name(?:\\[(\\w+)\\])?");
-    QRegExp policyExp("yes|no|auth_self|auth_admin");
+    QRegExp actionExp(QLatin1String("[0-9a-z]+(\\.[0-9a-z]+)*"));
+    QRegExp descriptionExp(QLatin1String("description(?:\\[(\\w+)\\])?"));
+    QRegExp nameExp(QLatin1String("name(?:\\[(\\w+)\\])?"));
+    QRegExp policyExp(QLatin1String("yes|no|auth_self|auth_admin"));
 
     descriptionExp.setCaseSensitivity(Qt::CaseInsensitive);
     nameExp.setCaseSensitivity(Qt::CaseInsensitive);
 
-    foreach(const QString &name, ini.childGroups()) {
+    const auto listChilds = ini.childGroups();
+    for (const QString &name : listChilds) {
         Action action;
 
-        if (name == "Domain") {
+        if (name == QLatin1String("Domain")) {
             continue;
         }
 
@@ -76,24 +95,27 @@ QList<Action> parse(QSettings &ini)
         action.name = name;
         ini.beginGroup(name);
 
-        foreach(const QString &key, ini.childKeys()) {
+        const auto listChildKeys = ini.childKeys();
+        for (const QString &key : listChildKeys) {
             if (descriptionExp.exactMatch(key)) {
                 QString lang = descriptionExp.capturedTexts().at(1);
 
-                if (lang.isEmpty())
-                    lang = "en";
+                if (lang.isEmpty()) {
+                    lang = QString::fromLatin1("en");
+                }
 
                 action.descriptions.insert(lang, ini.value(key).toString());
 
             } else if (nameExp.exactMatch(key)) {
                 QString lang = nameExp.capturedTexts().at(1);
 
-                if (lang.isEmpty())
-                    lang = "en";
+                if (lang.isEmpty()) {
+                    lang = QString::fromLatin1("en");
+                }
 
                 action.messages.insert(lang, ini.value(key).toString());
 
-            } else if (key.toLower() == "policy") {
+            } else if (key.toLower() == QLatin1String("policy")) {
                 QString policy = ini.value(key).toString();
                 if (!policyExp.exactMatch(policy)) {
                     qCritical("Wrong policy: %s", policy.toLatin1().data());
@@ -101,9 +123,17 @@ QList<Action> parse(QSettings &ini)
                 }
                 action.policy = policy;
 
-            } else if (key.toLower() == "persistence") {
+            } else if (key.toLower() == QLatin1String("policyinactive")) {
+                QString policyInactive = ini.value(key).toString();
+                if (!policyExp.exactMatch(policyInactive)) {
+                    qCritical("Wrong policy: %s", policyInactive.toLatin1().data());
+                    exit(1);
+                }
+                action.policyInactive = policyInactive;
+
+            } else if (key.toLower() == QLatin1String("persistence")) {
                 QString persistence = ini.value(key).toString();
-                if (persistence != "session" && persistence != "always") {
+                if (persistence != QLatin1String("session") && persistence != QLatin1String("always")) {
                     qCritical("Wrong persistence: %s", persistence.toLatin1().data());
                     exit(1);
                 }
@@ -123,24 +153,22 @@ QList<Action> parse(QSettings &ini)
     return actions;
 }
 
-
-QHash<QString, QString> parseDomain(QSettings& ini)
+QMap<QString, QString> parseDomain(QSettings &ini)
 {
-    QHash<QString, QString> rethash;
+    QMap<QString, QString> rethash;
 
-    if (ini.childGroups().contains("Domain")) {
-        if (ini.contains("Domain/Name")) {
-            rethash["vendor"] = ini.value("Domain/Name").toString();
+    if (ini.childGroups().contains(QString::fromLatin1("Domain"))) {
+        if (ini.contains(QString::fromLatin1("Domain/Name"))) {
+            rethash[QString::fromLatin1("vendor")] = ini.value(QString::fromLatin1("Domain/Name")).toString();
         }
-        if (ini.contains("Domain/URL")) {
-            rethash["vendorurl"] = ini.value("Domain/URL").toString();
+        if (ini.contains(QString::fromLatin1("Domain/URL"))) {
+            rethash[QString::fromLatin1("vendorurl")] = ini.value(QString::fromLatin1("Domain/URL")).toString();
         }
-        if (ini.contains("Domain/Icon")) {
-            rethash["icon"] = ini.value("Domain/Icon").toString();
+        if (ini.contains(QString::fromLatin1("Domain/Icon"))) {
+            rethash[QString::fromLatin1("icon")] = ini.value(QString::fromLatin1("Domain/Icon")).toString();
         }
     }
 
     return rethash;
 }
-
 

@@ -18,24 +18,24 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .
 */
 
-#ifndef POLICY_GEN_H
-#define POLICY_GEN_H
+#ifndef _POLICY_GEN_H_
+#define _POLICY_GEN_H_
 
-#include <QtCore/QString>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
+#include <QString>
+#include <QMap>
+#include <QHash>
 
 struct Action {
     QString name;
 
-    QHash<QString, QString> descriptions;
-    QHash<QString, QString> messages;
+    QMap<QString, QString> descriptions;
+    QMap<QString, QString> messages;
 
     QString policy;
+    QString policyInactive;
     QString persistence;
 };
 
-extern void output(QList<Action> actions, QHash<QString, QString> domain);
-
+extern void output(const QList<Action> &actions, const QMap<QString, QString> &domain);
 
 #endif

@@ -35,7 +35,7 @@ public:
     static QString textFromImpl(PolkitQt1::ActionDescription::ImplicitAuthorization implicit);
 };
 Q_DECLARE_METATYPE(PKLAEntry)
-Q_DECLARE_METATYPE(QList<PKLAEntry>);
+Q_DECLARE_METATYPE(QList<PKLAEntry>)
 
 typedef QList<PKLAEntry> PKLAEntryList;
 

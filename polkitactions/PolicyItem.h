@@ -61,6 +61,6 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(PolkitQt1::ActionDescription);
+Q_DECLARE_METATYPE(PolkitQt1::ActionDescription)
 
 #endif

@@ -26,9 +26,9 @@ public:
     KCMPolkitConfig(QWidget *parent, const QVariantList &args);
     virtual ~KCMPolkitConfig();
 
-    virtual void defaults();
-    virtual void load();
-    virtual void save();
+    void defaults() override;
+    void load() override;
+    void save() override;
 
 private Q_SLOTS:
     void addNewIdentity();

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 3.0)
 project(polkit-kde-kcmodules-1)
 
 set(QT_MIN_VERSION "5.9.0")

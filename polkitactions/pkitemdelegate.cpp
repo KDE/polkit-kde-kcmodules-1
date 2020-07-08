@@ -143,7 +143,7 @@ QSize PkItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelI
 /////////////////////////////
 
 PKLAItemDelegate::PKLAItemDelegate(QObject *parent) : QStyledItemDelegate(parent)
-    , m_passwordIcon("dialog-password")
+    , m_passwordIcon(QIcon::fromTheme("dialog-password"))
 {
 }
 

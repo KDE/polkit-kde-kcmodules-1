@@ -52,7 +52,9 @@ void PkItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     QStyle *style = QApplication::style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget);
 
-    QPixmap pixmap(opt.rect.size());
+    const auto dpr = painter->device()->devicePixelRatioF();
+    QPixmap pixmap(opt.rect.size() * dpr);
+    pixmap.setDevicePixelRatio(dpr);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
     p.translate(-opt.rect.topLeft());
@@ -156,7 +158,9 @@ void PKLAItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QStyle *style = QApplication::style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget);
 
-    QPixmap pixmap(opt.rect.size());
+    const auto dpr = painter->device()->devicePixelRatioF();
+    QPixmap pixmap(opt.rect.size() * dpr);
+    pixmap.setDevicePixelRatio(dpr);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
     p.translate(-opt.rect.topLeft());

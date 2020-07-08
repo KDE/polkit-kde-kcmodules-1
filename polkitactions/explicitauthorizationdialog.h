@@ -34,7 +34,7 @@ public:
     void commitChangesToPKLA();
     PKLAEntry pkla();
 
-private slots:
+private Q_SLOTS:
     void addIdentity();
 
 private:

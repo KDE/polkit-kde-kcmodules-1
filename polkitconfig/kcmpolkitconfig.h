@@ -30,7 +30,7 @@ public:
     virtual void load();
     virtual void save();
 
-private slots:
+private Q_SLOTS:
     void addNewIdentity();
 
 private:

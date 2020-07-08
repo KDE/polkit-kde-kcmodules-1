@@ -43,7 +43,7 @@ Q_SIGNALS:
     void explicitSaved();
     void implicitSaved();
 
-public slots:
+public Q_SLOTS:
     void slotCheckAuthorizationFinished(PolkitQt1::Authority::Result result);
     void slotCurrentChanged(const QModelIndex &current, const QModelIndex &);
 

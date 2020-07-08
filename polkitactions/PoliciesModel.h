@@ -56,7 +56,7 @@ public:
 
     QModelIndex indexFromId(const QString &id) const;
 
-public slots:
+public Q_SLOTS:
     void setCurrentEntries(const PolkitQt1::ActionDescription::List &entries);
 
 private:

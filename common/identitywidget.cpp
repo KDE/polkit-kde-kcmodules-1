@@ -80,7 +80,7 @@ void IdentityWidget::populateIdentityNameBox()
     if (m_ui->identityTypeBox->currentIndex() == (int)UserIdentity) {
         QList<KUser> users = KUser::allUsers();
 
-        foreach (const KUser &user, users) {
+        for (const KUser &user : qAsConst(users)) {
             QIcon icon;
             QString displayName;
             if (!user.faceIconPath().isEmpty()) {
@@ -99,7 +99,7 @@ void IdentityWidget::populateIdentityNameBox()
     } else {
         QList<KUserGroup> groups = KUserGroup::allGroups();
 
-        foreach (const KUserGroup &group, groups) {
+        for (const KUserGroup &group : qAsConst(groups)) {
             m_ui->identityNameBox->addItem(QIcon::fromTheme(QStringLiteral("system-users")), group.name(), group.name());
         }
     }

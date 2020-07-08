@@ -105,7 +105,7 @@ bool ActionWidget::reloadPKLAs()
     if (r.arguments().count() >= 1) {
         QVariantList vlist;
         r.arguments().first().value<QDBusArgument>() >> vlist;
-        foreach (const QVariant &variant, vlist) {
+        for (const QVariant &variant : qAsConst(vlist)) {
             PKLAEntry entry;
             variant.value<QDBusArgument>() >> entry;
             qDebug() << entry.title;
@@ -125,7 +125,7 @@ void ActionWidget::computeActionPolicies()
     qDebug();
     m_ui->localAuthListWidget->clear();
     std::sort(m_entries.begin(), m_entries.end(), orderByPriorityLessThan);
-    foreach (const PKLAEntry &entry, m_entries) {
+    for (const PKLAEntry &entry : qAsConst(m_entries)) {
         QStringList realActions = entry.action.split(QLatin1Char(';'));
         qDebug() << entry.action << m_current_policy.action;
         if (realActions.contains(m_current_policy.action)) {
@@ -185,7 +185,7 @@ QString ActionWidget::formatIdentities(const QString &identities)
     QString rettext;
     QStringList realIdentities = identities.split(QLatin1Char(';'));
 
-    foreach (const QString &identity, realIdentities) {
+    for (const QString &identity : qAsConst(realIdentities)) {
         if (identity.startsWith(QLatin1String("unix-user:"))) {
             rettext.append(identity.split(QStringLiteral("unix-user:")).last());
             rettext.append(QStringLiteral(", "));
@@ -265,7 +265,7 @@ void ActionWidget::setAction(const PolkitQt1::ActionDescription &action)
         m_PKLALoaded = true;
     }
     // Check for implicit override
-    foreach (const PKLAEntry &entry, m_implicit_entries) {
+    for (const PKLAEntry &entry : qAsConst(m_implicit_entries)) {
         if (entry.action == action.actionId()) {
             qDebug() << "Found implicit override!";
             m_current_policy = entry;
@@ -297,7 +297,7 @@ void ActionWidget::setAction(const PolkitQt1::ActionDescription &action)
 
 void ActionWidget::editExplicitPKLAEntry(QListWidgetItem *item)
 {
-    foreach (const PKLAEntry &entry, m_entries) {
+    for (const PKLAEntry &entry : qAsConst(m_entries)) {
         if (entry.title == item->text()) {
             QPointer<ExplicitAuthorizationDialog> dialog = new ExplicitAuthorizationDialog(entry, this);
             if (dialog.data()->exec() == QDialog::Accepted) {
@@ -347,7 +347,7 @@ void ActionWidget::addNewPKLAEntry(const PKLAEntry &entry)
     // If there's no file order, append it to the end of the current entries
     if (toInsert.fileOrder < 0) {
         int max = 0;
-        foreach (const PKLAEntry &entry, m_entries) {
+        for (const PKLAEntry &entry : qAsConst(m_entries)) {
             if (entry.fileOrder > max) {
                 max = entry.fileOrder;
             }

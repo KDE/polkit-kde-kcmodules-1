@@ -90,7 +90,7 @@ void KCMPolkitConfig::load()
     dir.setFilter(QDir::Files);
     QFileInfoList infolist = dir.entryInfoList();
 
-    foreach (const QFileInfo &finfo, infolist) {
+    for (const QFileInfo &finfo : qAsConst(infolist)) {
         int fpriority = finfo.baseName().split(QLatin1Char('-')).first().toInt();
         qDebug() << "Considering " << finfo.absoluteFilePath() << " which should have priority " << fpriority;
         if (fpriority > highestPriority) {

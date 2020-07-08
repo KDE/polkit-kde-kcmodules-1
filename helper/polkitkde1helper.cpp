@@ -207,13 +207,13 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
         return;
     }
 
-    foreach (const PKLAEntry &entry, entries) {
+    for (const PKLAEntry &entry : qAsConst(entries)) {
         QDomDocument doc = QDomDocument(QStringLiteral("policy"));
         QStringList actionNameSplitted = entry.action.split(QLatin1Char('.'));
         QString newName;
         QFile *pfile = new QFile(QStringLiteral("/usr/share/polkit-1/actions/org.freedesktop.kit.policy"));
         // Search for a valid file
-        foreach (const QString &nameSplitted, actionNameSplitted) {
+        for (const QString &nameSplitted : qAsConst(actionNameSplitted)) {
             newName.append(nameSplitted);
             pfile = new QFile(QStringLiteral("/usr/share/polkit-1/actions/") + newName + QStringLiteral(".policy"));
             if (!pfile->open(QIODevice::ReadOnly)) {
@@ -305,7 +305,7 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
     }
 
     // First delete all the old files, we do not need them anymore
-    foreach (const QFileInfo &nestedInfo, oldNestedList) {
+    for (const QFileInfo &nestedInfo : qAsConst(oldNestedList)) {
         QFile::remove(nestedInfo.absoluteFilePath());
     }
 
@@ -317,7 +317,7 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
     QString pathName = QStringLiteral("/var/lib/polkit-1/localauthority/%1-polkitkde.d/")
                        .arg(kdesettings.value(QStringLiteral("PoliciesPriority"), 75).toInt());
 
-    foreach (const PKLAEntry &entry, entries) {
+    for (const PKLAEntry &entry : qAsConst(entries)) {
         QString fullPath;
 
         // First check if it already has a filePath,
@@ -388,14 +388,14 @@ QVariantList PolkitKde1Helper::reloadFileList()
     QDir baseDir(QStringLiteral("/var/lib/polkit-1/localauthority/"));
     QFileInfoList baseList = baseDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-    foreach (const QFileInfo &info, baseList) {
+    for (const QFileInfo &info : qAsConst(baseList)) {
         int filePriority = info.baseName().split(QLatin1Char('-')).first().toInt();
         qDebug() << "Iterating over the directory " << info.absoluteFilePath() << ", which has a priority of " << filePriority;
 
         QDir nestedDir(info.absoluteFilePath());
         QFileInfoList nestedList = nestedDir.entryInfoList(QDir::Files);
 
-        foreach (const QFileInfo &nestedInfo, nestedList) {
+        for (const QFileInfo &nestedInfo : qAsConst(nestedList)) {
             qDebug() << "Parsing file " << nestedInfo.absoluteFilePath();
             retlist.append(entriesFromFile(filePriority, nestedInfo.absoluteFilePath()));
         }

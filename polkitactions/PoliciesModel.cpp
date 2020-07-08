@@ -125,13 +125,13 @@ void PoliciesModel::setCurrentEntries(const PolkitQt1::ActionDescription::List &
     // before inserting let's remove entries (policies)
     // that don't exist anymore
     QStringList stringEntries;
-    foreach (const PolkitQt1::ActionDescription &entry, entries) {
+    for (const PolkitQt1::ActionDescription &entry : qAsConst(entries)) {
         stringEntries.append(entry.actionId());
     }
     removeEntries(stringEntries, rootItem);
 
     // now we insert or update all the items
-    foreach (const PolkitQt1::ActionDescription &entry, entries) {
+    for (const PolkitQt1::ActionDescription &entry : qAsConst(entries)) {
         QStringList actionPath;
         actionPath = entry.actionId().split(QLatin1Char('.'));
         if (actionPath.size() > 2) {
@@ -194,7 +194,7 @@ bool PoliciesModel::removeEntries(const QStringList &entries, PolicyItem *parent
         } else {
             bool found = false;
             // lets see if this action still exists in the new list
-            foreach (const QString &entry, entries) {
+            for (const QString &entry : qAsConst(entries)) {
                 if (entry == item->data(PathRole).toString()) {
                     found = true;
                     break;

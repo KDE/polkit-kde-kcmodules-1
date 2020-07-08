@@ -133,12 +133,12 @@ void PoliciesModel::setCurrentEntries(const PolkitQt1::ActionDescription::List &
     // now we insert or update all the items
     foreach (const PolkitQt1::ActionDescription &entry, entries) {
         QStringList actionPath;
-        actionPath = entry.actionId().split('.');
+        actionPath = entry.actionId().split(QLatin1Char('.'));
         if (actionPath.size() > 2) {
             // if we have an action id bigger than
             // "org.kde"
             QString rootString = actionPath.takeFirst();
-            rootString += '.' + actionPath.takeFirst();
+            rootString += QLatin1Char('.') + actionPath.takeFirst();
             actionPath.prepend(rootString);
             insertOrUpdate(actionPath, entry, rootItem);
         } else if (actionPath.size() > 1) {
@@ -229,7 +229,7 @@ void PoliciesModel::insertOrUpdate(const QStringList &actionPath, const PolkitQt
         // if the actionPath size is equal as
         // the leve we are about to insert the
         // action itself
-        QString path = actionPath.join(".");
+        QString path = actionPath.join(QStringLiteral("."));
         PolicyItem *action = 0;
         for (int i = 0; i < parent->childCount(); i++) {
             if (!parent->child(i)->isGroup() && path == parent->child(i)->data(PathRole)) {

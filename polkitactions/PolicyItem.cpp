@@ -30,9 +30,9 @@ PolicyItem::PolicyItem(bool isGroup, PolicyItem *parent)
     : parentItem(parent)
 {
     if (isGroup) {
-        itemData[Qt::DecorationRole] = QIcon::fromTheme("folder-locked");
+        itemData[Qt::DecorationRole] = QIcon::fromTheme(QStringLiteral("folder-locked"));
     } else {
-        itemData[Qt::DecorationRole] = QIcon::fromTheme("preferences-desktop-cryptography");
+        itemData[Qt::DecorationRole] = QIcon::fromTheme(QStringLiteral("preferences-desktop-cryptography"));
     }
     itemData[PoliciesModel::IsGroupRole] = isGroup;
 }
@@ -45,7 +45,7 @@ PolicyItem::~PolicyItem()
 void PolicyItem::setPolkitEntry(const PolkitQt1::ActionDescription &entry)
 {
     QString iconName = entry.iconName();
-    itemData[Qt::DecorationRole] = QIcon::fromTheme(iconName, QIcon::fromTheme("preferences-desktop-cryptography"));
+    itemData[Qt::DecorationRole] = QIcon::fromTheme(iconName, QIcon::fromTheme(QStringLiteral("preferences-desktop-cryptography")));
 
     itemData[Qt::DisplayRole] = entry.description();
     itemData[PoliciesModel::PathRole] = entry.actionId();

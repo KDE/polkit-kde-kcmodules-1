@@ -57,7 +57,7 @@ void ExplicitAuthorizationDialog::init()
 
     setModal(true);
 
-    m_ui->addButton->setIcon(QIcon::fromTheme("list-add"));
+    m_ui->addButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
     m_identitiesLayout = new QVBoxLayout;
     m_identitiesLayout->addStretch();
@@ -78,12 +78,12 @@ void ExplicitAuthorizationDialog::reloadPKLA()
     m_ui->inactiveComboBox->setCurrentIndex(ActionWidget::comboBoxIndexFor(PKLAEntry::implFromText(m_entry.resultInactive)));
     m_ui->activeComboBox->setCurrentIndex(ActionWidget::comboBoxIndexFor(PKLAEntry::implFromText(m_entry.resultActive)));
 
-    foreach (const QString & identity, m_entry.identity.split(';')) {
+    foreach (const QString & identity, m_entry.identity.split(QLatin1Char(';'))) {
         IdentityWidget *idWidget = 0;
         if (identity.startsWith(QLatin1String("unix-user:"))) {
-            idWidget = new IdentityWidget(IdentityWidget::UserIdentity, identity.split("unix-user:").last());
+            idWidget = new IdentityWidget(IdentityWidget::UserIdentity, identity.split(QStringLiteral("unix-user:")).last());
         } else if (identity.startsWith(QLatin1String("unix-group:"))) {
-            idWidget = new IdentityWidget(IdentityWidget::GroupIdentity, identity.split("unix-group:").last());
+            idWidget = new IdentityWidget(IdentityWidget::GroupIdentity, identity.split(QStringLiteral("unix-group:")).last());
         }
 
         if (idWidget) {
@@ -110,12 +110,12 @@ void ExplicitAuthorizationDialog::commitChangesToPKLA()
                 if (identityWidget != 0) {
                     // Whew, let's add it
                     if (identityWidget->identityType() == IdentityWidget::UserIdentity) {
-                        identities.append("unix-user:");
+                        identities.append(QStringLiteral("unix-user:"));
                     } else {
-                        identities.append("unix-group:");
+                        identities.append(QStringLiteral("unix-group:"));
                     }
                     identities.append(identityWidget->identityName());
-                    identities.append(';');
+                    identities.append(QLatin1Char(';'));
                 }
             }
         }

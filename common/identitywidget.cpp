@@ -36,9 +36,9 @@ void IdentityWidget::init(IdentityType type)
 {
     m_ui = new Ui::IdentityWidget;
     m_ui->setupUi(this);
-    m_ui->removeButton->setIcon(QIcon::fromTheme("list-remove"));
-    m_ui->identityTypeBox->setItemIcon(0, QIcon::fromTheme("user-identity"));
-    m_ui->identityTypeBox->setItemIcon(1, QIcon::fromTheme("system-users"));
+    m_ui->removeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+    m_ui->identityTypeBox->setItemIcon(0, QIcon::fromTheme(QStringLiteral("user-identity")));
+    m_ui->identityTypeBox->setItemIcon(1, QIcon::fromTheme(QStringLiteral("system-users")));
     m_ui->identityTypeBox->setCurrentIndex((int)type);
     populateIdentityNameBox();
 
@@ -86,12 +86,12 @@ void IdentityWidget::populateIdentityNameBox()
             if (!user.faceIconPath().isEmpty()) {
                 icon.addPixmap(QPixmap(user.faceIconPath()));
             } else {
-                icon = QIcon::fromTheme("user-identity");
+                icon = QIcon::fromTheme(QStringLiteral("user-identity"));
             }
             if (!user.isValid()) {
                 displayName = user.loginName();
             } else {
-                displayName = QString("%1 (%2)").arg(user.property(KUser::FullName).toString(), user.loginName());
+                displayName = QStringLiteral("%1 (%2)").arg(user.property(KUser::FullName).toString(), user.loginName());
             }
 
             m_ui->identityNameBox->addItem(icon, displayName, user.loginName());
@@ -100,7 +100,7 @@ void IdentityWidget::populateIdentityNameBox()
         QList<KUserGroup> groups = KUserGroup::allGroups();
 
         foreach (const KUserGroup &group, groups) {
-            m_ui->identityNameBox->addItem(QIcon::fromTheme("system-users"), group.name(), group.name());
+            m_ui->identityNameBox->addItem(QIcon::fromTheme(QStringLiteral("system-users")), group.name(), group.name());
         }
     }
 }

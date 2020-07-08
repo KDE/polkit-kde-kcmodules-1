@@ -34,13 +34,13 @@ PolkitKde1Helper::PolkitKde1Helper(QObject *parent)
     qDBusRegisterMetaType<QList<PKLAEntry> >();
     (void) new HelperAdaptor(this);
     // Register the DBus service
-    if (!QDBusConnection::systemBus().registerService("org.kde.polkitkde1.helper")) {
+    if (!QDBusConnection::systemBus().registerService(QStringLiteral("org.kde.polkitkde1.helper"))) {
         qDebug() << QDBusConnection::systemBus().lastError().message();;
         QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit()));
         return;
     }
 
-    if (!QDBusConnection::systemBus().registerObject("/Helper", this)) {
+    if (!QDBusConnection::systemBus().registerObject(QStringLiteral("/Helper"), this)) {
         qDebug() << "unable to register service interface to dbus";
         QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit()));
         return;
@@ -58,7 +58,7 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString &adminIdentities, i
     PolkitQt1::Authority::Result result;
     PolkitQt1::SystemBusNameSubject subject(message().service());
 
-    result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changesystemconfiguration",
+    result = PolkitQt1::Authority::instance()->checkAuthorizationSync(QStringLiteral("org.kde.polkitkde1.changesystemconfiguration"),
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
     switch (result) {
     case PolkitQt1::Authority::Yes:
@@ -73,16 +73,16 @@ void PolkitKde1Helper::saveGlobalConfiguration(const QString &adminIdentities, i
     }
 
     // Ok, let's see what we have to save here.
-    QSettings kdesettings("/etc/polkit-1/polkit-kde-1.conf", QSettings::IniFormat);
-    kdesettings.beginGroup("General");
+    QSettings kdesettings(QStringLiteral("/etc/polkit-1/polkit-kde-1.conf"), QSettings::IniFormat);
+    kdesettings.beginGroup(QStringLiteral("General"));
 
-    kdesettings.setValue("ConfigPriority", systemPriority);
-    kdesettings.setValue("PoliciesPriority", policiesPriority);
+    kdesettings.setValue(QStringLiteral("ConfigPriority"), systemPriority);
+    kdesettings.setValue(QStringLiteral("PoliciesPriority"), policiesPriority);
 
-    QString contents = QString("[Configuration]\nAdminIdentities=%1\n").arg(adminIdentities);
+    QString contents = QStringLiteral("[Configuration]\nAdminIdentities=%1\n").arg(adminIdentities);
 
     qDebug() << contents << "will be wrote to the local authority file";
-    QFile wfile(QString("/etc/polkit-1/localauthority.conf.d/%1-polkitkde.conf").arg(systemPriority));
+    QFile wfile(QStringLiteral("/etc/polkit-1/localauthority.conf.d/%1-polkitkde.conf").arg(systemPriority));
     if (!wfile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
         sendErrorReply(QDBusError::Failed, i18n("Error opening the global configuration file: %1\nError code: %2.", wfile.fileName(), wfile.error()));
         return;
@@ -106,7 +106,7 @@ QVariantList PolkitKde1Helper::retrievePolicies()
     PolkitQt1::Authority::Result result;
     PolkitQt1::SystemBusNameSubject subject(message().service());
 
-    result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.readauthorizations",
+    result = PolkitQt1::Authority::instance()->checkAuthorizationSync(QStringLiteral("org.kde.polkitkde1.readauthorizations"),
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
     switch (result) {
     case PolkitQt1::Authority::Yes:
@@ -138,27 +138,27 @@ QVariantList PolkitKde1Helper::entriesFromFile(int filePriority, const QString &
     QTextStream in(&file);
     while (!in.atEnd()) {
         QString line = in.readLine();
-        if (line.startsWith('[')) {
+        if (line.startsWith(QLatin1Char('['))) {
             // Ok, that's a key entry
             PKLAEntry entry;
             entry.filePath = filePath;
-            entry.title = line.split('[').last().split(']').first();
+            entry.title = line.split(QLatin1Char('[')).last().split(QLatin1Char(']')).first();
             entry.filePriority = filePriority;
             entry.fileOrder = priority;
             // Now parse over all the rest
             while (!in.atEnd()) {
                 QString line = in.readLine();
                 if (line.startsWith(QLatin1String("Identity="))) {
-                    entry.identity = line.split("Identity=").last();
+                    entry.identity = line.split(QStringLiteral("Identity=")).last();
                 } else if (line.startsWith(QLatin1String("Action="))) {
-                    entry.action = line.split("Action=").last();
+                    entry.action = line.split(QStringLiteral("Action=")).last();
                 } else if (line.startsWith(QLatin1String("ResultAny="))) {
-                    entry.resultAny = line.split("ResultAny=").last();
+                    entry.resultAny = line.split(QStringLiteral("ResultAny=")).last();
                 } else if (line.startsWith(QLatin1String("ResultInactive="))) {
-                    entry.resultInactive = line.split("ResultInactive=").last();
+                    entry.resultInactive = line.split(QStringLiteral("ResultInactive=")).last();
                 } else if (line.startsWith(QLatin1String("ResultActive="))) {
-                    entry.resultActive = line.split("ResultActive=").last();
-                } else if (line.startsWith('[')) {
+                    entry.resultActive = line.split(QStringLiteral("ResultActive=")).last();
+                } else if (line.startsWith(QLatin1Char('['))) {
                     // Ouch!!
                     qWarning() << "The file appears malformed!! " << filePath;
                     return QVariantList();
@@ -192,7 +192,7 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
     PolkitQt1::Authority::Result result;
     PolkitQt1::SystemBusNameSubject subject(message().service());
 
-    result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changeimplicitauthorizations",
+    result = PolkitQt1::Authority::instance()->checkAuthorizationSync(QStringLiteral("org.kde.polkitkde1.changeimplicitauthorizations"),
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
 
     switch (result) {
@@ -208,22 +208,22 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
     }
 
     foreach (const PKLAEntry &entry, entries) {
-        QDomDocument doc = QDomDocument("policy");
-        QStringList actionNameSplitted = entry.action.split('.');
+        QDomDocument doc = QDomDocument(QStringLiteral("policy"));
+        QStringList actionNameSplitted = entry.action.split(QLatin1Char('.'));
         QString newName;
-        QFile *pfile = new QFile("/usr/share/polkit-1/actions/org.freedesktop.kit.policy");
+        QFile *pfile = new QFile(QStringLiteral("/usr/share/polkit-1/actions/org.freedesktop.kit.policy"));
         // Search for a valid file
         foreach (const QString &nameSplitted, actionNameSplitted) {
             newName.append(nameSplitted);
-            pfile = new QFile("/usr/share/polkit-1/actions/" + newName + ".policy");
+            pfile = new QFile(QStringLiteral("/usr/share/polkit-1/actions/") + newName + QStringLiteral(".policy"));
             if (!pfile->open(QIODevice::ReadOnly)) {
-                newName.append(".");
+                newName.append(QLatin1Char('.'));
                 delete pfile;
                 pfile = NULL;
                 continue;
             }
             if (!pfile->exists()) {
-                newName.append(".");
+                newName.append(QLatin1Char('.'));
                 pfile->close();
                 delete pfile;
                 pfile = NULL;
@@ -249,11 +249,11 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
         }
         pfile->close();
 
-        QDomElement el = doc.firstChildElement("policyconfig").firstChildElement("action");
-        while (!el.isNull() && el.attribute("id", QString()) != entry.action) {
-            el = el.nextSiblingElement("action");
+        QDomElement el = doc.firstChildElement(QStringLiteral("policyconfig")).firstChildElement(QStringLiteral("action"));
+        while (!el.isNull() && el.attribute(QStringLiteral("id")) != entry.action) {
+            el = el.nextSiblingElement(QStringLiteral("action"));
         }
-        el = el.firstChildElement("defaults");
+        el = el.firstChildElement(QStringLiteral("defaults"));
 
         // Delete all its childrens, :P
         QDomNodeList nodelist = el.childNodes();
@@ -262,9 +262,9 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
         }
 
         // Add new elements
-        QDomElement inactiveElem = el.appendChild(doc.createElement("allow_inactive")).toElement();
-        QDomElement activeElem = el.appendChild(doc.createElement("allow_active")).toElement();
-        QDomElement anyElem = el.appendChild(doc.createElement("allow_any")).toElement();
+        QDomElement inactiveElem = el.appendChild(doc.createElement(QStringLiteral("allow_inactive"))).toElement();
+        QDomElement activeElem = el.appendChild(doc.createElement(QStringLiteral("allow_active"))).toElement();
+        QDomElement anyElem = el.appendChild(doc.createElement(QStringLiteral("allow_any"))).toElement();
         inactiveElem.appendChild(doc.createTextNode(entry.resultInactive));
         activeElem.appendChild(doc.createTextNode(entry.resultActive));
         anyElem.appendChild(doc.createTextNode(entry.resultAny));
@@ -290,14 +290,14 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
     PolkitQt1::Authority::Result result;
     PolkitQt1::SystemBusNameSubject subject(message().service());
 
-    result = PolkitQt1::Authority::instance()->checkAuthorizationSync("org.kde.polkitkde1.changeexplicitauthorizations",
+    result = PolkitQt1::Authority::instance()->checkAuthorizationSync(QStringLiteral("org.kde.polkitkde1.changeexplicitauthorizations"),
                                                                       subject, PolkitQt1::Authority::AllowUserInteraction);
     switch (result) {
     case PolkitQt1::Authority::Yes:
         qDebug() << "Authorized successfully";
         break;
     case PolkitQt1::Authority::No:
-        sendErrorReply(QDBusError::AccessDenied, "Saving explicit policy settings is unauthorized");
+        sendErrorReply(QDBusError::AccessDenied, QStringLiteral("Saving explicit policy settings is unauthorized"));
         return;
     default:
         sendErrorReply(QDBusError::AccessDenied, i18n("Unknown reply from QPolkit-1\nError: %1", PolkitQt1::Authority::instance()->errorDetails()));
@@ -311,11 +311,11 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
 
     std::sort(entries.begin(), entries.end(), orderByPriorityLessThan);
 
-    QSettings kdesettings("/etc/polkit-1/polkit-kde-1.conf", QSettings::IniFormat);
-    kdesettings.beginGroup("General");
+    QSettings kdesettings(QStringLiteral("/etc/polkit-1/polkit-kde-1.conf"), QSettings::IniFormat);
+    kdesettings.beginGroup(QStringLiteral("General"));
 
-    QString pathName = QString("/var/lib/polkit-1/localauthority/%1-polkitkde.d/")
-                       .arg(kdesettings.value("PoliciesPriority", 75).toInt());
+    QString pathName = QStringLiteral("/var/lib/polkit-1/localauthority/%1-polkitkde.d/")
+                       .arg(kdesettings.value(QStringLiteral("PoliciesPriority"), 75).toInt());
 
     foreach (const PKLAEntry &entry, entries) {
         QString fullPath;
@@ -325,11 +325,11 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
         if (!entry.filePath.isEmpty()) {
             fullPath = entry.filePath;
         } else {
-            QStringList dotSplittedFileName = entry.action.split('.');
+            QStringList dotSplittedFileName = entry.action.split(QLatin1Char('.'));
 
             // Skip the action name
             dotSplittedFileName.removeLast();
-            dotSplittedFileName << "pkla";
+            dotSplittedFileName << QStringLiteral("pkla");
 
             // Check if the polkitkde.d dir exists. If not, create it.
             QDir path(pathName);
@@ -341,12 +341,12 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
                 }
             }
 
-            fullPath = pathName + dotSplittedFileName.join(".");
+            fullPath = pathName + dotSplittedFileName.join(QStringLiteral("."));
         }
 
         QString contents;
         contents.append(formatPKLAEntry(entry));
-        contents.append('\n');
+        contents.append(QLatin1Char('\n'));
 
         QFile wfile(fullPath);
         if (!wfile.open(QIODevice::Append | QIODevice::Truncate | QIODevice::Text)) {
@@ -370,12 +370,12 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
 QString PolkitKde1Helper::formatPKLAEntry(const PKLAEntry &entry)
 {
     QString retstring;
-    retstring.append(QString("[%1]\n").arg(entry.title));
-    retstring.append(QString("Identity=%1\n").arg(entry.identity));
-    retstring.append(QString("Action=%1\n").arg(entry.action));
-    retstring.append(QString("ResultAny=%1\n").arg(entry.resultAny));
-    retstring.append(QString("ResultInactive=%1\n").arg(entry.resultInactive));
-    retstring.append(QString("ResultActive=%1\n").arg(entry.resultActive));
+    retstring.append(QStringLiteral("[%1]\n").arg(entry.title));
+    retstring.append(QStringLiteral("Identity=%1\n").arg(entry.identity));
+    retstring.append(QStringLiteral("Action=%1\n").arg(entry.action));
+    retstring.append(QStringLiteral("ResultAny=%1\n").arg(entry.resultAny));
+    retstring.append(QStringLiteral("ResultInactive=%1\n").arg(entry.resultInactive));
+    retstring.append(QStringLiteral("ResultActive=%1\n").arg(entry.resultActive));
     return retstring;
 }
 
@@ -385,11 +385,11 @@ QVariantList PolkitKde1Helper::reloadFileList()
     oldNestedList.clear();
 
     // Iterate over the directory and find out everything
-    QDir baseDir("/var/lib/polkit-1/localauthority/");
+    QDir baseDir(QStringLiteral("/var/lib/polkit-1/localauthority/"));
     QFileInfoList baseList = baseDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 
     foreach (const QFileInfo &info, baseList) {
-        int filePriority = info.baseName().split('-').first().toInt();
+        int filePriority = info.baseName().split(QLatin1Char('-')).first().toInt();
         qDebug() << "Iterating over the directory " << info.absoluteFilePath() << ", which has a priority of " << filePriority;
 
         QDir nestedDir(info.absoluteFilePath());

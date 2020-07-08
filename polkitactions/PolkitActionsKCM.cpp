@@ -39,13 +39,13 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget *parent, const QVariantList &args)
     , m_ui(new Ui::PolkitActionsMainView)
 {
     KAboutData *about =
-        new KAboutData("kcm_polkitactions", "kcm_polkitactions",
-                       "1.0.0", i18n("A configuration for polkit-1 system administrators and policy priorities"),
+        new KAboutData(QStringLiteral("kcm_polkitactions"), QStringLiteral("kcm_polkitactions"),
+                       QStringLiteral("1.0.0"), i18n("A configuration for polkit-1 system administrators and policy priorities"),
                        KAboutLicense::GPL, i18n("(c), 2009 Dario Freddi"),
                        i18n("From this module, you can configure system administrators and priorities "
                             "for the policies defined in the Actions module"));
 
-    about->addAuthor(i18n("Dario Freddi"), i18n("Maintainer"), "drf@kde.org", "http://drfav.wordpress.com");
+    about->addAuthor(i18n("Dario Freddi"), i18n("Maintainer"), QStringLiteral("drf@kde.org"), QStringLiteral("http://drfav.wordpress.com"));
 
     setAboutData(about);
 
@@ -101,10 +101,10 @@ void PolkitActionsKCM::save()
     // HACK: Check if we want to save the implicit settings. This will be changed
     // in the future, where implicitEntries() will only contain the changed settings.
     if (m_actionWidget->isImplicitSettingsChanged()) {
-        QDBusMessage messageImplicit = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
-                                                                      "/Helper",
-                                                                      "org.kde.polkitkde1.helper",
-                                                                      QLatin1String("writeImplicitPolicy"));
+        QDBusMessage messageImplicit = QDBusMessage::createMethodCall(QStringLiteral("org.kde.polkitkde1.helper"),
+                                                                      QStringLiteral("/Helper"),
+                                                                      QStringLiteral("org.kde.polkitkde1.helper"),
+                                                                      QStringLiteral("writeImplicitPolicy"));
         QList<QVariant> implicitArgumentList;
         implicitArgumentList << QVariant::fromValue(m_actionWidget->implicitEntries());
 
@@ -126,10 +126,10 @@ void PolkitActionsKCM::save()
     // HACK: Check if we want to save the explicit settings. This will be changed
     // in the future, where entries() will only contain the changed settings.
     if (m_actionWidget->isExplicitSettingsChanged()) {
-        QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
-                                                              "/Helper",
-                                                              "org.kde.polkitkde1.helper",
-                                                              QLatin1String("writePolicy"));
+        QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.kde.polkitkde1.helper"),
+                                                              QStringLiteral("/Helper"),
+                                                              QStringLiteral("org.kde.polkitkde1.helper"),
+                                                              QStringLiteral("writePolicy"));
         QList<QVariant> argumentList;
         QList<PKLAEntry> policies;
         foreach (const PKLAEntry &entry, m_actionWidget->entries()) {

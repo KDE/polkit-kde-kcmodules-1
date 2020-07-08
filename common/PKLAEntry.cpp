@@ -31,17 +31,17 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, PKLAEntry &entry)
 
 PolkitQt1::ActionDescription::ImplicitAuthorization PKLAEntry::implFromText(const QString &text)
 {
-    if (text == "yes") {
+    if (text == QLatin1String("yes")) {
         return PolkitQt1::ActionDescription::Authorized;
-    } else if (text == "no") {
+    } else if (text == QLatin1String("no")) {
         return PolkitQt1::ActionDescription::NotAuthorized;
-    } else if (text == "auth_admin") {
+    } else if (text == QLatin1String("auth_admin")) {
         return PolkitQt1::ActionDescription::AdministratorAuthenticationRequired;
-    } else if (text == "auth_admin_keep") {
+    } else if (text == QLatin1String("auth_admin_keep")) {
         return PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained;
-    } else if (text == "auth_self") {
+    } else if (text == QLatin1String("auth_self")) {
         return PolkitQt1::ActionDescription::AuthenticationRequired;
-    } else if (text == "auth_self_keep") {
+    } else if (text == QLatin1String("auth_self_keep")) {
         return PolkitQt1::ActionDescription::AuthenticationRequiredRetained;
     } else {
         return PolkitQt1::ActionDescription::Unknown;
@@ -52,17 +52,17 @@ QString PKLAEntry::textFromImpl(PolkitQt1::ActionDescription::ImplicitAuthorizat
 {
     switch (implicit) {
     case PolkitQt1::ActionDescription::Authorized:
-        return "yes";
+        return QLatin1String("yes");
     case PolkitQt1::ActionDescription::NotAuthorized:
-        return "no";
+        return QLatin1String("no");
     case PolkitQt1::ActionDescription::AdministratorAuthenticationRequired:
-        return "auth_admin";
+        return QLatin1String("auth_admin");
     case PolkitQt1::ActionDescription::AdministratorAuthenticationRequiredRetained:
-        return "auth_admin_keep";
+        return QLatin1String("auth_admin_keep");
     case PolkitQt1::ActionDescription::AuthenticationRequired:
-        return "auth_self";
+        return QLatin1String("auth_self");
     case PolkitQt1::ActionDescription::AuthenticationRequiredRetained:
-        return "auth_self_keep";
+        return QLatin1String("auth_self_keep");
     default:
         return QString();
     }

@@ -41,10 +41,10 @@ ActionWidget::ActionWidget(QWidget *parent)
     m_ui->setupUi(this);
 
     // Icons 'n stuff
-    m_ui->removeButton->setIcon(QIcon::fromTheme("list-remove"));
-    m_ui->addLocalButton->setIcon(QIcon::fromTheme("list-add"));
-    m_ui->moveDownButton->setIcon(QIcon::fromTheme("go-down"));
-    m_ui->moveUpButton->setIcon(QIcon::fromTheme("go-up"));
+    m_ui->removeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+    m_ui->addLocalButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+    m_ui->moveDownButton->setIcon(QIcon::fromTheme(QStringLiteral("go-down")));
+    m_ui->moveUpButton->setIcon(QIcon::fromTheme(QStringLiteral("go-up")));
 
     m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
     this->setEnabled(false);
@@ -81,16 +81,16 @@ bool ActionWidget::reloadPKLAs()
     m_explicitIsChanged = false;
     m_implicitIsChanged = false;
 
-    QDBusMessage message = QDBusMessage::createMethodCall("org.kde.polkitkde1.helper",
-                                                          "/Helper",
-                                                          "org.kde.polkitkde1.helper",
-                                                          QLatin1String("retrievePolicies"));
+    QDBusMessage message = QDBusMessage::createMethodCall(QStringLiteral("org.kde.polkitkde1.helper"),
+                                                          QStringLiteral("/Helper"),
+                                                          QStringLiteral("org.kde.polkitkde1.helper"),
+                                                          QStringLiteral("retrievePolicies"));
     QDBusPendingCall reply = QDBusConnection::systemBus().asyncCall(message);
     reply.waitForFinished();
     if (reply.isError()) {
         const QDBusError dbusError = reply.error();
         // from PolkitKde1Helper::retrievePolicies()
-        const QString requiredAuth("org.kde.polkit1.readauthorizations");
+        const QString requiredAuth(QStringLiteral("org.kde.polkit1.readauthorizations"));
 
         KMessageBox::detailedError(this,
                                    i18n("<qt>Could not retrieve PolicyKit policies.<br>Either the authorization failed, or there is a system configuration problem."),
@@ -126,7 +126,7 @@ void ActionWidget::computeActionPolicies()
     m_ui->localAuthListWidget->clear();
     std::sort(m_entries.begin(), m_entries.end(), orderByPriorityLessThan);
     foreach (const PKLAEntry &entry, m_entries) {
-        QStringList realActions = entry.action.split(';');
+        QStringList realActions = entry.action.split(QLatin1Char(';'));
         qDebug() << entry.action << m_current_policy.action;
         if (realActions.contains(m_current_policy.action)) {
             // Match! Is it, actually, an implicit override?
@@ -161,15 +161,15 @@ QString ActionWidget::formatPKLAEntry(const PKLAEntry &entry)
 
     if (entry.resultActive != m_current_policy.resultActive) {
         authorizationText.append(i18n("'%1' on active console", entry.resultActive));
-        authorizationText.append(", ");
+        authorizationText.append(QStringLiteral(", "));
     }
     if (entry.resultInactive != m_current_policy.resultInactive) {
         authorizationText.append(i18n("'%1' on inactive console", entry.resultActive));
-        authorizationText.append(", ");
+        authorizationText.append(QStringLiteral(", "));
     }
     if (entry.resultAny != m_current_policy.resultAny) {
         authorizationText.append(i18n("'%1' on any console", entry.resultActive));
-        authorizationText.append(", ");
+        authorizationText.append(QStringLiteral(", "));
     }
 
     if (authorizationText.endsWith(QLatin1String(", "))) {
@@ -177,22 +177,22 @@ QString ActionWidget::formatPKLAEntry(const PKLAEntry &entry)
     }
 
     return i18np("%2 has the following policy: %3", "%2 have the following policy: %3",
-                 entry.identity.split(';').count(), formatIdentities(entry.identity), authorizationText);
+                 entry.identity.split(QLatin1Char(';')).count(), formatIdentities(entry.identity), authorizationText);
 }
 
 QString ActionWidget::formatIdentities(const QString &identities)
 {
     QString rettext;
-    QStringList realIdentities = identities.split(';');
+    QStringList realIdentities = identities.split(QLatin1Char(';'));
 
     foreach (const QString &identity, realIdentities) {
         if (identity.startsWith(QLatin1String("unix-user:"))) {
-            rettext.append(identity.split("unix-user:").last());
-            rettext.append(", ");
+            rettext.append(identity.split(QStringLiteral("unix-user:")).last());
+            rettext.append(QStringLiteral(", "));
         }
         if (identity.startsWith(QLatin1String("unix-group:"))) {
-            rettext.append(i18n("%1 group", identity.split("unix-group:").last()));
-            rettext.append(", ");
+            rettext.append(i18n("%1 group", identity.split(QStringLiteral("unix-group:")).last()));
+            rettext.append(QStringLiteral(", "));
         }
     }
 
@@ -340,9 +340,9 @@ void ActionWidget::addNewPKLAEntry(const PKLAEntry &entry)
 {
     PKLAEntry toInsert(entry);
     // Match it to the current config value
-    QSettings settings("/etc/polkit-1/polkit-kde-1.conf", QSettings::IniFormat);
-    settings.beginGroup("General");
-    toInsert.filePriority = settings.value("PoliciesPriority", 75).toInt();
+    QSettings settings(QStringLiteral("/etc/polkit-1/polkit-kde-1.conf"), QSettings::IniFormat);
+    settings.beginGroup(QStringLiteral("General"));
+    toInsert.filePriority = settings.value(QStringLiteral("PoliciesPriority"), 75).toInt();
 
     // If there's no file order, append it to the end of the current entries
     if (toInsert.fileOrder < 0) {

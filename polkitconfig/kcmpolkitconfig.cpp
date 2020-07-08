@@ -145,11 +145,11 @@ void KCMPolkitConfig::save()
     QString identities;
     for (int i = 0; i < m_identitiesLayout->count(); ++i) {
         QLayoutItem *item = m_identitiesLayout->itemAt(i);
-        if (item != 0) {
+        if (item != nullptr) {
             QWidget *widget = item->widget();
-            if (widget != 0) {
+            if (widget != nullptr) {
                 IdentityWidget *identityWidget = qobject_cast<IdentityWidget *>(widget);
-                if (identityWidget != 0) {
+                if (identityWidget != nullptr) {
                     // Whew, let's add it
                     if (identityWidget->identityType() == IdentityWidget::UserIdentity) {
                         identities.append(QStringLiteral("unix-user:"));

@@ -37,7 +37,7 @@ namespace PolkitKde
 class PolicyItem
 {
 public:
-    explicit PolicyItem(bool isGroup, PolicyItem *parent = 0);
+    explicit PolicyItem(bool isGroup, PolicyItem *parent = nullptr);
     ~PolicyItem();
 
     void appendChild(PolicyItem *child);

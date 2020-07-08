@@ -43,7 +43,7 @@ public:
         PolkitEntryRole = 43
     };
 
-    PoliciesModel(QObject *parent = 0);
+    PoliciesModel(QObject *parent = nullptr);
     ~PoliciesModel();
 
     QVariant data(const QModelIndex &index, int role) const override;

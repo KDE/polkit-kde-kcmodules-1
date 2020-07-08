@@ -32,7 +32,7 @@ class AuthorizationsFilterModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
-    AuthorizationsFilterModel(QObject *parent = 0);
+    AuthorizationsFilterModel(QObject *parent = nullptr);
     ~AuthorizationsFilterModel();
 
 protected:

@@ -33,7 +33,7 @@ class PkItemDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    PkItemDelegate(QObject *parent = 0);
+    PkItemDelegate(QObject *parent = nullptr);
     ~PkItemDelegate();
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
@@ -46,7 +46,7 @@ class PKLAItemDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    PKLAItemDelegate(QObject *parent = 0);
+    PKLAItemDelegate(QObject *parent = nullptr);
     ~PKLAItemDelegate();
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;

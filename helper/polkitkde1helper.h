@@ -23,7 +23,7 @@ class PolkitKde1Helper : public QObject, protected QDBusContext
     Q_CLASSINFO("D-Bus Interface", "org.kde.polkitkde1.helper")
 
 public:
-    PolkitKde1Helper(QObject *parent = 0);
+    PolkitKde1Helper(QObject *parent = nullptr);
     virtual ~PolkitKde1Helper();
 
 public Q_SLOTS:

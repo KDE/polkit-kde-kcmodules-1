@@ -29,7 +29,7 @@ class ActionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ActionWidget(QWidget *parent = 0);
+    explicit ActionWidget(QWidget *parent = nullptr);
     virtual ~ActionWidget();
 
     static int comboBoxIndexFor(PolkitQt1::ActionDescription::ImplicitAuthorization auth);

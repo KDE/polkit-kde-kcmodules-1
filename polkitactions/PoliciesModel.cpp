@@ -60,7 +60,7 @@ QVariant PoliciesModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags PoliciesModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
-        return 0;
+        return Qt::NoItemFlags;
     }
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -230,7 +230,7 @@ void PoliciesModel::insertOrUpdate(const QStringList &actionPath, const PolkitQt
         // the leve we are about to insert the
         // action itself
         QString path = actionPath.join(QStringLiteral("."));
-        PolicyItem *action = 0;
+        PolicyItem *action = nullptr;
         for (int i = 0; i < parent->childCount(); i++) {
             if (!parent->child(i)->isGroup() && path == parent->child(i)->data(PathRole)) {
                 action = parent->child(i);
@@ -259,7 +259,7 @@ void PoliciesModel::insertOrUpdate(const QStringList &actionPath, const PolkitQt
     } else {
         // here we are adding or finding a group
         QString path = actionPath.at(level);
-        PolicyItem *group = 0;
+        PolicyItem *group = nullptr;
         for (int i = 0; i < parent->childCount(); i++) {
             if (parent->child(i)->isGroup() && path == parent->child(i)->data(PathRole)) {
                 group = parent->child(i);

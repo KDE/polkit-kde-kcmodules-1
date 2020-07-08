@@ -27,8 +27,8 @@ public:
         GroupIdentity = 1
     };
 
-    IdentityWidget(IdentityType type, const QString &name, QWidget *parent = 0);
-    IdentityWidget(QWidget *parent = 0);
+    IdentityWidget(IdentityType type, const QString &name, QWidget *parent = nullptr);
+    IdentityWidget(QWidget *parent = nullptr);
     ~IdentityWidget();
     void setIdentityType(IdentityType type);
     void setIdentityName(const QString &name);

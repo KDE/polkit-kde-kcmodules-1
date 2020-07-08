@@ -149,9 +149,9 @@ void ActionWidget::computeActionPolicies()
 
     // Trigger the selection
     if (!m_ui->localAuthListWidget->selectedItems().isEmpty()) {
-        explicitSelectionChanged(m_ui->localAuthListWidget->selectedItems().first(), 0);
+        explicitSelectionChanged(m_ui->localAuthListWidget->selectedItems().first(), nullptr);
     } else {
-        explicitSelectionChanged(0, 0);
+        explicitSelectionChanged(nullptr, nullptr);
     }
 }
 

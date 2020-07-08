@@ -32,7 +32,7 @@ class PolkitActionsKCM : public KCModule
 {
     Q_OBJECT
 public:
-    explicit PolkitActionsKCM(QWidget *parent = 0, const QVariantList &args = QVariantList());
+    explicit PolkitActionsKCM(QWidget *parent = nullptr, const QVariantList &args = QVariantList());
     virtual ~PolkitActionsKCM();
 
     void load() override;

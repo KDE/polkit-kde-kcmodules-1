@@ -102,9 +102,10 @@ bool ActionWidget::reloadPKLAs()
     }
 
     const QDBusMessage r = reply.reply();
-    if (r.arguments().count() >= 1) {
+    const auto arguments = r.arguments();
+    if (arguments.count() >= 1) {
         QVariantList vlist;
-        r.arguments().first().value<QDBusArgument>() >> vlist;
+        arguments.first().value<QDBusArgument>() >> vlist;
         for (const QVariant &variant : qAsConst(vlist)) {
             PKLAEntry entry;
             variant.value<QDBusArgument>() >> entry;

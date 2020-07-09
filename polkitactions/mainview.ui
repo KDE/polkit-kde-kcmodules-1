@@ -14,7 +14,11 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLineEdit" name="searchLine"/>
+      <widget class="QLineEdit" name="searchLine">
+       <property name="placeholderText">
+        <string comment="@info:placeholder">Search...</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QTreeView" name="treeView"/>

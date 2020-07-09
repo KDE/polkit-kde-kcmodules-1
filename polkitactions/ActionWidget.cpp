@@ -49,24 +49,24 @@ ActionWidget::ActionWidget(QWidget *parent)
     m_ui->localAuthListWidget->setItemDelegate(new PKLAItemDelegate);
     this->setEnabled(false);
 
-    connect(m_ui->localAuthListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
-            this, SLOT(editExplicitPKLAEntry(QListWidgetItem*)));
-    connect(m_ui->localAuthListWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
-            this, SLOT(explicitSelectionChanged(QListWidgetItem*,QListWidgetItem*)));
-    connect(m_ui->addLocalButton, SIGNAL(clicked(bool)),
-            this, SLOT(addExplicitPKLAEntry()));
-    connect(m_ui->removeButton, SIGNAL(clicked(bool)),
-            this, SLOT(removePKLAEntry()));
-    connect(m_ui->moveDownButton, SIGNAL(clicked(bool)),
-            this, SLOT(movePKLADown()));
-    connect(m_ui->moveUpButton, SIGNAL(clicked(bool)),
-            this, SLOT(movePKLAUp()));
-    connect(m_ui->anyComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(anyImplicitSettingChanged()));
-    connect(m_ui->inactiveComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(inactiveImplicitSettingChanged()));
-    connect(m_ui->activeComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(activeImplicitSettingChanged()));
+    connect(m_ui->localAuthListWidget, &QListWidget::itemDoubleClicked,
+            this, &ActionWidget::editExplicitPKLAEntry);
+    connect(m_ui->localAuthListWidget, &QListWidget::currentItemChanged,
+            this, &ActionWidget::explicitSelectionChanged);
+    connect(m_ui->addLocalButton, &QAbstractButton::clicked,
+            this, &ActionWidget::addExplicitPKLAEntry);
+    connect(m_ui->removeButton, &QAbstractButton::clicked,
+            this, &ActionWidget::removePKLAEntry);
+    connect(m_ui->moveDownButton, &QAbstractButton::clicked,
+            this, &ActionWidget::movePKLADown);
+    connect(m_ui->moveUpButton, &QAbstractButton::clicked,
+            this, &ActionWidget::movePKLAUp);
+    connect(m_ui->anyComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &ActionWidget::anyImplicitSettingChanged);
+    connect(m_ui->inactiveComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &ActionWidget::inactiveImplicitSettingChanged);
+    connect(m_ui->activeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &ActionWidget::activeImplicitSettingChanged);
 }
 
 ActionWidget::~ActionWidget()

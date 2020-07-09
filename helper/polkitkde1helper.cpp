@@ -36,13 +36,13 @@ PolkitKde1Helper::PolkitKde1Helper(QObject *parent)
     // Register the DBus service
     if (!QDBusConnection::systemBus().registerService(QStringLiteral("org.kde.polkitkde1.helper"))) {
         qDebug() << QDBusConnection::systemBus().lastError().message();;
-        QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit()));
+        QTimer::singleShot(0, QCoreApplication::instance(), &QCoreApplication::quit);
         return;
     }
 
     if (!QDBusConnection::systemBus().registerObject(QStringLiteral("/Helper"), this)) {
         qDebug() << "unable to register service interface to dbus";
-        QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit()));
+        QTimer::singleShot(0, QCoreApplication::instance(), &QCoreApplication::quit);
         return;
     }
 }

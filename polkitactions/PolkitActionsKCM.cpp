@@ -62,16 +62,16 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget *parent, const QVariantList &args)
     m_ui->treeView->setModel(m_proxyModel);
     m_ui->treeView->setItemDelegate(new PolkitKde::PkItemDelegate(this));
 
-    connect(m_ui->searchLine, SIGNAL(textChanged(QString)),
-            m_proxyModel, SLOT(setFilterRegExp(QString)));
-    connect(m_ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)));
+    connect(m_ui->searchLine, &QLineEdit::textChanged,
+            m_proxyModel, QOverload<const QString &>::of(&PolkitKde::AuthorizationsFilterModel::setFilterRegExp));
+    connect(m_ui->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &PolkitActionsKCM::slotCurrentChanged);
 
     // Initialize
-    connect(PolkitQt1::Authority::instance(), SIGNAL(checkAuthorizationFinished(PolkitQt1::Authority::Result)),
-            this, SLOT(slotCheckAuthorizationFinished(PolkitQt1::Authority::Result)));
-    connect(PolkitQt1::Authority::instance(), SIGNAL(enumerateActionsFinished(PolkitQt1::ActionDescription::List)),
-            m_model, SLOT(setCurrentEntries(PolkitQt1::ActionDescription::List)));
+    connect(PolkitQt1::Authority::instance(), &PolkitQt1::Authority::checkAuthorizationFinished,
+            this, &PolkitActionsKCM::slotCheckAuthorizationFinished);
+    connect(PolkitQt1::Authority::instance(), &PolkitQt1::Authority::enumerateActionsFinished,
+            m_model, &PolkitKde::PoliciesModel::setCurrentEntries);
     PolkitQt1::Authority::instance()->enumerateActions();
 
     // Initialize ActionWidget
@@ -79,9 +79,9 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget *parent, const QVariantList &args)
         layout()->takeAt(1)->widget()->deleteLater();
     }
     m_actionWidget = new PolkitKde::ActionWidget(this);
-    connect(m_actionWidget, SIGNAL(changed()), this, SLOT(changed()));
-    connect(this, SIGNAL(implicitSaved()), m_actionWidget, SLOT(implicitSettingsSaved()));
-    connect(this, SIGNAL(explicitSaved()), m_actionWidget, SLOT(explicitSettingsSaved()));
+    connect(m_actionWidget, &PolkitKde::ActionWidget::changed, this, QOverload<>::of(&PolkitActionsKCM::changed));
+    connect(this, &PolkitActionsKCM::implicitSaved, m_actionWidget, &PolkitKde::ActionWidget::implicitSettingsSaved);
+    connect(this, &PolkitActionsKCM::explicitSaved, m_actionWidget, &PolkitKde::ActionWidget::explicitSettingsSaved);
     layout()->addWidget(m_actionWidget);
 }
 

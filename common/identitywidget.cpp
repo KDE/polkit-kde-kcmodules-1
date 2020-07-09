@@ -42,16 +42,16 @@ void IdentityWidget::init(IdentityType type)
     m_ui->identityTypeBox->setCurrentIndex((int)type);
     populateIdentityNameBox();
 
-    connect(m_ui->identityTypeBox, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(changed()));
-    connect(m_ui->identityTypeBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(populateIdentityNameBox()));
-    connect(m_ui->identityNameBox, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(changed()));
-    connect(m_ui->removeButton, SIGNAL(clicked(bool)),
-            this, SIGNAL(changed()));
-    connect(m_ui->removeButton, SIGNAL(clicked(bool)),
-            this, SLOT(deleteLater()));
+    connect(m_ui->identityTypeBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &IdentityWidget::changed);
+    connect(m_ui->identityTypeBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &IdentityWidget::populateIdentityNameBox);
+    connect(m_ui->identityNameBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &IdentityWidget::changed);
+    connect(m_ui->removeButton, &QAbstractButton::clicked,
+            this, &IdentityWidget::changed);
+    connect(m_ui->removeButton, &QAbstractButton::clicked,
+            this, &QObject::deleteLater);
 }
 
 QString IdentityWidget::identityName() const

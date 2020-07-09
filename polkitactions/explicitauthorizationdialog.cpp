@@ -62,7 +62,7 @@ void ExplicitAuthorizationDialog::init()
     m_identitiesLayout = new QVBoxLayout;
     m_identitiesLayout->addStretch();
     m_ui->scrollAreaWidgetContents->setLayout(m_identitiesLayout);
-    connect(m_ui->addButton, SIGNAL(clicked(bool)), this, SLOT(addIdentity()));
+    connect(m_ui->addButton, &QAbstractButton::clicked, this, &ExplicitAuthorizationDialog::addIdentity);
 }
 
 void ExplicitAuthorizationDialog::addIdentity()

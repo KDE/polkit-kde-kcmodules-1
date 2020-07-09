@@ -141,7 +141,7 @@ void ActionWidget::computeActionPolicies()
                 // TODO: Add it to the local auths
                 //LocalAuthorization *auth = new LocalAuthorization(entry);
                 qDebug() << "Found PKLA override";
-                QListWidgetItem *item = new QListWidgetItem(entry.title);
+                auto *item = new QListWidgetItem(entry.title);
                 item->setData(Qt::UserRole, formatPKLAEntry(entry));
                 m_ui->localAuthListWidget->addItem(item);
             // }

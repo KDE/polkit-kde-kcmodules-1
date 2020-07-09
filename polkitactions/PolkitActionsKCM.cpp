@@ -37,7 +37,7 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget *parent, const QVariantList &args)
     : KCModule(parent, args)
     , m_ui(new Ui::PolkitActionsMainView)
 {
-    KAboutData *about =
+    auto *about =
         new KAboutData(QStringLiteral("kcm_polkitactions"), QStringLiteral("kcm_polkitactions"),
                        QStringLiteral("1.0.0"), i18n("A configuration for polkit-1 system administrators and policy priorities"),
                        KAboutLicense::GPL, i18n("(c), 2009 Dario Freddi"),

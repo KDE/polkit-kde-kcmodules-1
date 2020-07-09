@@ -36,7 +36,7 @@ K_PLUGIN_FACTORY(KCMPolkitConfigFactory,
 KCMPolkitConfig::KCMPolkitConfig(QWidget *parent, const QVariantList &args)
     : KCModule(parent, args)
 {
-    KAboutData *about =
+    auto *about =
         new KAboutData(QStringLiteral("kcm_polkitconfig"), QStringLiteral("kcm_polkitconfig"),
                        QStringLiteral("1.0.0"), i18n("A configuration for polkit-1 system administrators and policy priorities"),
                        KAboutLicense::GPL, i18n("(c), 2009 Dario Freddi"),
@@ -128,7 +128,7 @@ void KCMPolkitConfig::load()
             qDebug() << "It's a group";
         }
         QString name = identity.split(QLatin1Char(':')).last();
-        IdentityWidget *iw = new IdentityWidget(type, name);
+        auto *iw = new IdentityWidget(type, name);
         m_identitiesLayout->insertWidget(m_identitiesLayout->count() - 1, iw);
         connect(iw, &IdentityWidget::changed, this, QOverload<>::of(&KCMPolkitConfig::changed));
     }
@@ -147,7 +147,7 @@ void KCMPolkitConfig::save()
         if (item != nullptr) {
             QWidget *widget = item->widget();
             if (widget != nullptr) {
-                IdentityWidget *identityWidget = qobject_cast<IdentityWidget *>(widget);
+                auto *identityWidget = qobject_cast<IdentityWidget *>(widget);
                 if (identityWidget != nullptr) {
                     // Whew, let's add it
                     if (identityWidget->identityType() == IdentityWidget::UserIdentity) {
@@ -183,7 +183,7 @@ void KCMPolkitConfig::save()
 
 void KCMPolkitConfig::addNewIdentity()
 {
-    IdentityWidget *iw = new IdentityWidget();
+    auto *iw = new IdentityWidget();
     m_identitiesLayout->insertWidget(m_identitiesLayout->count() - 1, iw);
     connect(iw, &IdentityWidget::changed, this, QOverload<>::of(&KCMPolkitConfig::changed));
     changed();

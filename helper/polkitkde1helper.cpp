@@ -211,7 +211,7 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
         QDomDocument doc = QDomDocument(QStringLiteral("policy"));
         QStringList actionNameSplitted = entry.action.split(QLatin1Char('.'));
         QString newName;
-        QFile *pfile = new QFile(QStringLiteral("/usr/share/polkit-1/actions/org.freedesktop.kit.policy"));
+        auto *pfile = new QFile(QStringLiteral("/usr/share/polkit-1/actions/org.freedesktop.kit.policy"));
         // Search for a valid file
         for (const QString &nameSplitted : qAsConst(actionNameSplitted)) {
             newName.append(nameSplitted);

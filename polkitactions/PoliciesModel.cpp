@@ -52,7 +52,7 @@ QVariant PoliciesModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    PolicyItem *item = static_cast<PolicyItem *>(index.internalPointer());
+    auto *item = static_cast<PolicyItem *>(index.internalPointer());
 
     return item->data(role);
 }
@@ -94,7 +94,7 @@ QModelIndex PoliciesModel::parent(const QModelIndex &index) const
         return QModelIndex();
     }
 
-    PolicyItem *childItem = static_cast<PolicyItem *>(index.internalPointer());
+    auto *childItem = static_cast<PolicyItem *>(index.internalPointer());
     PolicyItem *parentItem = childItem->parent();
 
     if (parentItem == rootItem) {

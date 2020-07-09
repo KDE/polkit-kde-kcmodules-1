@@ -42,7 +42,7 @@ ExplicitAuthorizationDialog::~ExplicitAuthorizationDialog()
 
 void ExplicitAuthorizationDialog::init()
 {
-    QWidget *widget = new QWidget;
+    auto *widget = new QWidget;
     m_ui = new Ui::ExplicitAuthorizationWidget;
     m_ui->setupUi(widget);
 
@@ -67,7 +67,7 @@ void ExplicitAuthorizationDialog::init()
 
 void ExplicitAuthorizationDialog::addIdentity()
 {
-    IdentityWidget *iw = new IdentityWidget();
+    auto *iw = new IdentityWidget();
     m_identitiesLayout->insertWidget(m_identitiesLayout->count() - 1, iw);
 }
 
@@ -106,7 +106,7 @@ void ExplicitAuthorizationDialog::commitChangesToPKLA()
         if (item != nullptr) {
             QWidget *widget = item->widget();
             if (widget != nullptr) {
-                IdentityWidget *identityWidget = qobject_cast<IdentityWidget *>(widget);
+                auto *identityWidget = qobject_cast<IdentityWidget *>(widget);
                 if (identityWidget != nullptr) {
                     // Whew, let's add it
                     if (identityWidget->identityType() == IdentityWidget::UserIdentity) {

@@ -219,14 +219,14 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
             if (!pfile->open(QIODevice::ReadOnly)) {
                 newName.append(QLatin1Char('.'));
                 delete pfile;
-                pfile = NULL;
+                pfile = nullptr;
                 continue;
             }
             if (!pfile->exists()) {
                 newName.append(QLatin1Char('.'));
                 pfile->close();
                 delete pfile;
-                pfile = NULL;
+                pfile = nullptr;
                 continue;
             }
 
@@ -235,7 +235,7 @@ void PolkitKde1Helper::writeImplicitPolicy(const QList<PKLAEntry> &policy)
         }
 
         // Check if the file is valid
-        if (pfile == NULL) {
+        if (pfile == nullptr) {
             sendErrorReply(QDBusError::Failed, i18n("Did not find a valid policy file for the implicit action: %1.", entry.action));
             return;
         }

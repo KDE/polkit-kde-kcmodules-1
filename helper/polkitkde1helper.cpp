@@ -317,6 +317,8 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
     QString pathName = QStringLiteral("/var/lib/polkit-1/localauthority/%1-polkitkde.d/")
                        .arg(kdesettings.value(QStringLiteral("PoliciesPriority"), 75).toInt());
 
+    QMap<QString, QString> pathContentsMap;
+
     for (const PKLAEntry &entry : qAsConst(entries)) {
         QString fullPath;
 
@@ -348,11 +350,17 @@ void PolkitKde1Helper::writePolicy(const QList<PKLAEntry> &policy)
         contents.append(formatPKLAEntry(entry));
         contents.append(QLatin1Char('\n'));
 
+        pathContentsMap[fullPath].append(contents);
+    }
+
+    for (auto it = pathContentsMap.constBegin(); it != pathContentsMap.constEnd(); ++it) {
+        const QString &fullPath = it.key();
         QFile wfile(fullPath);
         if (!wfile.open(QIODevice::Append | QIODevice::Truncate | QIODevice::Text)) {
             sendErrorReply(QDBusError::Failed, i18n("Error opening the explicit setting file: %1\nError code: %2.", wfile.fileName(), wfile.error()));
             return;
         }
+        const QString &contents = it.value();
         if (wfile.write(contents.toUtf8()) < 0) {
             sendErrorReply(QDBusError::Failed, i18n("Error occurred while writing explicit settings to file: %1.", wfile.fileName()));
             return;

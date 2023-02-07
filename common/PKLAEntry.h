@@ -12,7 +12,7 @@
 #define PKLAENTRY_H
 
 #include <QMetaType>
-#include <polkit-qt5-1/PolkitQt1/ActionDescription>
+#include <PolkitQt1/ActionDescription>
 
 class QDBusArgument;
 

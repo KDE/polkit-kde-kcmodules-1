@@ -31,7 +31,7 @@ set(polkitkde1helper_SRCS
     polkitkde1helper.cpp
 )
 
-qt5_add_dbus_adaptor(polkitkde1helper_SRCS
+qt_add_dbus_adaptor(polkitkde1helper_SRCS
     org.kde.polkitkde1.helper.xml
     polkitkde1helper.h
     PolkitKde1Helper

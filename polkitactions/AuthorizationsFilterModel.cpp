@@ -81,5 +81,3 @@ bool AuthorizationsFilterModel::groupHasMatchingItem(const QModelIndex &parent) 
 }
 
 }
-
-#include "AuthorizationsFilterModel.moc"

@@ -79,7 +79,7 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget *parent, const QVariantList &args)
         layout()->takeAt(1)->widget()->deleteLater();
     }
     m_actionWidget = new PolkitKde::ActionWidget(this);
-    connect(m_actionWidget, &PolkitKde::ActionWidget::changed, this, QOverload<>::of(&PolkitActionsKCM::changed));
+    connect(m_actionWidget, &PolkitKde::ActionWidget::changed, this, &PolkitActionsKCM::markAsChanged);
     connect(this, &PolkitActionsKCM::implicitSaved, m_actionWidget, &PolkitKde::ActionWidget::implicitSettingsSaved);
     connect(this, &PolkitActionsKCM::explicitSaved, m_actionWidget, &PolkitKde::ActionWidget::explicitSettingsSaved);
     layout()->addWidget(m_actionWidget);
@@ -116,7 +116,7 @@ void PolkitActionsKCM::save()
                                        replyImplicit.error().name(),
                                        replyImplicit.error().message()
                                       );
-            changed();
+            markAsChanged();
         } else {
             emit implicitSaved();
         }
@@ -144,7 +144,7 @@ void PolkitActionsKCM::save()
                                        reply.error().name(),
                                        reply.error().message()
                                       );
-            changed();
+            markAsChanged();
         } else {
             emit explicitSaved();
         }

@@ -61,9 +61,9 @@ KCMPolkitConfig::KCMPolkitConfig(QWidget *parent, const QVariantList &args)
     connect(m_ui->addIdentityButton, &QAbstractButton::clicked,
             this, &KCMPolkitConfig::addNewIdentity);
     connect(m_ui->configPrioritySpin, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, QOverload<>::of(&KCMPolkitConfig::changed));
+            this, &KCMPolkitConfig::markAsChanged);
     connect(m_ui->policyPrioritySpin, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, QOverload<>::of(&KCMPolkitConfig::changed));
+            this, &KCMPolkitConfig::markAsChanged);
 }
 
 KCMPolkitConfig::~KCMPolkitConfig()
@@ -130,7 +130,7 @@ void KCMPolkitConfig::load()
         QString name = identity.split(QLatin1Char(':')).last();
         auto *iw = new IdentityWidget(type, name);
         m_identitiesLayout->insertWidget(m_identitiesLayout->count() - 1, iw);
-        connect(iw, &IdentityWidget::changed, this, QOverload<>::of(&KCMPolkitConfig::changed));
+        connect(iw, &IdentityWidget::changed, this, &KCMPolkitConfig::markAsChanged);
     }
 
     // Set up the other tab
@@ -185,7 +185,7 @@ void KCMPolkitConfig::addNewIdentity()
 {
     auto *iw = new IdentityWidget();
     m_identitiesLayout->insertWidget(m_identitiesLayout->count() - 1, iw);
-    connect(iw, &IdentityWidget::changed, this, QOverload<>::of(&KCMPolkitConfig::changed));
-    changed();
+    connect(iw, &IdentityWidget::changed, this, &KCMPolkitConfig::markAsChanged);
+    markAsChanged();
 }
 

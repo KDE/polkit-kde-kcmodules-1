@@ -130,13 +130,13 @@ QSize PkItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelI
     if (index.data(PolkitKde::PoliciesModel::IsGroupRole).toBool()) {
         dFont.setBold(true);
         d_fm = QFontMetrics(dFont);
-        return QSize(qMax(d_fm.width(index.data(Qt::DisplayRole).toString()),
-                          d_fm.width(index.data(PolkitKde::PoliciesModel::PathRole).toString())),
+        return QSize(qMax(d_fm.horizontalAdvance(index.data(Qt::DisplayRole).toString()),
+                          d_fm.horizontalAdvance(index.data(PolkitKde::PoliciesModel::PathRole).toString())),
                      qMax(GROUP_ROW_HEIGHT, d_fm.height()));
     }
 
-    return QSize(qMax(d_fm.width(index.data(Qt::DisplayRole).toString()),
-                      d_fm.width(index.data(PolkitKde::PoliciesModel::PathRole).toString())),
+    return QSize(qMax(d_fm.horizontalAdvance(index.data(Qt::DisplayRole).toString()),
+                      d_fm.horizontalAdvance(index.data(PolkitKde::PoliciesModel::PathRole).toString())),
                  qMax(ITEM_ROW_HEIGHT, d_fm.height() + r_fm.height()));
 }
 
@@ -223,8 +223,8 @@ QSize PKLAItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMode
     QFontMetrics d_fm(dFont); // description font
     QFontMetrics r_fm(rFont); // raw string font
 
-    return QSize(qMax(d_fm.width(index.data(Qt::DisplayRole).toString()),
-                      d_fm.width(index.data(PolkitKde::PoliciesModel::PathRole).toString())),
+    return QSize(qMax(d_fm.horizontalAdvance(index.data(Qt::DisplayRole).toString()),
+                      d_fm.horizontalAdvance(index.data(PolkitKde::PoliciesModel::PathRole).toString())),
                  qMax(ITEM_ROW_HEIGHT, d_fm.height() + r_fm.height()));
 }
 

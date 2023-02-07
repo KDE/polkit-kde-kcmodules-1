@@ -1,113 +1,81 @@
 /*
-*   Copyright (C) 2008 Nicola Gigante <nicola.gigante@gmail.com>
-*   Copyright (C) 2009-2010 Dario Freddi <drf@kde.org>
-*
-*   This program is free software; you can redistribute it and/or modify
-*   it under the terms of the GNU Lesser General Public License as published by
-*   the Free Software Foundation; either version 2.1 of the License, or
-*   (at your option) any later version.
-*
-*   This program is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU Lesser General Public License
-*   along with this program; if not, write to the
-*   Free Software Foundation, Inc.,
-*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .
+    SPDX-FileCopyrightText: 2008 Nicola Gigante <nicola.gigante@gmail.com>
+    SPDX-FileCopyrightText: 2009-2010 Dario Freddi <drf@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
-#include "policy-gen.h"
+#include <policy-gen/policy-gen.h>
 
-#include <cstdio>
 #include <QDebug>
 #include <QTextStream>
 
-const char header[] = ""
-                      "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-                      "<!DOCTYPE policyconfig PUBLIC\n"
-                      "\"-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN\"\n"
-                      "\"http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd\">\n"
-                      "<policyconfig>\n";
+#include <cstdio>
 
-const char policy_tag[] = ""
-                          "      <defaults>\n"
-                          "         <allow_inactive>%1</allow_inactive>\n"
-                          "         <allow_active>%2</allow_active>\n"
-                          "      </defaults>\n";
+const char header[] =
+    ""
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+    "<!DOCTYPE policyconfig PUBLIC\n"
+    "\"-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN\"\n"
+    "\"http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd\">\n"
+    "<policyconfig>\n";
+
+const char policy_tag[] =
+    ""
+    "      <defaults>\n"
+    "         <allow_inactive>%1</allow_inactive>\n"
+    "         <allow_active>%2</allow_active>\n"
+    "      </defaults>\n";
 
 const char dent[] = "   ";
 
 void output(const QList<Action> &actions, const QMap<QString, QString> &domain)
 {
     QTextStream out(stdout);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     out.setCodec("UTF-8");
+#endif
 
     out << header;
 
-    // Blacklisted characters + replacements
-    QMap< QChar, QString > blacklist;
-    blacklist.insert(QLatin1Char('&'), QLatin1String("&amp;"));
-
     if (domain.contains(QLatin1String("vendor"))) {
-        QString vendor = domain[QLatin1String("vendor")];
-        for (QMap< QChar, QString >::const_iterator blI = blacklist.constBegin(), total = blacklist.constEnd(); blI != total; ++blI) {
-            vendor.replace(blI.key(), blI.value());
-        }
-        out << "<vendor>" << vendor << "</vendor>\n";
+        out << "<vendor>" << domain[QStringLiteral("vendor")].toHtmlEscaped() << "</vendor>\n";
     }
     if (domain.contains(QLatin1String("vendorurl"))) {
-        out << "<vendor_url>" << domain[QLatin1String("vendorurl")] << "</vendor_url>\n";
+        out << "<vendor_url>" << domain[QStringLiteral("vendorurl")] << "</vendor_url>\n";
     }
     if (domain.contains(QLatin1String("icon"))) {
-        out << "<icon_name>" << domain[QLatin1String("icon")] << "</icon_name>\n";
+        out << "<icon_name>" << domain[QStringLiteral("icon")] << "</icon_name>\n";
     }
 
     for (const Action &action : actions) {
         out << dent << "<action id=\"" << action.name << "\" >\n";
 
         // Not a typo, messages and descriptions are actually inverted
-        for (QMap< QString, QString >::const_iterator i = action.messages.constBegin(); i != action.messages.constEnd(); ++i) {
+        for (auto i = action.messages.cbegin(); i != action.messages.cend(); ++i) {
             out << dent << dent << "<description";
             if (i.key() != QLatin1String("en")) {
                 out << " xml:lang=\"" << i.key() << '"';
             }
 
-            QMap< QChar, QString >::const_iterator blI;
-            QString description = i.value();
-            for (blI = blacklist.constBegin(); blI != blacklist.constEnd(); ++blI) {
-                description.replace(blI.key(), blI.value());
-            }
-
-            out << '>' << description << "</description>\n";
+            out << '>' << i.value().toHtmlEscaped() << "</description>\n";
         }
 
-        for (QMap< QString, QString >::const_iterator i = action.descriptions.constBegin();
-                i != action.descriptions.constEnd();
-                ++i) {
+        for (auto i = action.descriptions.cbegin(); i != action.descriptions.cend(); ++i) {
             out << dent << dent << "<message";
             if (i.key() != QLatin1String("en")) {
                 out << " xml:lang=\"" << i.key() << '"';
             }
 
-            QMap< QChar, QString >::const_iterator blI;
-            QString message = i.value();
-            for (blI = blacklist.constBegin(); blI != blacklist.constEnd(); ++blI) {
-                message.replace(blI.key(), blI.value());
-            }
-
-            out << '>' << message << "</message>\n";
+            out << '>' << i.value().toHtmlEscaped() << "</message>\n";
         }
 
         QString policy = action.policy;
         QString policyInactive = action.policyInactive.isEmpty() ? QLatin1String("no") : action.policyInactive;
-        if (!action.persistence.isEmpty() && policy != QLatin1String("yes") && policy !=
-                QLatin1String("no")) {
+        if (!action.persistence.isEmpty() && policy != QLatin1String("yes") && policy != QLatin1String("no")) {
             policy += QLatin1String("_keep");
         }
-        if (!action.persistence.isEmpty() && policyInactive != QLatin1String("yes") && policyInactive !=
-                QLatin1String("no")) {
+        if (!action.persistence.isEmpty() && policyInactive != QLatin1String("yes") && policyInactive != QLatin1String("no")) {
             policyInactive += QLatin1String("_keep");
         }
 

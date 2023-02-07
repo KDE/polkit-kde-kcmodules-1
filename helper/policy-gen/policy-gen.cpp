@@ -1,34 +1,21 @@
 /*
-*   Copyright (C) 2008 Nicola Gigante <nicola.gigante@gmail.com>
-*   Copyright (C) 2009 Dario Freddi <drf@kde.org>
-*
-*   This program is free software; you can redistribute it and/or modify
-*   it under the terms of the GNU Lesser General Public License as published by
-*   the Free Software Foundation; either version 2.1 of the License, or
-*   (at your option) any later version.
-*
-*   This program is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU Lesser General Public License
-*   along with this program; if not, write to the
-*   Free Software Foundation, Inc.,
-*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .
+    SPDX-FileCopyrightText: 2008 Nicola Gigante <nicola.gigante@gmail.com>
+    SPDX-FileCopyrightText: 2009 Dario Freddi <drf@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #include "policy-gen.h"
-#include <QFile>
 
 #include <QCoreApplication>
-#include <QSettings>
-#include <QRegExp>
-#include <QStringList>
 #include <QDebug>
+#include <QFile>
+#include <QRegularExpression>
+#include <QSettings>
+#include <QStringList>
 
+#include <cerrno>
 #include <cstdio>
-#include <errno.h>
 
 using namespace std;
 
@@ -45,7 +32,10 @@ int main(int argc, char **argv)
     }
 
     QSettings ini(QFile::decodeName(argv[1]), QSettings::IniFormat);
+    // It's UTF-8 by default in Qt6
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     ini.setIniCodec("UTF-8");
+#endif
     if (ini.status()) {
         qCritical("Error loading file: %s", argv[1]);
         return 1;
@@ -71,13 +61,19 @@ int main(int argc, char **argv)
 QList<Action> parse(QSettings &ini)
 {
     QList<Action> actions;
-    QRegExp actionExp(QLatin1String("[0-9a-z]+(\\.[0-9a-z]+)*"));
-    QRegExp descriptionExp(QLatin1String("description(?:\\[(\\w+)\\])?"));
-    QRegExp nameExp(QLatin1String("name(?:\\[(\\w+)\\])?"));
-    QRegExp policyExp(QLatin1String("yes|no|auth_self|auth_admin"));
 
-    descriptionExp.setCaseSensitivity(Qt::CaseInsensitive);
-    nameExp.setCaseSensitivity(Qt::CaseInsensitive);
+    // example: [org.kde.kcontrol.kcmfoo.save]
+    const QRegularExpression actionExp(QRegularExpression::anchoredPattern(QStringLiteral("[0-9a-z]+(\\.[0-9a-z]+)*")));
+
+    // example: Description[ca]=Mòdul de control del Foo.
+    const QRegularExpression descriptionExp(QRegularExpression::anchoredPattern(QStringLiteral("description(?:\\[(\\w+)\\])?")),
+                                            QRegularExpression::CaseInsensitiveOption);
+
+    // example: Name[ca]=Mòdul de control del Foo
+    const QRegularExpression nameExp(QRegularExpression::anchoredPattern(QStringLiteral("name(?:\\[(\\w+)\\])?")), QRegularExpression::CaseInsensitiveOption);
+
+    // example: Policy=auth_admin
+    const QRegularExpression policyExp(QRegularExpression::anchoredPattern(QStringLiteral("(?:yes|no|auth_self|auth_admin)")));
 
     const auto listChilds = ini.childGroups();
     for (const QString &name : listChilds) {
@@ -87,7 +83,7 @@ QList<Action> parse(QSettings &ini)
             continue;
         }
 
-        if (!actionExp.exactMatch(name)) {
+        if (!actionExp.match(name).hasMatch()) {
             qCritical("Wrong action syntax: %s\n", name.toLatin1().data());
             exit(1);
         }
@@ -97,8 +93,9 @@ QList<Action> parse(QSettings &ini)
 
         const auto listChildKeys = ini.childKeys();
         for (const QString &key : listChildKeys) {
-            if (descriptionExp.exactMatch(key)) {
-                QString lang = descriptionExp.capturedTexts().at(1);
+            QRegularExpressionMatch match;
+            if ((match = descriptionExp.match(key)).hasMatch()) {
+                QString lang = match.captured(1);
 
                 if (lang.isEmpty()) {
                     lang = QString::fromLatin1("en");
@@ -106,8 +103,8 @@ QList<Action> parse(QSettings &ini)
 
                 action.descriptions.insert(lang, ini.value(key).toString());
 
-            } else if (nameExp.exactMatch(key)) {
-                QString lang = nameExp.capturedTexts().at(1);
+            } else if ((match = nameExp.match(key)).hasMatch()) {
+                QString lang = match.captured(1);
 
                 if (lang.isEmpty()) {
                     lang = QString::fromLatin1("en");
@@ -117,7 +114,7 @@ QList<Action> parse(QSettings &ini)
 
             } else if (key.toLower() == QLatin1String("policy")) {
                 QString policy = ini.value(key).toString();
-                if (!policyExp.exactMatch(policy)) {
+                if (!policyExp.match(policy).hasMatch()) {
                     qCritical("Wrong policy: %s", policy.toLatin1().data());
                     exit(1);
                 }
@@ -125,7 +122,7 @@ QList<Action> parse(QSettings &ini)
 
             } else if (key.toLower() == QLatin1String("policyinactive")) {
                 QString policyInactive = ini.value(key).toString();
-                if (!policyExp.exactMatch(policyInactive)) {
+                if (!policyExp.match(policyInactive).hasMatch()) {
                     qCritical("Wrong policy: %s", policyInactive.toLatin1().data());
                     exit(1);
                 }
@@ -171,4 +168,3 @@ QMap<QString, QString> parseDomain(QSettings &ini)
 
     return rethash;
 }
-

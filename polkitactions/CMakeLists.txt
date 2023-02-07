@@ -23,7 +23,7 @@ add_library(kcm_polkitactions ${kcm_polkitactions_SRCS})
 target_link_libraries(kcm_polkitactions
      Qt::Core
      Qt::DBus
-     PolkitQt5-1::Core
+     PolkitQt${QT_MAJOR_VERSION}-1::Core
      polkitkdekcmodulesprivate
 )
 

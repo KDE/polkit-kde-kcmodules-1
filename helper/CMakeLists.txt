@@ -43,7 +43,7 @@ target_link_libraries(polkitkde1helper
     Qt::Core
     Qt::DBus
     Qt::Xml
-    PolkitQt5-1::Core
+    PolkitQt${QT_MAJOR_VERSION}-1::Core
     polkitkdekcmodulesprivate)
 
 install(TARGETS polkitkde1helper DESTINATION ${CMAKE_INSTALL_FULL_LIBEXECDIR})

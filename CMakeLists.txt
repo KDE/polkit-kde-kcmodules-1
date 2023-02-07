@@ -10,7 +10,7 @@ include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 
 find_package(KF5 REQUIRED COMPONENTS I18n KCMUtils Auth)
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets DBus)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets DBus)
 
 function(dbus_add_activation_system_service _sources)
     pkg_search_module( DBUS dbus-1 )
@@ -23,8 +23,7 @@ function(dbus_add_activation_system_service _sources)
     endforeach (_i ${ARGN})
 endfunction(dbus_add_activation_system_service _sources)
 
-set(POLKITQT5-1_MIN_VERSION "0.103.0")
-find_package(PolkitQt5-1 REQUIRED)
+find_package(PolkitQt${QT_MAJOR_VERSION}-1 REQUIRED 0.103.0)
 
 include(FindPkgConfig)
 

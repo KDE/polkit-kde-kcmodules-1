@@ -43,7 +43,7 @@ bool AuthorizationsFilterModel::filterAcceptsRow(int source_row, const QModelInd
 
     // if the filter is empty avoid checking since if the model isn't complete populated
     // some items might be hidden
-    if (filterRegExp().isEmpty()) {
+    if (filterRegularExpression().pattern().isEmpty()) {
         return true;
     }
 
@@ -51,8 +51,8 @@ bool AuthorizationsFilterModel::filterAcceptsRow(int source_row, const QModelInd
         return groupHasMatchingItem(index);
     }
 
-    return (index.data(PolkitKde::PoliciesModel::PathRole).toString().contains(filterRegExp()) ||
-            index.data(Qt::DisplayRole).toString().contains(filterRegExp()));
+    return (index.data(PolkitKde::PoliciesModel::PathRole).toString().contains(filterRegularExpression()) ||
+            index.data(Qt::DisplayRole).toString().contains(filterRegularExpression()));
 }
 
 bool AuthorizationsFilterModel::groupHasMatchingItem(const QModelIndex &parent) const
@@ -70,8 +70,8 @@ bool AuthorizationsFilterModel::groupHasMatchingItem(const QModelIndex &parent) 
         } else {
 //             qDebug() << "item" << index.data(Qt::DisplayRole);
             // here we have an action let's see it this match
-            if (index.data(PolkitKde::PoliciesModel::PathRole).toString().contains(filterRegExp()) ||
-                    index.data(Qt::DisplayRole).toString().contains(filterRegExp())) {
+            if (index.data(PolkitKde::PoliciesModel::PathRole).toString().contains(filterRegularExpression()) ||
+                    index.data(Qt::DisplayRole).toString().contains(filterRegularExpression())) {
                 return true;
             }
         }

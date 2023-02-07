@@ -19,7 +19,7 @@
 #include "pkitemdelegate.h"
 #include "PoliciesModel.h"
 
-#include <QStyleOptionViewItemV4>
+#include <QStyleOptionViewItem>
 #include <QPainter>
 #include <QApplication>
 #include <QFontMetrics>

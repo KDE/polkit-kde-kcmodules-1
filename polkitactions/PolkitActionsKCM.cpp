@@ -63,7 +63,7 @@ PolkitActionsKCM::PolkitActionsKCM(QWidget *parent, const QVariantList &args)
     m_ui->treeView->setItemDelegate(new PolkitKde::PkItemDelegate(this));
 
     connect(m_ui->searchLine, &QLineEdit::textChanged,
-            m_proxyModel, QOverload<const QString &>::of(&PolkitKde::AuthorizationsFilterModel::setFilterRegExp));
+            m_proxyModel, QOverload<const QString &>::of(&PolkitKde::AuthorizationsFilterModel::setFilterRegularExpression));
     connect(m_ui->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
             this, &PolkitActionsKCM::slotCurrentChanged);
 
